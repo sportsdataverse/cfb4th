@@ -1,13 +1,52 @@
 Package: cfb4th
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Functions to Calculate Optimal Fourth Down Decisions for NCAA Football
 Version: 0.1.0
-Author: Who wrote it
+Authors@R: 
+    c(person(given = "Jared",
+             family = "Lee",
+             role = c("aut", "cre", "cph"),
+             email = "13jaredlee@gmail.com"),
+      person(given = "Ben",
+             family = "Baldwin",
+             role = c("aut"),
+             email = "bbaldwin206@gmail.com"),
+      person(given = "Sebastian",
+             family = "Carl",
+             role = "ctb",
+             email = "mrcaseb@gmail.com"))
 Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Description: A set of functions to estimate outcomes of fourth down
+    plays in NCAA football and obtain fourth down plays
+    from <https://www.espn.com/>.
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/Kazink36/cfb4th
+URL: https://kazink36.github.io/cfb4th/, https://github.com/Kazink36/cfb4th
 BugReports: https://github.com/Kazink36/cfb4th/issues
+Depends: 
+    R (>= 2.10)
+RoxygenNote: 7.1.2
+Imports: 
+    dplyr,
+    glue,
+    httr,
+    janitor,
+    jsonlite,
+    magrittr,
+    mgcv,
+    cfbfastR (>= 1.4.0),
+    purrr,
+    stringr,
+    tibble,
+    tidyr,
+    tidyselect,
+    xgboost
+Suggests: 
+    future,
+    gt,
+    rmarkdown,
+    tictoc,
+    tidyverse,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

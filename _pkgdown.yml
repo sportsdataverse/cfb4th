@@ -1,0 +1,102 @@
+url: https://kazink36.github.io/cfb4th/
+
+template:
+  params:
+    bootswatch: cosmo
+
+authors:
+  Jared Lee:
+    href: https://twitter.com/JaredDLee
+  Ben Baldwin:
+    href: https://twitter.com/benbbaldwin
+  Sebastian Carl:
+    href: https://twitter.com/mrcaseb
+
+
+home:
+  title: cfb4th • CFB 4th Down Decisions
+  description: >
+    A set of functions to analyze NCAA Football 4th Downs.
+  icon: fa-home
+  href: index.html
+
+navbar:
+  structure:
+    left: [home, intro, reference, news, games, network, data, repo]
+    right: [twitter, github]
+  components:
+    twitter:
+      icon: "fab fa-twitter fa-lg"
+      href: http://twitter.com/aisports_4th
+    news:
+      icon: "fas fa-newspaper"
+      text: " Changelog"
+      href: news/index.html
+    data:
+      icon: "fas fa-database"
+      text: " Data"
+      menu:
+      - text: "CFBData.com"
+        href: https://collegefootballdata.com
+      - text: "Data Repository"
+        href: https://github.com/saiemgilani/cfbfastR-data
+      - text: "Raw Data Repository"
+        href: https://github.com/saiemgilani/cfbfastR-raw
+    games:
+      icon: "fas fa-football-ball"
+      text: " GP"
+      href: http://gameonpaper.com/cfb
+    reference:
+      text: "Functions"
+      href: reference/index.html
+    network:
+      icon: "fas fa-project-diagram"
+      text: SDV
+      menu:
+      - text: SportsDataverse
+        href: https://sportsdataverse.org/
+      - text: --------------------------------
+      - text: R Packages
+      - text: cfbfastR
+        href: https://saiemgilani.github.io/cfbfastR/
+      - text: hoopR
+        href: https://hoopR.sportsdataverse.org/
+      - text: wehoop
+        href: https://wehoop.sportsdataverse.org/
+      - text: recruitR
+        href: https://saiemgilani.github.io/recruitR/
+      - text: puntr
+        href: https://puntalytics.github.io/puntr
+      - text: gamezoneR
+        href: https://jacklich10.github.io/gamezoneR/
+      - text: cfbplotR
+        href: https://kazink36.github.io/cfbplotR/
+      - text: worldfootballR
+        href: https://jaseziv.github.io/worldfootballR/
+      - text: hockeyR
+        href: https://hockeyr.netlify.app/
+      - text: baseballr
+        href: https://saiemgilani.github.io/baseballr/
+      - text: --------------------------------
+      - text: Python Packages
+      - text: cfbfastR-py
+        href: https://cfbfastR-py.sportsdataverse.org/
+      - text: hoopR-py
+        href: https://hoopR-py.sportsdataverse.org/
+      - text: wehoop-py
+        href: https://wehoop-py.sportsdataverse.org/
+      - text: --------------------------------
+      - text: Node.js Packages
+      - text: sportsdataverse.js
+        href: https://saiemgilani.github.io/sportsdataverse/
+      - text: nfl-nerd
+        href: https://github.com/nntrn/nfl-nerd/
+    github:
+      icon: "fab fa-github fa-lg"
+      href: https://github.com/Kazink36/cfb4th/
+    repo:
+      url:
+      home: https://github.com/Kazink36/cfb4th/
+      source: https://github.com/Kazink36/cfb4th/blob/master/
+      issue: https://github.com/Kazink36/cfb4th/issues/issues/
+      user: https://github.com/Kazink36/
