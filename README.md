@@ -74,7 +74,7 @@ returned).
 ## Get Started
 
 To get started with cfb4th please see [this
-article](https://kazink36.github.io//cfb4th/docs/articles/articles/cfb4th.html).
+article](https://kazink36.github.io/cfb4th/docs/articles/articles/cfb4th.html).
 
 -   [The logic of the shiny
     app](https://github.com/Kazink36/cfb_fourth_down/blob/main/app.R)
