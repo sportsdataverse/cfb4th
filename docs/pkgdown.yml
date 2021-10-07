@@ -1,0 +1,10 @@
+pandoc: 2.11.2
+pkgdown: 1.6.1
+pkgdown_sha: ~
+articles:
+  articles/cfb4th: cfb4th.html
+last_built: 2021-10-07T04:47Z
+urls:
+  reference: https://kazink36.github.io/cfb4th//reference
+  article: https://kazink36.github.io/cfb4th//articles
+
