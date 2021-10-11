@@ -30,6 +30,11 @@ get_punt_wp <- function(pbp) {
         (yards_to_goal_end == 100) & original_pos_team == home ~ home,
         TRUE ~ pos_team
       ),
+      def_pos_team = case_when(
+        (yards_to_goal_end == 100) & original_pos_team == away ~ home,
+        (yards_to_goal_end == 100) & original_pos_team == home ~ away,
+        TRUE ~ def_pos_team
+      ),
 
       pos_team_timeouts_remaining_before = case_when(
         (yards_to_goal_end == 100) & original_pos_team == home ~ home_timeouts_remaining,
@@ -242,6 +247,11 @@ get_go_wp <- function(pbp) {
         away == pos_team & turnover == 1 ~ home,
         TRUE ~ pos_team
       ),
+      def_pos_team = case_when(
+        home == def_pos_team & turnover == 1 ~ away,
+        away == def_pos_team & turnover == 1 ~ home,
+        TRUE ~ def_pos_team
+      ),
 
       # swap spread if turnover
       pos_team_spread = ifelse(turnover == 1, -pos_team_spread, pos_team_spread),
@@ -278,6 +288,11 @@ get_go_wp <- function(pbp) {
         home == pos_team & touchdown == 1 ~ away,
         away == pos_team & touchdown == 1 ~ home,
         TRUE ~ pos_team
+      ),
+      def_pos_team = case_when(
+        home == def_pos_team & touchdown == 1 ~ away,
+        away == def_pos_team & touchdown == 1 ~ home,
+        TRUE ~ def_pos_team
       ),
       pos_team_spread = ifelse(touchdown == 1, -pos_team_spread, pos_team_spread),
 
@@ -382,6 +397,6 @@ get_go_wp <- function(pbp) {
     left_join(wp_go_df, by = "go_index") %>%
     select(-go_index) %>%
     return()
-# TODO: flip variables for touchdown. Check that all relevant variables are flipped (spread and total?).  implement runoff?
+
 }
 

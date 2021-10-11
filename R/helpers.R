@@ -71,8 +71,8 @@ flip_team <- function(df) {
   df %>%
     mutate(
       # switch posteam
-      pos_team = if_else(home == pos_team, away, home),
-
+      pos_team = if_else(home == original_pos_team, away, home),
+      def_pos_team = if_else(home == original_pos_team, home, away),
       # update timeouts
       pos_team_timeouts_rem_before = if_else(pos_team == away, away_timeouts_remaining, home_timeouts_remaining),
       def_pos_team_timeouts_rem_before = if_else(pos_team == home, away_timeouts_remaining, home_timeouts_remaining),
@@ -80,7 +80,7 @@ flip_team <- function(df) {
       pos_score_diff_start = -pos_score_diff_start,
       # 1st and 10
       down = 1,
-      ydstogo = 10,
+      distance = 10,
       # run off 6 seconds
       TimeSecsRem = TimeSecsRem - 6,
       adj_TimeSecsRem = adj_TimeSecsRem - 6,
@@ -114,19 +114,32 @@ flip_half <- function(df) {
         pos_team_receives_2H_kickoff == 0 & end_of_half == 1 ~ def_pos_team,
         TRUE ~ pos_team
       ),
+      def_pos_team = case_when(
+        pos_team_receives_2H_kickoff == 1 & end_of_half == 1 ~ def_pos_team,
+        pos_team_receives_2H_kickoff == 0 & end_of_half == 1 ~ pos_team,
+        TRUE ~ def_pos_team
+      ),
       period = ifelse(end_of_half == 1, 3L, period),
+      half = ifelse(end_of_half == 1, 2L, half),
       pos_team_timeouts_rem_before = ifelse(end_of_half == 1, 3L, pos_team_timeouts_rem_before),
       def_pos_team_timeouts_rem_before = ifelse(end_of_half == 1, 3L, def_pos_team_timeouts_rem_before),
       down = ifelse(end_of_half == 1, 1, down),
       distance = ifelse(end_of_half == 1, 10L, distance),
       yards_to_goal = ifelse(end_of_half == 1, 75L, yards_to_goal),
       TimeSecsRem = ifelse(end_of_half == 1, 1800, TimeSecsRem),
-      #adj_TimeSecsRem = ifelse(end_of_half == 1, 1800, adj_TimeSecsRem),
+      adj_TimeSecsRem = ifelse(end_of_half == 1, 1800, adj_TimeSecsRem),
       pos_score_diff_start = ifelse(
         pos_team != prior_pos_team & end_of_half == 1, -pos_score_diff_start, pos_score_diff_start
       ),
-      pos_team_spread = ifelse(end_of_half == 1, -1*pos_team_spread, pos_team_spread),
-      pos_team_receives_2H_kickoff = ifelse(end_of_half == 1, 0, pos_team_receives_2H_kickoff)
+      pos_team_spread = case_when(
+        pos_team_receives_2H_kickoff == 1 & end_of_half == 1 ~ pos_team_spread,
+        pos_team_receives_2H_kickoff == 0 & end_of_half == 1 ~ -1*pos_team_spread,
+        TRUE ~ pos_team_spread
+      ),
+
+      pos_team_receives_2H_kickoff = ifelse(
+        pos_team != prior_pos_team & end_of_half == 1, 1, pos_team_receives_2H_kickoff
+      )
     ) %>%
     select(-prior_pos_team, -end_of_half) %>%
     return()
@@ -140,9 +153,9 @@ end_game_fn <- function(pbp) {
   pbp %>%
     mutate(
       wp = case_when(
-        pos_score_diff_start > 0 & adj_TimeSecsRem < 120 & def_pos_team_timeouts_rem_before == 0 ~ 0,
-        pos_score_diff_start > 0 & adj_TimeSecsRem < 80 & def_pos_team_timeouts_rem_before == 1 ~ 0,
-        pos_score_diff_start > 0 & adj_TimeSecsRem < 40 & def_pos_team_timeouts_rem_before == 2 ~ 0,
+        pos_score_diff_start > 0 & adj_TimeSecsRem < 120 & period == 4 & def_pos_team_timeouts_rem_before == 0 ~ 0,
+        pos_score_diff_start > 0 & adj_TimeSecsRem < 80 & period == 4 & def_pos_team_timeouts_rem_before == 1 ~ 0,
+        pos_score_diff_start > 0 & adj_TimeSecsRem < 40 & period == 4 & def_pos_team_timeouts_rem_before == 2 ~ 0,
         TRUE ~ wp
       )
     ) %>%
@@ -239,7 +252,7 @@ add_ep <- function(game_state) {
 prep_wp <- function(game_state) {
   game_state %>%
     mutate(ExpScoreDiff = pos_score_diff_start + ep,
-           adj_TimeSecsRem = TimeSecsRem + ifelse(half == 1,1800,0),
+           #adj_TimeSecsRem = TimeSecsRem + ifelse(half == 1,1800,0),
            ExpScoreDiff_Time_Ratio = ExpScoreDiff/(adj_TimeSecsRem+1),
            elapsed_share = ((3600 - adj_TimeSecsRem) / 3600),
            spread_time = (-1 * pos_team_spread) * exp(-4 * elapsed_share),

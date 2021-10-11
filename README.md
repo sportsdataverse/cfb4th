@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# cfb4th <img src='man/figures/logo.png' align="right" width="25%" min-width="120px"/>
+# cfb4th <a href='https://kazink36.github.io/cfb4th'><img src='man/figures/logo.svg' align="right" height="139" /></a>
 
 <!-- badges: start -->
 

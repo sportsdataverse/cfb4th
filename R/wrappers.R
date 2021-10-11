@@ -136,7 +136,7 @@ load_4th_pbp <- function(seasons) {
   # this is less likely to result in crashes due to memory
   purrr::map_df(seasons, ~{
     message(glue::glue("Loading season {.x}"))
-    bets <- cfbfastR::cfbd_betting_lines(year = .x) %>%
+    suppressMessages({bets <- cfbfastR::cfbd_betting_lines(year = .x) %>%
       bind_rows(cfbfastR::cfbd_betting_lines(year = .x, season_type = "postseason")) %>%
       mutate(provider = factor(provider,
                                c(
@@ -156,6 +156,8 @@ load_4th_pbp <- function(seasons) {
       arrange(provider) %>%
       slice(1) %>%
       select(game_id,spread,over_under)
+      }
+    )
     cfbfastR::load_cfb_pbp(.x) %>%
       left_join(bets, by = "game_id") %>%
       cfb4th::add_4th_probs() %>%
