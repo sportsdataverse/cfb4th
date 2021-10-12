@@ -28,7 +28,7 @@ prepare_df <- function(df) {
       pos_team_spread = if_else(pos_team == home, spread, -spread),
       home_total = (spread + over_under) / 2,
       away_total = (over_under - spread) / 2,
-      pos_team_total = if_else(pos_team == home, home_total, away_total),
+      pos_team_total = dplyr::if_else(pos_team == home, home_total, away_total),
       pos_team_spread = dplyr::if_else(pos_team == home, spread, -1 * spread),
 
       # useful for lots of stuff later
