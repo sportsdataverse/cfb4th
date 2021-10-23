@@ -184,6 +184,11 @@ load_4th_pbp <- function(seasons) {
         (rush == 1 | pass == 1),# & !play_type_nfl %in% c("PUNT", "FIELD_GOAL"),
         100, 0
       ),
+      # Penalties and Timeouts are NA
+      go = ifelse(
+        play_type %in% c("Timeout","Penalty"),
+        NA_integer_, go
+      )
       # if it's an aborted snap in punt formation, call it a punt
       # go = ifelse(
       #   aborted_play == 1 & stringr::str_detect(desc, "Punt formation"),
