@@ -1,7 +1,7 @@
 Package: cfb4th
 Type: Package
 Title: Functions to Calculate Optimal Fourth Down Decisions for NCAA Football
-Version: 0.1.0
+Version: 0.1.0.9001
 Authors@R: 
     c(person(given = "Jared",
              family = "Lee",

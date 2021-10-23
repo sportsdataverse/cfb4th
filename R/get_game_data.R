@@ -190,7 +190,7 @@ get_4th_plays <- function(df) {
             away_score = dplyr::lag(away_score),
             score_differential = if_else(pos_team == home_team, home_score - away_score, away_score - home_score),
             runoff = 0,
-            yr = 2020,
+            yr = 2021,
             home_opening_kickoff = if_else(dplyr::first(na.omit(pos_team)) == home_team, 1, 0),
             week = week,
             type = if_else(week <= 17, "reg", "post")

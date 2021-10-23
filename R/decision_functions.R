@@ -199,9 +199,10 @@ get_go_wp <- function(pbp) {
     ) %>%
     dplyr::mutate(
       # if predicted gain is more than possible, call it a TD
-      gain = ifelse(gain > yards_to_goal, as.integer(yards_to_goal), as.integer(gain))
+      gain = ifelse(gain > yards_to_goal, as.integer(yards_to_goal), as.integer(gain)),
+      # if predicted loss is more than possible, call it on the 1
+      gain = ifelse(yards_to_goal - gain >= 100, as.integer(yards_to_goal - 99), as.integer(gain))
     ) %>%
-
     # this step is to combine all the TD probs into one (for gains longer than possible)
     group_by(go_index, gain) %>%
     mutate(prob = sum(prob)) %>%
