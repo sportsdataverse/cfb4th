@@ -32,8 +32,8 @@ prepare_df <- function(df) {
       pos_team_spread = dplyr::if_else(pos_team == home, spread, -1 * spread),
 
       # set timeouts to default if data says it's negative. May not be accurate but fewer timeouts could give drastically different results in end of game situations
-      pos_team_timeouts_rem_before = dplyr::if_else(pos_team_timeouts_rem_before < 0, 3, pos_team_timeouts_rem_before),
-      def_pos_team_timeouts_rem_before = dplyr::if_else(def_pos_team_timeouts_rem_before < 0, 3, def_pos_team_timeouts_rem_before),
+      pos_team_timeouts_rem_before = ifelse(pos_team_timeouts_rem_before < 0, 3, pos_team_timeouts_rem_before),
+      def_pos_team_timeouts_rem_before = ifelse(def_pos_team_timeouts_rem_before < 0, 3, def_pos_team_timeouts_rem_before),
       # useful for lots of stuff later
 
       home_timeouts_remaining = if_else(pos_team == home, pos_team_timeouts_rem_before, def_pos_team_timeouts_rem_before),
