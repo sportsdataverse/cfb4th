@@ -115,19 +115,19 @@ get_4th_plays <- function(df) {
             desc = text,
             time = clock_display_value
           ) %>%
-          dplyr::left_join(team_info %>%
-                      select(abbreviation,pos_team = school) %>%
-                      mutate(abbreviation = case_when(pos_team == "Louisiana" ~ "UL",
-                                                      pos_team == "Wisconsin" ~ "WISC",
-                                                      pos_team == "Oklahoma" ~ "OU",
-                                                      pos_team == "Indiana" ~ "IU",
-                                                      pos_team == "Charlotte" ~ "CLT",
-                                                      pos_team == "UMass" ~ "MASS",
-                                                      pos_team == "Northwestern" ~ "NU",
-                                                      pos_team == "Miami" ~ "MIA",
-                                                      TRUE ~ abbreviation)),
-                    by = "abbreviation") %>%
-          dplyr::filter(qtr <= 4) %>%
+          # dplyr::left_join(team_info %>%
+          #                    select(abbreviation,pos_team = school) %>%
+          #                    mutate(abbreviation = case_when(pos_team == "Louisiana" ~ "UL",
+          #                                                    pos_team == "Wisconsin" ~ "WISC",
+          #                                                    pos_team == "Oklahoma" ~ "OU",
+          #                                                    pos_team == "Indiana" ~ "IU",
+          #                                                    pos_team == "Charlotte" ~ "CLT",
+          #                                                    pos_team == "UMass" ~ "MASS",
+          #                                                    pos_team == "Northwestern" ~ "NU",
+          #                                                    pos_team == "Miami" ~ "MIA",
+          #                                                    TRUE ~ abbreviation)),
+        #                  by = "abbreviation") %>%
+        dplyr::filter(qtr <= 4) %>%
           dplyr::mutate(
             # time column is wacky so extract it from play description when possible
             play_time = stringr::str_extract(desc, "\\([^()]+(?=\\)\\s)"),
@@ -144,21 +144,35 @@ get_4th_plays <- function(df) {
           dplyr::mutate(
             home_team = home,
             away_team = away,
+            home_team_abbrv = pbp$header$competitions$competitors[[1]]$team.abbreviation[[1]],
+            home_team_nick = pbp$header$competitions$competitors[[1]]$team.name[[1]],
+            home_team_alt = pbp$header$competitions$competitors[[1]]$team.nickname[[1]],
+            away_team_abbrv = pbp$header$competitions$competitors[[1]]$team.abbreviation[[2]],
+            away_team_nick = pbp$header$competitions$competitors[[1]]$team.name[[2]],
+            away_team_alt = pbp$header$competitions$competitors[[1]]$team.nickname[[2]],
+
+            pos_team = dplyr::if_else(abbreviation == home_team_abbrv, home_team, away_team),
             defteam = if_else(pos_team == home_team, away_team, home_team),
             half = if_else(qtr <= 2, 1, 2),
             challenge_team = stringr::str_extract(desc, "[:alpha:]*\\s*[:alpha:]*\\s*[:alpha:]*[:alpha:]+(?=\\schallenged)"),
             challenge_team = stringr::str_replace_all(challenge_team, "[\r\n]" , ""),
             challenge_team = stringr::str_trim(challenge_team, side = c("both")),
-            desc_timeout = if_else(stringr::str_detect(desc, "Timeout #[:digit:]"), 1, 0),
-            timeout_team = stringr::str_extract(desc, "(?<=Timeout #[:digit:] by )[:upper:]{2,3}"),
+            desc_timeout = if_else(stringr::str_detect(desc, "Timeout "), 1, 0),
+            timeout_team = stringr::str_extract(desc, "(?<=Timeout ).{2,20}(?=, )"),
 
             home_timeout_used = case_when(
-              timeout_team == home_team ~ 1,
+              timeout_team == toupper(home_team) ~ 1,
+              timeout_team == toupper(home_team_abbrv) ~ 1,
+              timeout_team == toupper(home_team_nick) ~ 1,
+              timeout_team == toupper(home_team_alt) ~ 1,
               timeout_team != home_team ~ 0,
               is.na(timeout_team) ~ 0
             ),
             away_timeout_used = case_when(
-              timeout_team == away_team ~ 1,
+              timeout_team == toupper(away_team) ~ 1,
+              timeout_team == toupper(away_team_abbrv) ~ 1,
+              timeout_team == toupper(away_team_nick) ~ 1,
+              timeout_team == toupper(away_team_alt) ~ 1,
               timeout_team != away_team ~ 0,
               is.na(timeout_team) ~ 0
             ),
@@ -210,6 +224,8 @@ get_4th_plays <- function(df) {
           dplyr::ungroup() %>%
           dplyr::arrange(qtr, desc(time), ydstogo) %>%
           dplyr::mutate(
+            season = pbp$header$season$year,
+            week = pbp$header$week,
             game_id = df$game_id,
             yardline_side = purrr::map_chr(
               stringr::str_split(yardline, " "),
@@ -243,13 +259,15 @@ get_4th_plays <- function(df) {
             home_total = (spread_line + total_line) / 2,
             away_total = (total_line - spread_line) / 2,
             pos_team_total = if_else(pos_team == home_team, home_total, away_total),
-            pos_team_spread = dplyr::if_else(pos_team == home_team, spread_line, -1 * spread_line)
+            pos_team_spread = dplyr::if_else(pos_team == home_team, spread_line, -1 * spread_line),
+            play_text = desc
           ) %>%
           dplyr::select(
             game_id,
             play_id = id,
             yr,
             desc,
+            play_text,
             type,
             qtr,
             period,
@@ -281,24 +299,24 @@ get_4th_plays <- function(df) {
             away_score,
             pos_team_score = pos_score,
             def_pos_team_score = def_pos_score,
-            type_text,
+            play_type = type_text,
             yr
           ) %>%
           dplyr::mutate(Under_two = TimeSecsRem < 120,
-                 distance = ifelse(distance == 0,1,distance),
-                 period = qtr,
-                 adj_TimeSecsRem = ifelse(period < 3, TimeSecsRem + 1800, TimeSecsRem),
-                 log_ydstogo = log(yards_to_goal),
-                 Goal_To_Go = distance == yards_to_goal,
-                 pos_score_diff_start = pos_team_score-def_pos_team_score,
-                 pos_team_receives_2H_kickoff = case_when(
-                   # 1st half, home team opened game with kickoff, away team has ball
-                   period <= 2 & home_opening_kickoff == 1 & pos_team == away_team ~ 1,
-                   # 1st half, away team opened game with kickoff, home team has ball
-                   period <= 2 & home_opening_kickoff == 0 & pos_team == home_team ~ 1,
-                   TRUE ~ 0
-                 ),
-                 ) %>%
+                        distance = ifelse(distance == 0,1,distance),
+                        period = qtr,
+                        adj_TimeSecsRem = ifelse(period < 3, TimeSecsRem + 1800, TimeSecsRem),
+                        log_ydstogo = log(yards_to_goal),
+                        Goal_To_Go = distance == yards_to_goal,
+                        pos_score_diff_start = pos_team_score-def_pos_team_score,
+                        pos_team_receives_2H_kickoff = case_when(
+                          # 1st half, home team opened game with kickoff, away team has ball
+                          period <= 2 & home_opening_kickoff == 1 & pos_team == away_team ~ 1,
+                          # 1st half, away team opened game with kickoff, home team has ball
+                          period <= 2 & home_opening_kickoff == 0 & pos_team == home_team ~ 1,
+                          TRUE ~ 0
+                        ),
+          ) %>%
           # put in end of game conditions
           dplyr::mutate(
             # if there's a conversion with fewer than 5 minutes left and a lead, run off 40 seconds
@@ -337,3 +355,8 @@ get_4th_plays <- function(df) {
 
   return(plays)
 }
+
+
+
+
+

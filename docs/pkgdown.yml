@@ -3,7 +3,7 @@ pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   articles/cfb4th: cfb4th.html
-last_built: 2021-10-26T02:35Z
+last_built: 2021-11-05T06:09Z
 urls:
   reference: https://kazink36.github.io/cfb4th//reference
   article: https://kazink36.github.io/cfb4th//articles
