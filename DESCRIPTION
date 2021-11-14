@@ -1,7 +1,7 @@
 Package: cfb4th
 Type: Package
 Title: Functions to Calculate Optimal Fourth Down Decisions for NCAA Football
-Version: 0.1.0.9003
+Version: 0.1.1
 Authors@R: 
     c(person(given = "Jared",
              family = "Lee",
@@ -15,7 +15,7 @@ Authors@R:
              family = "Carl",
              role = "ctb",
              email = "mrcaseb@gmail.com"))
-Maintainer: The package maintainer <yourself@somewhere.net>
+Maintainer: Jared Lee <13jaredlee@gmail.com>
 Description: A set of functions to estimate outcomes of fourth down
     plays in NCAA football and obtain fourth down plays
     from <https://www.espn.com/>.

@@ -262,8 +262,8 @@ get_go_wp <- function(pbp) {
 
 
       touchdown = ifelse(yards_to_goal == 0, 1,0),
-      # give 7 points for the TD play # CHANGE TO 6 WHEN 2-pt IMPLEMENTED
-      pos_score_diff_start = ifelse(touchdown == 1, -pos_score_diff_start - 7, pos_score_diff_start),
+      # give 6 points for the TD play
+      pos_score_diff_start = ifelse(touchdown == 1, -pos_score_diff_start - 6, pos_score_diff_start),
 
       # change variables for TD
       yards_to_goal = ifelse(touchdown == 1, 75, yards_to_goal),
@@ -319,23 +319,23 @@ get_go_wp <- function(pbp) {
   ## THIS IS FOR WHEN 2-pt IS IMPLEMENTED
   # separate df of just the TDs to calculate WP after TD
   # this step is needed to deal with the option of 1pt or 2pt choice
-  # if (nrow(preds_df %>% filter(yards_to_goal == 0)) > 0) {
-  #   tds_df <- preds_df %>%
-  #     filter(yards_to_goal == 0) %>%
-  #     #get_2pt_wp() %>%
-  #     select(go_index, yards_to_goal, wp_td)
-  # } else {
-  #   # avoids errors when one play is fed that doesn't have TD in range
-  #   tds_df <- tibble::tibble(
-  #     "go_index" = 0,
-  #     "yardline_100" = 99999
-  #   )
-  # }
+  if (nrow(preds_df %>% filter(touchdown == 1)) > 0) {
+    tds_df <- preds_df %>%
+      filter(touchdown == 1) %>%
+      get_2pt_wp() %>%
+      select(go_index, yards_to_goal, wp_td)
+  } else {
+    # avoids errors when one play is fed that doesn't have TD in range
+    tds_df <- tibble::tibble(
+      "go_index" = 0,
+      "yards_to_goal" = 99999
+    )
+  }
 
 
   # join TD WPs back to original df and use those WPs
   preds <- preds_df %>%
-    #left_join(tds_df, by = c("go_index", "yardline_100")) %>%
+    left_join(tds_df, by = c("go_index", "yards_to_goal")) %>%
     flip_half() %>%
     prep_ep() %>%
     add_ep() %>%
@@ -346,7 +346,7 @@ get_go_wp <- function(pbp) {
       wp = if_else(pos_team != original_pos_team, 1 - wp, wp),
 
       # get the TD probs computed separately
-      #wp = ifelse(yards_to_goal == 0, wp_td, wp),
+      wp = ifelse(touchdown == 1, wp_td, wp),
 
       # fill in end of game situation when team can kneel out clock after successful non-td conversion
       wp = case_when(
@@ -401,3 +401,93 @@ get_go_wp <- function(pbp) {
 
 }
 
+get_2pt_wp <- function(pbp) {
+  pbp <- pbp %>% mutate(index_2pt = 1 : n())
+
+  # stuff in the 2pt model
+  # data <- pbp %>%
+  #   transmute(down = as.numeric(down),
+  #             distance,
+  #             yards_to_goal,
+  #             posteam_spread = pos_team_spread,
+  #             posteam_total = pos_team_total) %>%
+  #   as.matrix()
+
+  # get probability of converting 2pt attempt from model
+  prob_2pt <- tibble::tibble(prob_2pt = .45)
+  #   stats::predict(
+  #   two_pt_model,
+  #   data
+  # )  %>%
+  #   tibble::as_tibble() %>%
+  #   dplyr::rename(prob_2pt = "value") %>%
+  #   select(prob_2pt)
+
+  # probability of making PAT
+  xp_prob <- as.numeric(mgcv::predict.bam(fg_model, newdata = pbp %>% mutate(yards_to_goal = 2), type="response")) %>%
+    as_tibble() %>%
+    dplyr::rename(prob_1pt = "value") %>%
+    select(prob_1pt)
+
+  pbp <- bind_cols(
+    pbp, prob_2pt, xp_prob
+  )
+
+  probs <- bind_rows(
+    pbp %>% mutate(pts = 0, pos_score_diff_start = pos_score_diff_start),
+    pbp %>% mutate(pts = 1, pos_score_diff_start = pos_score_diff_start - 1),
+    pbp %>% mutate(pts = 2, pos_score_diff_start = pos_score_diff_start - 2)
+  ) %>%
+    #This switch was all handled in get_go_wp()
+    # mutate(
+    #   # switch posteam, timeouts and kickoff indicator
+    #   posteam = case_when(
+    #     home == pos_team ~ away,
+    #     away == pos_team ~ home
+    #   ),
+    #
+    #   pos_team_timeouts_rem_before = ifelse(original_posteam == home, away_timeouts_remaining, home_timeouts_remaining),
+    #   def_pos_team_timeouts_rem_before = ifelse(original_posteam == home, home_timeouts_remaining, away_timeouts_remaining),
+    #
+    #   receive_2h_ko = case_when(
+    #     qtr <= 2 & receive_2h_ko == 0 ~ 1,
+    #     qtr <= 2 & receive_2h_ko == 1 ~ 0,
+    #     TRUE ~ receive_2h_ko
+    #   ),
+    #
+    #   # 1st & 10 after touchback
+    #   yardline_100 = 75,
+    #   down = 1,
+    #   ydstogo = 10
+    #
+    # ) %>%
+    flip_half() %>%
+    prep_ep() %>%
+    add_ep() %>%
+    prep_wp() %>%
+    add_wp() %>%
+    mutate(wp = if_else(pos_team != original_pos_team, 1 - wp, wp)) %>%
+    arrange(index_2pt, pts) %>%
+    select(index_2pt, pts, wp, prob_2pt, prob_1pt) %>%
+    group_by(index_2pt) %>%
+    summarize(
+      wp_0 = dplyr::first(wp),
+      wp_1 = dplyr::nth(wp, 2),
+      wp_2 = dplyr::last(wp),
+      conv_2pt = dplyr::first(prob_2pt),
+      conv_1pt = dplyr::first(prob_1pt)
+    ) %>%
+    mutate(
+      wp_go2 = conv_2pt * wp_2 + (1 - conv_2pt) * wp_0,
+      wp_go1 = conv_1pt * wp_1 + (1 - conv_1pt) * wp_0,
+
+      # convenience column useful for other things
+      wp_td = ifelse(wp_go1 > wp_go2, wp_go1, wp_go2)
+    ) %>%
+    ungroup()
+
+  pbp %>%
+    left_join(probs, by = "index_2pt") %>%
+    select(-index_2pt) %>%
+    return()
+}

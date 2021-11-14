@@ -260,7 +260,8 @@ get_4th_plays <- function(df) {
             away_total = (total_line - spread_line) / 2,
             pos_team_total = if_else(pos_team == home_team, home_total, away_total),
             pos_team_spread = dplyr::if_else(pos_team == home_team, spread_line, -1 * spread_line),
-            play_text = desc
+            play_text = desc,
+            play_type = type_text
           ) %>%
           dplyr::select(
             game_id,
@@ -299,7 +300,8 @@ get_4th_plays <- function(df) {
             away_score,
             pos_team_score = pos_score,
             def_pos_team_score = def_pos_score,
-            play_type = type_text,
+            type_text,
+            play_type,
             yr
           ) %>%
           dplyr::mutate(Under_two = TimeSecsRem < 120,

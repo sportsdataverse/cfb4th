@@ -81,7 +81,7 @@ for it, kick field goal, punt)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cfb4th</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.9003</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
       </span>
     </div>
 
@@ -267,66 +267,68 @@ for it, kick field goal, punt).</p>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='va'>play</span> <span class='op'>&lt;-</span>
-  <span class='fu'>tibble</span><span class='fu'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='op'>(</span>
-    <span class='co'># Game Info</span>
-    home <span class='op'>=</span> <span class='st'>"Utah"</span>,
-    away <span class='op'>=</span> <span class='st'>"BYU"</span>,
-    pos_team <span class='op'>=</span> <span class='st'>"Utah"</span>,
-    def_pos_team <span class='op'>=</span> <span class='st'>"BYU"</span>,
-    spread <span class='op'>=</span> <span class='op'>-</span><span class='fl'>7</span>,
-    over_under <span class='op'>=</span> <span class='fl'>55</span>,
-
-    <span class='co'># Situation Info</span>
-    half <span class='op'>=</span> <span class='fl'>2</span>,
-    period <span class='op'>=</span> <span class='fl'>3</span>, <span class='co'># Quarter</span>
-    TimeSecsRem <span class='op'>=</span> <span class='fl'>900</span>, <span class='co'># Half Seconds Remaining</span>
-    adj_TimeSecsRem <span class='op'>=</span> <span class='fl'>900</span>, <span class='co'># Game Seconds Remaining</span>
-    down <span class='op'>=</span> <span class='fl'>4</span>,
-    distance <span class='op'>=</span> <span class='fl'>4</span>,
-    yards_to_goal <span class='op'>=</span> <span class='fl'>40</span>,
-    pos_score_diff_start <span class='op'>=</span> <span class='fl'>7</span>,
-
-    pos_team_receives_2H_kickoff <span class='op'>=</span> <span class='fl'>1</span>,
-    pos_team_timeouts_rem_before <span class='op'>=</span> <span class='fl'>3</span>,
-    def_pos_team_timeouts_rem_before <span class='op'>=</span> <span class='fl'>3</span>
-
-  <span class='op'>)</span>
-
-<span class='va'>probs</span> <span class='op'>&lt;-</span> <span class='fu'>cfb4th</span><span class='fu'>::</span><span class='fu'>add_4th_probs</span><span class='op'>(</span><span class='va'>play</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Computing probabilities for 1 plays. . .</span></div><div class='input'>
-<span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://pillar.r-lib.org/reference/glimpse.html'>glimpse</a></span><span class='op'>(</span><span class='va'>probs</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Rows: 1
-#&gt; Columns: 27
-#&gt; $ home                             <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> "Utah"
-#&gt; $ away                             <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> "BYU"
-#&gt; $ pos_team                         <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> "Utah"
-#&gt; $ def_pos_team                     <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> "BYU"
-#&gt; $ spread                           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> -7
-#&gt; $ over_under                       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 55
-#&gt; $ half                             <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 2
-#&gt; $ period                           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 3
-#&gt; $ TimeSecsRem                      <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 900
-#&gt; $ adj_TimeSecsRem                  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 900
-#&gt; $ down                             <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 4
-#&gt; $ distance                         <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 4
-#&gt; $ yards_to_goal                    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 40
-#&gt; $ pos_score_diff_start             <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 7
-#&gt; $ pos_team_receives_2H_kickoff     <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 1
-#&gt; $ pos_team_timeouts_rem_before     <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 3
-#&gt; $ def_pos_team_timeouts_rem_before <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 3
-#&gt; $ go_boost                         <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 1.375031
-#&gt; $ first_down_prob                  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 0.4937149
-#&gt; $ wp_fail                          <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 0.812409
-#&gt; $ wp_succeed                       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 0.9191829
-#&gt; $ go_wp                            <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 0.8651249
-#&gt; $ fg_make_prob                     <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 0.2960965
-#&gt; $ miss_fg_wp                       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 0.8073803
-#&gt; $ make_fg_wp                       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 0.9132916
-#&gt; $ fg_wp                            <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 0.8387403
-#&gt; $ punt_wp                          <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 0.8513746</div><div class='input'><span class='co'># }</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># \donttest{</span></span>
+<span class='r-in'><span class='va'>play</span> <span class='op'>&lt;-</span></span>
+<span class='r-in'>  <span class='fu'>tibble</span><span class='fu'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='op'>(</span></span>
+<span class='r-in'>    <span class='co'># Game Info</span></span>
+<span class='r-in'>    home <span class='op'>=</span> <span class='st'>"Utah"</span>,</span>
+<span class='r-in'>    away <span class='op'>=</span> <span class='st'>"BYU"</span>,</span>
+<span class='r-in'>    pos_team <span class='op'>=</span> <span class='st'>"Utah"</span>,</span>
+<span class='r-in'>    def_pos_team <span class='op'>=</span> <span class='st'>"BYU"</span>,</span>
+<span class='r-in'>    spread <span class='op'>=</span> <span class='op'>-</span><span class='fl'>7</span>,</span>
+<span class='r-in'>    over_under <span class='op'>=</span> <span class='fl'>55</span>,</span>
+<span class='r-in'></span>
+<span class='r-in'>    <span class='co'># Situation Info</span></span>
+<span class='r-in'>    half <span class='op'>=</span> <span class='fl'>2</span>,</span>
+<span class='r-in'>    period <span class='op'>=</span> <span class='fl'>3</span>, <span class='co'># Quarter</span></span>
+<span class='r-in'>    TimeSecsRem <span class='op'>=</span> <span class='fl'>900</span>, <span class='co'># Half Seconds Remaining</span></span>
+<span class='r-in'>    adj_TimeSecsRem <span class='op'>=</span> <span class='fl'>900</span>, <span class='co'># Game Seconds Remaining</span></span>
+<span class='r-in'>    down <span class='op'>=</span> <span class='fl'>4</span>,</span>
+<span class='r-in'>    distance <span class='op'>=</span> <span class='fl'>4</span>,</span>
+<span class='r-in'>    yards_to_goal <span class='op'>=</span> <span class='fl'>40</span>,</span>
+<span class='r-in'>    pos_score_diff_start <span class='op'>=</span> <span class='fl'>7</span>,</span>
+<span class='r-in'></span>
+<span class='r-in'>    pos_team_receives_2H_kickoff <span class='op'>=</span> <span class='fl'>1</span>,</span>
+<span class='r-in'>    pos_team_timeouts_rem_before <span class='op'>=</span> <span class='fl'>3</span>,</span>
+<span class='r-in'>    def_pos_team_timeouts_rem_before <span class='op'>=</span> <span class='fl'>3</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>probs</span> <span class='op'>&lt;-</span> <span class='fu'>cfb4th</span><span class='fu'>::</span><span class='fu'>add_4th_probs</span><span class='op'>(</span><span class='va'>play</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Computing probabilities for 1 plays. . .</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://pillar.r-lib.org/reference/glimpse.html'>glimpse</a></span><span class='op'>(</span><span class='va'>probs</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Rows: 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Columns: 27</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ home                             <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> "Utah"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ away                             <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> "BYU"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ pos_team                         <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> "Utah"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ def_pos_team                     <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> "BYU"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ spread                           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> -7</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ over_under                       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 55</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ half                             <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ period                           <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ TimeSecsRem                      <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 900</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ adj_TimeSecsRem                  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 900</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ down                             <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ distance                         <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ yards_to_goal                    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 40</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ pos_score_diff_start             <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 7</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ pos_team_receives_2H_kickoff     <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ pos_team_timeouts_rem_before     <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ def_pos_team_timeouts_rem_before <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ go_boost                         <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 1.395278</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ first_down_prob                  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 0.4937149</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ wp_fail                          <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 0.812409</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ wp_succeed                       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 0.919593</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ go_wp                            <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 0.8653273</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ fg_make_prob                     <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 0.2960965</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ miss_fg_wp                       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 0.8073803</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ make_fg_wp                       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 0.9132916</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ fg_wp                            <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 0.8387403</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ punt_wp                          <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> 0.8513746</span>
+<span class='r-in'><span class='co'># }</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
