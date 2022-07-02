@@ -25,8 +25,8 @@ LazyData: true
 URL: https://kazink36.github.io/cfb4th/, https://github.com/Kazink36/cfb4th
 BugReports: https://github.com/Kazink36/cfb4th/issues
 Depends: 
-    R (>= 2.10)
-RoxygenNote: 7.1.2
+    R (>= 3.5.0)
+RoxygenNote: 7.2.0
 Imports: 
     dplyr,
     glue,
@@ -35,18 +35,19 @@ Imports:
     jsonlite,
     magrittr,
     mgcv,
+    nnet,
     cfbfastR (>= 1.4.0),
     purrr,
     stringr,
     tibble,
     tidyr,
-    tidyselect,
     xgboost
 Suggests: 
     future,
     gt,
     rmarkdown,
     tictoc,
+    tidyselect,
     tidyverse,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

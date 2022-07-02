@@ -59,17 +59,19 @@
 
 add_4th_probs <- function(df) {
 
-  original_df <- df %>% mutate(index = 1 : n())
+  original_df <- df %>%
+    dplyr::mutate(index = 1:dplyr::n())
+
   modified_df <- original_df
   if("fg_make_prob" %in% names(original_df)) {
     original_df <- original_df %>%
-      select(-fg_make_prob)
+      dplyr::select(-.data$fg_make_prob)
   }
 
   if (!"type" %in% names(df)) {
     # message("type not found. Assuming an cfbfastR df and doing necessary cleaning . . .")
     modified_df <- original_df %>%
-      filter(down == 4) %>%
+      dplyr::filter(.data$down == 4) %>%
       prepare_cfbfastr_data()
   }
 
@@ -84,24 +86,25 @@ add_4th_probs <- function(df) {
   message(glue::glue("Computing probabilities for {nrow(df)} plays. . ."))
   df <- df %>%
     add_probs() %>%
-    mutate(play_no = 1 : n()) %>%
-    group_by(play_no) %>%
-    mutate(
-      punt_prob = if_else(is.na(punt_wp), 0, punt_wp),
-      max_non_go = max(fg_wp, punt_prob, na.rm = T),
-      go_boost = 100 * (go_wp - max_non_go)
-    ) %>%
-    ungroup() %>%
-    select(
-      index, go_boost,
-      first_down_prob, wp_fail, wp_succeed, go_wp,
-      fg_make_prob, miss_fg_wp, make_fg_wp, fg_wp,
-      punt_wp
+    dplyr::mutate(play_no = 1 : dplyr::n()) %>%
+    dplyr::group_by(.data$play_no) %>%
+    dplyr::mutate(
+      punt_prob = dplyr::if_else(is.na(.data$punt_wp), 0, .data$punt_wp),
+      max_non_go = max(.data$fg_wp, .data$punt_prob, na.rm = T),
+      go_boost = 100 * (.data$go_wp - .data$max_non_go)) %>%
+    dplyr::ungroup() %>%
+    dplyr::select(
+      .data$index, .data$go_boost,
+      .data$first_down_prob, .data$wp_fail,
+      .data$wp_succeed, .data$go_wp,
+      .data$fg_make_prob, .data$miss_fg_wp,
+      .data$make_fg_wp, .data$fg_wp,
+      .data$punt_wp
     )
 
   original_df %>%
-    left_join(df, by = c("index")) %>%
-    select(-index) %>%
+    dplyr::left_join(df, by = c("index")) %>%
+    dplyr::select(-.data$index) %>%
     return()
 
 }
@@ -137,8 +140,9 @@ load_4th_pbp <- function(seasons) {
   purrr::map_df(seasons, ~{
     message(glue::glue("Loading season {.x}"))
     suppressMessages({bets <- cfbfastR::cfbd_betting_lines(year = .x) %>%
-      bind_rows(cfbfastR::cfbd_betting_lines(year = .x, season_type = "postseason")) %>%
-      mutate(provider = factor(provider,
+      dplyr::bind_rows(cfbfastR::cfbd_betting_lines(year = .x, season_type = "postseason")) %>%
+      dplyr::mutate(
+        provider = factor(.data$provider,
                                c(
                                  "consensus",
                                  "teamrankings",
@@ -149,17 +153,17 @@ load_4th_pbp <- function(seasons) {
                                  "SugarHouse",
                                  "Bovada"
                                )),
-             spread = as.numeric(spread),
-             over_under = as.numeric(over_under)
+             spread = as.numeric(.data$spread),
+             over_under = as.numeric(.data$over_under)
              ) %>%
-      group_by(game_id) %>%
-      arrange(provider) %>%
-      slice(1) %>%
-      select(game_id,spread,over_under)
+      dplyr::group_by(.data$game_id) %>%
+      dplyr::arrange(.data$provider) %>%
+      dplyr::slice(1) %>%
+      dplyr::select(.data$game_id,.data$spread,.data$over_under)
       }
     )
     cfbfastR::load_cfb_pbp(.x) %>%
-      left_join(bets, by = "game_id") %>%
+      dplyr::left_join(bets, by = "game_id") %>%
       cfb4th::add_4th_probs() %>%
       return()
   }) %>%
@@ -181,13 +185,13 @@ load_4th_pbp <- function(seasons) {
       # ),
       go = ifelse(
 
-        (rush == 1 | pass == 1),# & !play_type_nfl %in% c("PUNT", "FIELD_GOAL"),
+        (.data$rush == 1 |.data$pass == 1),# & !play_type_nfl %in% c("PUNT", "FIELD_GOAL"),
         100, 0
       ),
       # Penalties and Timeouts are NA
       go = ifelse(
-        play_type %in% c("Timeout","Penalty"),
-        NA_integer_, go
+        .data$play_type %in% c("Timeout","Penalty"),
+        NA_integer_, .data$go
       )
       # if it's an aborted snap in punt formation, call it a punt
       # go = ifelse(

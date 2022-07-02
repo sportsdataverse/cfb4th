@@ -1,0 +1,135 @@
+---
+title: "Get Started with cfb4th"
+author: "Ben Baldwin & Jared Lee"
+opengraph:
+  image: 
+    src: "https://github.com/sportsdataverse/cfbfastR-data/blob/main/themes/social_card_cfb4th.png?raw=true"
+  twitter:
+    site: "@cfbfastR"
+    card: summary_large_image
+    creator: "@JaredDLee"
+output: html_document
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+options(dplyr.summarise.inform = FALSE)
+options(warn = -1) # silences a warning caused by a dplyr bug in the gt package
+```
+
+First load the packages and some data. `load_4th_pbp()` loads `cfbfastR` data and computes 4th down probabilities (depending on your computer, this may take up to a minute or two per season). 
+
+```{r setup, message = FALSE}
+library(cfb4th)
+library(tidyverse)
+library(gt)
+data <- cfb4th::load_4th_pbp(2020)
+```
+
+## Easy mode: using cfbfastR data
+
+Here's what the data obtained using `load_4th_pbp()` looks like: 
+
+```{r ex1}
+data %>%
+  dplyr::filter(!is.na(go_boost)) %>%
+  utils::head(10) %>%
+  dplyr::select(
+    pos_team, distance, yards_to_goal, go_boost, first_down_prob, 
+    wp_fail, wp_succeed, go_wp, fg_make_prob, miss_fg_wp, make_fg_wp, 
+    fg_wp, punt_wp
+  ) %>%
+  knitr::kable(digits = 2)
+```
+
+Or we can add some filters to look up a certain game:
+
+```{r ex2}
+data %>%
+  dplyr::filter(week == 12, pos_team == "Utah", down == 4) %>%
+  dplyr::select(
+    pos_team, distance, yards_to_goal, go_boost, first_down_prob, 
+    wp_fail, wp_succeed, go_wp, fg_make_prob, miss_fg_wp, make_fg_wp, 
+    fg_wp, punt_wp
+  ) %>%
+  knitr::kable(digits = 2)
+```
+
+
+
+## Calculations from user input
+
+The below shows the bare minimum amount of information that has to be fed to `cfb4th` in order to compute 4th down decision recommendations. The main function on user-input data is `add_4th_probs()`.
+
+Teams are included to help the model easily track the simulations.
+
+```{r ex3}
+one_play <-
+  tibble::tibble(
+      # Game Info
+      home = "Utah",
+      away = "BYU",
+      pos_team = "Utah",
+      def_pos_team = "BYU",
+      spread = -7,
+      over_under = 55,
+
+      # Situation Info
+      half = 2,
+      period = 3, # Quarter
+      TimeSecsRem = 900, # Half Seconds Remaining
+      adj_TimeSecsRem = 900, # Game Seconds Remaining
+      down = 4,
+      distance = 4,
+      yards_to_goal = 40,
+      pos_score_diff_start = 7,
+
+      pos_team_receives_2H_kickoff = 1,
+      pos_team_timeouts_rem_before = 3,
+      def_pos_team_timeouts_rem_before = 3
+
+    )
+one_play %>%
+  cfb4th::add_4th_probs() %>%
+  dplyr::select(
+    pos_team, distance, yards_to_goal, go_boost, first_down_prob, 
+    wp_fail, wp_succeed, go_wp, fg_make_prob, miss_fg_wp, make_fg_wp, 
+    fg_wp, punt_wp
+  ) %>%
+  knitr::kable(digits = 2)
+```
+
+## Make a summary table
+
+Let's put the play above into a table using the provided function `make_table_data()`, which makes it easier to interpret the recommendations for a play. This function only works with one play at a time since it makes a table using the results from the play.
+
+```{r table1}
+one_play %>%
+  cfb4th::add_4th_probs() %>%
+  cfb4th::make_table_data() %>%
+  knitr::kable(digits = 1)
+```
+
+Looking at the table, the offense would be expected to have 86.5% win probability if they had gone for it and 85% if they punted. 
+
+
+## Getting 4th down plays from a live game
+
+`cfbfastR` isn't available for live games and typing all the plays in by hand is annoying. So how does the 4th down bot work? With thanks to the ESPN API, which can be accessed using `get_4th_plays()`.
+
+```{r espn}
+game <- cfbfastR::cfbd_game_info(2019, team = "Utah", week = 4)
+plays <- cfb4th::get_4th_plays(game) %>% 
+  tail(1)
+plays %>% 
+  select(desc, TimeSecsRem)
+plays %>% 
+  cfb4th::add_4th_probs() %>%
+  cfb4th::make_table_data() %>%
+  knitr::kable(digits = 1)
+```
+
+

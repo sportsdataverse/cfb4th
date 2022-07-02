@@ -9,7 +9,7 @@
 #'
 #' @description Get 4th down plays from a game.
 #'
-#' @param gid A game to get 4th down decisions of.
+#' @param df A data frame of a game to get 4th down decisions of.
 #' @details Obtains a data frame that can be used with `add_4th_probs()`. The following columns
 #' must be present:
 #' \itemize{
@@ -71,7 +71,9 @@ get_4th_plays <- function(df) {
         previous_drives <- pbp$drives$previous
 
         drives <- bind_rows(
-          previous_drives %>% dplyr::select(team.abbreviation, plays) %>% tidyr::unnest(plays),
+          previous_drives %>%
+            dplyr::select(team.abbreviation, plays) %>%
+            tidyr::unnest(plays),
           current_drive
         )
       } else if ("current" %in% names(pbp$drives)) {

@@ -2,7 +2,7 @@
 #'
 #' @description Get a table with the probabilities on 4th down.
 #'
-#' @param probs A data frame consisting of one play that has had `add_4th_probs()` already run on it.
+#' @param df A data frame consisting of one play that has had `add_4th_probs()` already run on it.
 #' @return A table showing the probabilities associated with each possible choice.
 #' @export
 #' @examples

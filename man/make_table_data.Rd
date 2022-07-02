@@ -7,7 +7,7 @@
 make_table_data(df)
 }
 \arguments{
-\item{probs}{A data frame consisting of one play that has had `add_4th_probs()` already run on it.}
+\item{df}{A data frame consisting of one play that has had `add_4th_probs()` already run on it.}
 }
 \value{
 A table showing the probabilities associated with each possible choice.

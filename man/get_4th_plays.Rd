@@ -7,7 +7,7 @@
 get_4th_plays(df)
 }
 \arguments{
-\item{gid}{A game to get 4th down decisions of.}
+\item{df}{A data frame of a game to get 4th down decisions of.}
 }
 \value{
 Original data frame Data frame plus the following columns added:

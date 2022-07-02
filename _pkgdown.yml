@@ -1,8 +1,36 @@
-url: https://kazink36.github.io/cfb4th/
+url: https://cfbplotr.sportsdataverse.org/
 
 template:
-  params:
-    bootswatch: cosmo
+  bootstrap: 5
+  bootswatch: cosmo
+  bslib:
+    primary: "#222222"
+    secondary: "#222222"
+    success: "#2680E4"
+    link-color: "#2680E4"
+    link-hover-color: "#2680E4"
+    nav-link-hover-color: "#2680E4"
+    nav-link-focus-color: "#2680E4"
+    nav-link-dropdown-toggle-hover-color: "#2680E4"
+    navbar-hover-color: "#2680E4"
+    navbar-brand-hover-color: "#2680E4"
+    nav-tabs-link-active-bg	: "#2680E4"
+    nav-pills-link-active-color: "#2680E4"
+    btn-link-color: "#2680E4"
+    btn-link-hover-color: "#2680E4"
+    dropdown-link-color: "#2680E4"
+    input-btn-focus-color: "#2680E4"
+    dropdown-dark-link-hover-bg: "#2680E4"
+    border-radius: 0.5rem
+    btn-border-radius: 0.25rem
+  opengraph:
+    image:
+      src: "https://raw.githubusercontent.com/sportsdataverse/cfb4th/main/man/figures/logo.png"
+      alt: "cf4th social preview card"
+    twitter:
+      creator: "@JaredDLee"
+      site: "@cfbfastR"
+      card: summary
 
 authors:
   Jared Lee:
@@ -25,13 +53,70 @@ navbar:
     left: [home, intro, reference, news, games, network, data, repo]
     right: [twitter, github]
   components:
-    twitter:
-      icon: "fab fa-twitter fa-lg"
-      href: http://twitter.com/aisports_4th
+    articles:
+      icon: "fas fa-book-reader"
+      text: " Articles"
+      href: articles/index.html
     news:
       icon: "fas fa-newspaper"
       text: " Changelog"
       href: news/index.html
+    games:
+      icon: "fas fa-football-ball"
+      text: " GP"
+      href: http://gameonpaper.com/cfb
+    network:
+      icon: "fas fa-project-diagram"
+      text: " SDV"
+      menu:
+      - text: SportsDataverse
+        href: https://sportsdataverse.org/
+      - text: --------------------------------
+      - text: "R Packages"
+      - text: sportsdataverse-R
+        href: https://r.sportsdataverse.org/
+      - text: cfbfastR
+        href: https://cfbfastR.sportsdataverse.org/
+      - text: hoopR
+        href: https://hoopR.sportsdataverse.org/
+      - text: wehoop
+        href: https://wehoop.sportsdataverse.org/
+      - text: toRvik
+        href: https://torvik.dev/
+      - text: fastRhockey
+        href: https://fastRhockey.sportsdataverse.org/
+      - text: baseballr
+        href: https://BillPetti.github.io/baseballr/
+      - text: worldfootballR
+        href: https://jaseziv.github.io/worldfootballR/
+      - text: chessR
+        href: https://jaseziv.github.io/chessR/
+      - text: oddsapiR
+        href: https://oddsapiR.sportsdataverse.org/
+      - text: sportyR
+        href: https://sportyR.sportsdataverse.org/
+      - text: cfbplotR
+        href: https://cfbplotR.sportsdataverse.org/
+      - text: mlbplotR
+        href: https://github.com/camdenk/mlbplotR
+      - text: cfb4th
+        href: https://cfb4th.sportsdataverse.org/
+      - text: recruitR
+        href: https://recruitr.sportsdataverse.org/
+      - text: gamezoneR
+        href: https://jacklich10.github.io/gamezoneR/
+      - text: puntr
+        href: https://puntalytics.github.io/puntr/
+      - text: --------------------------------
+      - text: "Python Packages"
+      - text: sportsdataverse-py
+        href: https://py.sportsdataverse.org/
+      - text: --------------------------------
+      - text: "Node.js Packages"
+      - text: sportsdataverse.js
+        href: https://js.sportsdataverse.org/
+      - text: nfl-nerd
+        href: https://github.com/nntrn/nfl-nerd/
     data:
       icon: "fas fa-database"
       text: " Data"
@@ -39,64 +124,12 @@ navbar:
       - text: "CFBData.com"
         href: https://collegefootballdata.com
       - text: "Data Repository"
-        href: https://github.com/saiemgilani/cfbfastR-data
+        href: https://github.com/sportsdataverse/cfbfastR-data
       - text: "Raw Data Repository"
-        href: https://github.com/saiemgilani/cfbfastR-raw
-    games:
-      icon: "fas fa-football-ball"
-      text: " GP"
-      href: http://gameonpaper.com/cfb
-    reference:
-      text: "Functions"
-      href: reference/index.html
-    network:
-      icon: "fas fa-project-diagram"
-      text: SDV
-      menu:
-      - text: SportsDataverse
-        href: https://sportsdataverse.org/
-      - text: --------------------------------
-      - text: R Packages
-      - text: cfbfastR
-        href: https://saiemgilani.github.io/cfbfastR/
-      - text: hoopR
-        href: https://hoopR.sportsdataverse.org/
-      - text: wehoop
-        href: https://wehoop.sportsdataverse.org/
-      - text: recruitR
-        href: https://saiemgilani.github.io/recruitR/
-      - text: puntr
-        href: https://puntalytics.github.io/puntr
-      - text: gamezoneR
-        href: https://jacklich10.github.io/gamezoneR/
-      - text: cfbplotR
-        href: https://kazink36.github.io/cfbplotR/
-      - text: worldfootballR
-        href: https://jaseziv.github.io/worldfootballR/
-      - text: hockeyR
-        href: https://hockeyr.netlify.app/
-      - text: baseballr
-        href: https://saiemgilani.github.io/baseballr/
-      - text: --------------------------------
-      - text: Python Packages
-      - text: cfbfastR-py
-        href: https://cfbfastR-py.sportsdataverse.org/
-      - text: hoopR-py
-        href: https://hoopR-py.sportsdataverse.org/
-      - text: wehoop-py
-        href: https://wehoop-py.sportsdataverse.org/
-      - text: --------------------------------
-      - text: Node.js Packages
-      - text: sportsdataverse.js
-        href: https://saiemgilani.github.io/sportsdataverse/
-      - text: nfl-nerd
-        href: https://github.com/nntrn/nfl-nerd/
+        href: https://github.com/sportsdataverse/cfbfastR-raw
+    twitter:
+      icon: "fab fa-twitter fa-lg"
+      href: http://twitter.com/aisports_4th
     github:
       icon: "fab fa-github fa-lg"
-      href: https://github.com/Kazink36/cfb4th/
-    repo:
-      url:
-      home: https://github.com/Kazink36/cfb4th/
-      source: https://github.com/Kazink36/cfb4th/blob/master/
-      issue: https://github.com/Kazink36/cfb4th/issues/issues/
-      user: https://github.com/Kazink36/
+      href: https://github.com/sportsdataverse/cfbplotR/
