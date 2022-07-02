@@ -5,10 +5,13 @@
 
 <!-- badges: start -->
 
+[![Version-Number](https://img.shields.io/github/r-package/v/sportsdataverse/cfb4th?label=cfb4th&logo=R&style=for-the-badge)](https://github.com/sportsdataverse/cfb4th/)
+[![R-CMD-check](https://img.shields.io/github/workflow/status/sportsdataverse/cfb4th/R-CMD-check?label=R-CMD-Check&logo=R&logoColor=white&style=for-the-badge)](https://github.com/sportsdataverse/cfb4th/actions/workflows/R-CMD-check.yaml)
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg?style=for-the-badge&logo=github)](https://lifecycle.r-lib.org/articles/stages.html#experimental)[![Contributors](https://img.shields.io/github/contributors/sportsdataverse/fastRhockey?style=for-the-badge)](https://github.com/sportsdataverse/fastRhockey/graphs/contributors)
 [![Twitter
-Follow](https://img.shields.io/twitter/follow/aisports_4th.svg?style=social)](https://twitter.com/aisports_4th)
+Follow](https://img.shields.io/twitter/follow/aisports_4th.svg?color=blue&label=%40aisports_4th&logo=twitter&style=for-the-badge)](https://twitter.com/aisports_4th)
+
 <!-- badges: end -->
 
 This is the package that powers the [A.I. Sports College Football 4th

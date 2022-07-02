@@ -30,7 +30,7 @@ for it, kick field goal, punt).
 }
 \examples{
 \donttest{
-play <-
+ play <-
   tibble::tibble(
     # Game Info
     home = "Utah",
@@ -56,8 +56,7 @@ play <-
 
   )
 
-probs <- cfb4th::add_4th_probs(play)
+ cfb4th::add_4th_probs(play)
 
-dplyr::glimpse(probs)
 }
 }

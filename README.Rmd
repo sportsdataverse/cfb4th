@@ -4,7 +4,7 @@ output: github_document
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-```{r setup, include = FALSE}
+```{r rdmesetup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -16,8 +16,11 @@ knitr::opts_chunk$set(
 # cfb4th <a href='https://cfb4th.sportsdataverse.org'><img src='https://raw.githubusercontent.com/sportsdataverse/cfb4th/main/man/figures/logo.png' align="right" width="25%" min-width="120px" /></a>
 
 <!-- badges: start -->
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![Twitter Follow](https://img.shields.io/twitter/follow/aisports_4th.svg?style=social)](https://twitter.com/aisports_4th)
+[![Version-Number](https://img.shields.io/github/r-package/v/sportsdataverse/cfb4th?label=cfb4th&logo=R&style=for-the-badge)](https://github.com/sportsdataverse/cfb4th/)
+[![R-CMD-check](https://img.shields.io/github/workflow/status/sportsdataverse/cfb4th/R-CMD-check?label=R-CMD-Check&logo=R&logoColor=white&style=for-the-badge)](https://github.com/sportsdataverse/cfb4th/actions/workflows/R-CMD-check.yaml)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg?style=for-the-badge&logo=github)](https://lifecycle.r-lib.org/articles/stages.html#experimental)[![Contributors](https://img.shields.io/github/contributors/sportsdataverse/fastRhockey?style=for-the-badge)](https://github.com/sportsdataverse/fastRhockey/graphs/contributors)
+[![Twitter Follow](https://img.shields.io/twitter/follow/aisports_4th.svg?color=blue&label=%40aisports_4th&logo=twitter&style=for-the-badge)](https://twitter.com/aisports_4th)
+
 <!-- badges: end -->
 
 This is the package that powers the [A.I. Sports College Football 4th Down Model](https://kazink.shinyapps.io/cfb_fourth_down/) discussed in [this UteZone article.](https://247sports.com/college/utah/LongFormArticle/Utah-Fourth-Downs-2020-159851937/) The model is heavily based on the work and [code](https://www.nfl4th.com/) produced by [Ben Baldwin](https://twitter.com/benbbaldwin) for his [4th Down Calculator for the NFL](https://rbsdm.com/stats/fourth_calculator/)

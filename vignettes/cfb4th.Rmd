@@ -11,7 +11,7 @@ opengraph:
 output: html_document
 ---
 
-```{r, include = FALSE}
+```{r presetup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -24,9 +24,13 @@ First load the packages and some data. `load_4th_pbp()` loads `cfbfastR` data an
 
 ```{r setup, message = FALSE}
 library(cfb4th)
-library(tidyverse)
+library(dplyr)
+library(knitr)
+library(tibble)
 library(gt)
-data <- cfb4th::load_4th_pbp(2020)
+suppressWarnings(
+  data <- cfb4th::load_4th_pbp(2020)
+)
 ```
 
 ## Easy mode: using cfbfastR data
@@ -125,7 +129,7 @@ game <- cfbfastR::cfbd_game_info(2019, team = "Utah", week = 4)
 plays <- cfb4th::get_4th_plays(game) %>% 
   tail(1)
 plays %>% 
-  select(desc, TimeSecsRem)
+  dplyr::select(desc, TimeSecsRem)
 plays %>% 
   cfb4th::add_4th_probs() %>%
   cfb4th::make_table_data() %>%

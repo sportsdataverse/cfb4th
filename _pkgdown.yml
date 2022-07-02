@@ -1,4 +1,4 @@
-url: https://cfbplotr.sportsdataverse.org/
+url: https://cfb4th.sportsdataverse.org/
 
 template:
   bootstrap: 5
@@ -26,7 +26,7 @@ template:
   opengraph:
     image:
       src: "https://raw.githubusercontent.com/sportsdataverse/cfb4th/main/man/figures/logo.png"
-      alt: "cf4th social preview card"
+      alt: "cfb4th social preview card"
     twitter:
       creator: "@JaredDLee"
       site: "@cfbfastR"
@@ -132,4 +132,4 @@ navbar:
       href: http://twitter.com/aisports_4th
     github:
       icon: "fab fa-github fa-lg"
-      href: https://github.com/sportsdataverse/cfbplotR/
+      href: https://github.com/sportsdataverse/cfb4th/

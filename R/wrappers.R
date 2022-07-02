@@ -26,7 +26,7 @@
 #' @export
 #' @examples
 #' \donttest{
-#' play <-
+#'  play <-
 #'   tibble::tibble(
 #'     # Game Info
 #'     home = "Utah",
@@ -52,9 +52,8 @@
 #'
 #'   )
 #'
-#' probs <- cfb4th::add_4th_probs(play)
+#'  cfb4th::add_4th_probs(play)
 #'
-#' dplyr::glimpse(probs)
 #' }
 
 add_4th_probs <- function(df) {
@@ -121,13 +120,7 @@ add_4th_probs <- function(df) {
 #' @export
 #' @examples
 #' \donttest{
-#' probs <- cfb4th::load_4th_pbp(2019:2020)
-#'
-#' dplyr::glimpse(probs)
-#' \dontshow{
-#' # Close open connections for R CMD Check
-#' future::plan("sequential")
-#' }
+#'   cfb4th::load_4th_pbp(2020)
 #' }
 
 load_4th_pbp <- function(seasons) {
