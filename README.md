@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# cfb4th <a href='https://kazink36.github.io/cfb4th'><img src='man/figures/logo.png' align="right" width="25%" min-width="120px" /></a>
+# cfb4th <a href='https://cfb4th.sportsdataverse.org'><img src='https://raw.githubusercontent.com/sportsdataverse/cfb4th/main/man/figures/logo.png' align="right" width="25%" min-width="120px" /></a>
 
 <!-- badges: start -->
 
@@ -29,7 +29,7 @@ for the NFL](https://rbsdm.com/stats/fourth_calculator/)
 <!-- And the development version from [GitHub](https://github.com/) with: -->
 <!-- ``` r -->
 <!-- # install.packages("devtools") -->
-<!-- devtools::install_github("Kazink36/cfb4th") -->
+<!-- devtools::install_github("sportsdataverse/cfb4th") -->
 <!-- ``` -->
 
 You can install the development version of cfb4th from
@@ -37,7 +37,7 @@ You can install the development version of cfb4th from
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("Kazink36/cfb4th")
+devtools::install_github("sportsdataverse/cfb4th")
 ```
 
 ## Features
@@ -74,7 +74,7 @@ returned).
 ## Get Started
 
 To get started with cfb4th please see [this
-article](https://kazink36.github.io/cfb4th/docs/articles/articles/cfb4th.html).
+article](https://cfb4th.sportsdataverse.org/articles/cfb4th.html).
 
 -   [The logic of the shiny
     app](https://github.com/Kazink36/cfb_fourth_down/blob/main/app.R)

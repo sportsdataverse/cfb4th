@@ -22,8 +22,8 @@ Description: A set of functions to estimate outcomes of fourth down
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-URL: https://kazink36.github.io/cfb4th/, https://github.com/Kazink36/cfb4th
-BugReports: https://github.com/Kazink36/cfb4th/issues
+URL: https://cfb4th.sportsdataverse.org/, https://github.com/sportsdataverse/cfb4th
+BugReports: https://github.com/sportsdataverse/cfb4th/issues
 Depends: 
     R (>= 3.5.0)
 RoxygenNote: 7.2.0
