@@ -2,11 +2,9 @@
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
-    branches: [main, master]
-  pull_request:
-    branches: [main, master]
-  release:
-    types: [published]
+    branches:
+      - main
+      - master
   workflow_dispatch:
 
 name: pkgdown
@@ -14,26 +12,49 @@ name: pkgdown
 jobs:
   pkgdown:
     runs-on: ubuntu-latest
-    # Only restrict concurrency for non-PR jobs
-    concurrency:
-      group: pkgdown-${{ github.event_name != 'pull_request' || github.run_id }}
+
+    strategy:
+      fail-fast: false
     env:
+      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       CFBD_API_KEY: ${{ secrets.CFBD_API_KEY }}
+      RSPM: "https://packagemanager.rstudio.com/cran/__linux__/jammy/latest"
+
     steps:
       - uses: actions/checkout@v2
 
-      - uses: r-lib/actions/setup-pandoc@v2
-
       - uses: r-lib/actions/setup-r@v2
-        with:
-          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-pandoc@v2
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::pkgdown, local::.
+          cache-version: 1
+          extra-packages: |
+            any::pkgdown
+            any::animation
+            any::baseballr
+            any::cfbfastR
+            any::hoopR
+            any::fastRhockey
+            any::ggimage
+            any::knitr
+            any::oddsapiR
+            any::pacman
+            any::pak
+            any::ragg
+            any::remotes
+            any::rsconnect
+            any::sportyR
+            any::tictoc
+            any::wehoop
+            any::zoo
+            local::.
           needs: website
 
-      - name: Build site
-        run: pkgdown::deploy_to_branch(new_process = FALSE)
-        shell: Rscript {0}
+      - name: Deploy package
+        run: |
+          git config --local user.name "$GITHUB_ACTOR"
+          git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE)'
