@@ -28,17 +28,18 @@ library(dplyr)
 library(knitr)
 library(tibble)
 library(gt)
-suppressWarnings(
-  data <- cfb4th::load_4th_pbp(2020) %>% 
-    dplyr::filter(.data$week %in% 1:14)
-)
+
 ```
 
 ## Easy mode: using cfbfastR data
 
 Here's what the data obtained using `load_4th_pbp()` looks like: 
 
-```{r ex1}
+```{r ex1, eval = FALSE}
+suppressWarnings(
+  data <- cfb4th::load_4th_pbp(2020) %>% 
+    dplyr::filter(.data$week %in% 1:14)
+)
 data %>%
   dplyr::filter(!is.na(go_boost)) %>%
   utils::head(10) %>%
@@ -52,7 +53,7 @@ data %>%
 
 Or we can add some filters to look up a certain game:
 
-```{r ex2}
+```{r ex2, eval = FALSE}
 data %>%
   dplyr::filter(week == 12, pos_team == "Utah", down == 4) %>%
   dplyr::select(
