@@ -62,9 +62,9 @@ add_4th_probs <- function(df) {
     dplyr::mutate(index = 1:dplyr::n())
 
   modified_df <- original_df
-  if("fg_make_prob" %in% names(original_df)) {
+  if ("fg_make_prob" %in% names(original_df)) {
     original_df <- original_df %>%
-      dplyr::select(-.data$fg_make_prob)
+      dplyr::select(-"fg_make_prob")
   }
 
   if (!"type" %in% names(df)) {
@@ -85,7 +85,7 @@ add_4th_probs <- function(df) {
   message(glue::glue("Computing probabilities for {nrow(df)} plays. . ."))
   df <- df %>%
     add_probs() %>%
-    dplyr::mutate(play_no = 1 : dplyr::n()) %>%
+    dplyr::mutate(play_no = 1:dplyr::n()) %>%
     dplyr::group_by(.data$play_no) %>%
     dplyr::mutate(
       punt_prob = dplyr::if_else(is.na(.data$punt_wp), 0, .data$punt_wp),
@@ -93,17 +93,22 @@ add_4th_probs <- function(df) {
       go_boost = 100 * (.data$go_wp - .data$max_non_go)) %>%
     dplyr::ungroup() %>%
     dplyr::select(
-      .data$index, .data$go_boost,
-      .data$first_down_prob, .data$wp_fail,
-      .data$wp_succeed, .data$go_wp,
-      .data$fg_make_prob, .data$miss_fg_wp,
-      .data$make_fg_wp, .data$fg_wp,
-      .data$punt_wp
+      "index",
+      "go_boost",
+      "first_down_prob",
+      "wp_fail",
+      "wp_succeed",
+      "go_wp",
+      "fg_make_prob",
+      "miss_fg_wp",
+      "make_fg_wp",
+      "fg_wp",
+      "punt_wp"
     )
 
   original_df %>%
     dplyr::left_join(df, by = c("index")) %>%
-    dplyr::select(-.data$index) %>%
+    dplyr::select(-"index") %>%
     return()
 
 }
@@ -152,7 +157,10 @@ load_4th_pbp <- function(seasons) {
       dplyr::group_by(.data$game_id) %>%
       dplyr::arrange(.data$provider) %>%
       dplyr::slice(1) %>%
-      dplyr::select(.data$game_id,.data$spread,.data$over_under)
+      dplyr::select(
+        "game_id",
+        "spread",
+        "over_under")
       }
     )
     cfbfastR::load_cfb_pbp(.x) %>%
@@ -178,7 +186,7 @@ load_4th_pbp <- function(seasons) {
       # ),
       go = ifelse(
 
-        (.data$rush == 1 |.data$pass == 1),# & !play_type_nfl %in% c("PUNT", "FIELD_GOAL"),
+        (.data$rush == 1 | .data$pass == 1),# & !play_type_nfl %in% c("PUNT", "FIELD_GOAL"),
         100, 0
       ),
       # Penalties and Timeouts are NA

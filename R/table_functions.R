@@ -46,16 +46,26 @@ make_table_data <- function(df) {
     "fail_wp" = df$wp_fail,
     "success_wp" = df$wp_succeed
   ) %>%
-    select(choice, choice_prob, success_prob, fail_wp, success_wp)
+    dplyr::select(
+      "choice",
+      "choice_prob",
+      "success_prob",
+      "fail_wp",
+      "success_wp")
 
   punt <- tibble::tibble(
-    "choice_prob" = if_else(is.na(df$punt_wp), NA_real_, df$punt_wp),
+    "choice_prob" = dplyr::if_else(is.na(df$punt_wp), NA_real_, df$punt_wp),
     "choice" = "Punt",
     "success_prob" = NA_real_,
     "fail_wp" = NA_real_,
     "success_wp" = NA_real_
   ) %>%
-    select(choice, choice_prob, success_prob, fail_wp, success_wp)
+    dplyr::select(
+      "choice",
+      "choice_prob",
+      "success_prob",
+      "fail_wp",
+      "success_wp")
 
   fg <- tibble::tibble(
     "choice_prob" = df$fg_wp,
@@ -64,17 +74,22 @@ make_table_data <- function(df) {
     "fail_wp" = df$miss_fg_wp,
     "success_wp" = df$make_fg_wp
   ) %>%
-    select(choice, choice_prob, success_prob, fail_wp, success_wp)
+    dplyr::select(
+      "choice",
+      "choice_prob",
+      "success_prob",
+      "fail_wp",
+      "success_wp")
 
-  tableData <- bind_rows(
+  tableData <- dplyr::bind_rows(
     go, fg, punt
   ) %>%
-    mutate(
-      choice_prob = 100 * choice_prob,
-      success_prob = 100 * success_prob,
-      fail_wp = 100 * fail_wp,
-      success_wp = 100 * success_wp
+    dplyr::mutate(
+      choice_prob = 100 * .data$choice_prob,
+      success_prob = 100 * .data$success_prob,
+      fail_wp = 100 * .data$fail_wp,
+      success_wp = 100 * .data$success_wp
     ) %>%
-    arrange(-choice_prob)
+    dplyr::arrange(dplyr::desc(.data$choice_prob))
   return(tableData)
 }
