@@ -10,7 +10,7 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.path = "man/figures/README-",
   out.width = "100%"
-)
+) 
 ```
 
 # cfb4th <a href='https://cfb4th.sportsdataverse.org'><img src='https://raw.githubusercontent.com/sportsdataverse/cfb4th/main/man/figures/logo.png' align="right" width="25%" min-width="120px" /></a>
