@@ -29,7 +29,8 @@ library(knitr)
 library(tibble)
 library(gt)
 suppressWarnings(
-  data <- cfb4th::load_4th_pbp(2020)
+  data <- cfb4th::load_4th_pbp(2020) %>% 
+    dplyr::filter(.data$week %in% 1:14)
 )
 ```
 
@@ -125,11 +126,11 @@ Looking at the table, the offense would be expected to have 86.5% win probabilit
 `cfbfastR` isn't available for live games and typing all the plays in by hand is annoying. So how does the 4th down bot work? With thanks to the ESPN API, which can be accessed using `get_4th_plays()`.
 
 ```{r espn}
-game <- cfbfastR::cfbd_game_info(2019, team = "Utah", week = 4)
+game <- cfbfastR::cfbd_game_info(year = 2019, team = "Utah", week = 4)
 plays <- cfb4th::get_4th_plays(game) %>% 
   tail(1)
 plays %>% 
-  dplyr::select(desc, TimeSecsRem)
+  dplyr::select("desc", "TimeSecsRem")
 plays %>% 
   cfb4th::add_4th_probs() %>%
   cfb4th::make_table_data() %>%

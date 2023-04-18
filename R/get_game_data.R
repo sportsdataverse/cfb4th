@@ -324,9 +324,9 @@ get_4th_plays <- function(df) {
             pos_score_diff_start = .data$pos_team_score - .data$def_pos_team_score,
             pos_team_receives_2H_kickoff = dplyr::case_when(
               # 1st half, home team opened game with kickoff, away team has ball
-              .data$period <= 2 & .data$home_opening_kickoff == 1 & .data$pos_team == .data$away_team ~ 1,
+              .data$period <= 2 & .data$home_opening_kickoff == 1 & .data$pos_team == .data$away ~ 1,
               # 1st half, away team opened game with kickoff, home team has ball
-              .data$period <= 2 & .data$home_opening_kickoff == 0 & .data$pos_team == .data$home_team ~ 1,
+              .data$period <= 2 & .data$home_opening_kickoff == 0 & .data$pos_team == .data$home ~ 1,
               TRUE ~ 0
             ),
           ) %>%
