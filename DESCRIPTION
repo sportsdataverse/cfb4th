@@ -1,7 +1,7 @@
 Package: cfb4th
 Type: Package
 Title: Functions to Calculate Optimal Fourth Down Decisions for NCAA Football
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: 
     c(person(given = "Jared",
              family = "Lee",
@@ -28,7 +28,7 @@ URL: https://cfb4th.sportsdataverse.org/,
 BugReports: https://github.com/sportsdataverse/cfb4th/issues
 Depends: 
     R (>= 3.5.0)
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.3
 Imports: 
     dplyr,
     glue,

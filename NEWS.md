@@ -1,5 +1,10 @@
 # cfb4th (development version)
 
+## cfb4th 0.1.2
+
+* Tidy-select and data-masking fixes to reduce notes/warnings/errors for checks
+* Load `{cfbfastR}` models in the same way that the package does (from URL)
+
 # cfb4th 0.1.1
 
 * Re-categorized some plays as unknown (i.e., `NA`) `go`: Penalties and Timeouts
