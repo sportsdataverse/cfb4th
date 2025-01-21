@@ -144,7 +144,7 @@ get_fg_wp <- function(pbp) {
   miss_df <- dat %>%
     flip_team() %>%
     dplyr::mutate(
-      yards_to_goal = (100 - .data$yards_to_goal) - 8,
+      yards_to_goal = (100 - .data$yards_to_goal),
       # yards_to_goal can't be bigger than 80 due to some weird nfl rule *Check rule for college?
       yards_to_goal = dplyr::if_else(.data$yards_to_goal > 80, 80, .data$yards_to_goal),
       yards_to_goal = ifelse(.data$yards_to_goal < 1, 1, .data$yards_to_goal)
