@@ -135,39 +135,12 @@ load_4th_pbp <- function(seasons) {
   }
 
   # this is less likely to result in crashes due to memory
-  purrr::map_df(seasons, ~{
-    message(glue::glue("Loading season {.x}"))
-    suppressMessages({bets <- cfbfastR::cfbd_betting_lines(year = .x) %>%
-      dplyr::bind_rows(cfbfastR::cfbd_betting_lines(year = .x, season_type = "postseason")) %>%
-      dplyr::mutate(
-        provider = factor(.data$provider,
-                               c(
-                                 "consensus",
-                                 "teamrankings",
-                                 "numberfire",
-                                 "Caesars",
-                                 "Caesars (Pennsylvania)",
-                                 "William Hill (New Jersey)",
-                                 "SugarHouse",
-                                 "Bovada"
-                               )),
-             spread = as.numeric(.data$spread),
-             over_under = as.numeric(.data$over_under)
-             ) %>%
-      dplyr::group_by(.data$game_id) %>%
-      dplyr::arrange(.data$provider) %>%
-      dplyr::slice(1) %>%
-      dplyr::select(
-        "game_id",
-        "spread",
-        "over_under")
-      }
-    )
-    cfbfastR::load_cfb_pbp(.x) %>%
-      dplyr::left_join(bets, by = "game_id") %>%
-      cfb4th::add_4th_probs() %>%
-      return()
-  }) %>%
+  purrr::map_df(seasons, function(x) {
+    message(glue::glue("Loading season {x}"))
+    cfbfastR::load_cfb_pbp(x) %>%
+        cfb4th::add_4th_probs() %>%
+        return()
+    }) %>%
     dplyr::mutate(
       # choice <- dplyr::case_when(
       #   # football to punt

@@ -1,8 +1,9 @@
-# punt_df <- pbp %>%
-#   filter(str_detect(play_text,"punt"))
-#punt_df <- readRDS("punt_df.RDS")
+library(tidyverse)
+library(MASS)
 
-
+if (!exists("pbp")) {
+  pbp = cfbfastR::load_cfb_pbp(2014:2024)
+}
 
 get_density <- function(x, y, ...) {
   density_out <- MASS::kde2d(x, y, ...)

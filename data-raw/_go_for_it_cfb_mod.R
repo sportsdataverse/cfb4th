@@ -1,29 +1,11 @@
 library(tidyverse)
 library(tidymodels)
 
-# seasons <- 2014:2019
-# pbp <- purrr::map_df(seasons, function(x) {
-#   print(x)
-#   readRDS(
-#     url(
-#       glue::glue("https://raw.githubusercontent.com/saiemgilani/cfbscrapR-data/master/data/rds/pbp_players_pos_{x}.rds")
-#     )
-#   )
-# })
+if (!exists("pbp")) {
+  pbp = cfbfastR::load_cfb_pbp(2014:2024)
+}
 
-seasons <- 2014:2020
-pbp <- purrr::map_df(seasons, function(x) {
-  download.file(glue::glue("https://raw.githubusercontent.com/saiemgilani/cfbscrapR-data/master/data/parquet/pbp_players_pos_{x}.parquet"),"tmp.parquet")
-  df <- arrow::read_parquet("tmp.parquet")
-  return(df)
-})
-
-lines <- read_csv("data/Game_Lines.csv")
-lines <- lines %>%
-  select(game_id,home_team,away_team,spread_line = spread,total_line = over_under)
-
-pbp_test <- pbp %>% sample_n(1000)
-pbp_test <- pbp_test %>% as_tibble() %>%
+model_vars <- pbp %>%
   filter(
     down %in% c(3,4),
     rush == 1 | pass == 1,
@@ -31,17 +13,7 @@ pbp_test <- pbp_test %>% as_tibble() %>%
     !is.na(yards_to_goal),
     !is.na(score_diff)
   ) %>%
-  mutate(first_down_penalty = firstD_by_penalty) #%>% select(contains("penalty")) %>% view()
-pbp %>% count(penalty_detail) %>% view()
-model_vars <-pbp %>%
-  filter(
-    down %in% c(3,4),
-    rush == 1 | pass == 1,
-    !is.na(offense_play),
-    !is.na(yards_to_goal),
-    !is.na(score_diff)
-  ) %>%
-  left_join(lines,by = c("game_id")) %>%
+  # left_join(lines,by = c("game_id")) %>%
   mutate(first_down_penalty = firstD_by_penalty) %>%
   mutate(#yards_gained =
 
@@ -61,10 +33,10 @@ model_vars <-pbp %>%
          # truncate to make model training easier
          yards_gained = ifelse(yards_gained < -10, -10, yards_gained),
          yards_gained = ifelse(yards_gained > 65, 65, yards_gained),
-         home_total = (spread_line + total_line) / 2,
-         away_total = (total_line - spread_line) / 2,
+         home_total = (spread + over_under) / 2,
+         away_total = (over_under - spread) / 2,
          posteam_total = if_else(offense_play == home_team, home_total, away_total),
-         posteam_spread = dplyr::if_else(offense_play == home_team, spread_line, -1 * spread_line)
+         posteam_spread = dplyr::if_else(offense_play == home_team, spread, -1 * spread)
   ) %>%
   # look at when an actual play is run or a defensive penalty gives a first down
   filter(rush+pass == 1 | first_down_penalty == 1,
@@ -89,6 +61,7 @@ model_vars <-pbp %>%
   ) %>%
   # 0 = 10 yard loss
   mutate(label = label + 10)
+
 set.seed(2013)
 
 full_train = xgboost::xgb.DMatrix(model.matrix(~.+0, data = model_vars %>% dplyr::select(-label)), label = as.integer(model_vars$label))
@@ -97,11 +70,20 @@ nrounds = 5000
 
 grid <- grid_latin_hypercube(
   finalize(mtry(), model_vars),
-  min_n(),
-  tree_depth(),
-  learn_rate(),
-  loss_reduction(),
-  sample_size = sample_prop(),
+  # min_n(),
+  # tree_depth(),
+  # learn_rate(),
+  # loss_reduction(),
+
+  dials::min_n(),
+  # force tree depth to be between 3 and 5
+  dials::tree_depth(range = c(4L, 8L)),
+  # to force learn_rate to not be crazy small like dials defaults to
+  dials::learn_rate(range = c(-1.5, -1), trans = scales::log10_trans()),
+  dials::loss_reduction(),
+  sample_size = dials::sample_prop(),
+
+  # sample_size = sample_prop(),
   size = 20
 )
 
@@ -146,13 +128,13 @@ get_metrics <- function(df, row = 1) {
 
   this_param <- bind_rows(output)
 
-  if (row == 1) {
-    saveRDS(this_param, "data/modeling.rds")
-  } else {
-    prev <- readRDS("data/modeling.rds")
-    for_save <- bind_rows(prev, this_param)
-    saveRDS(for_save, "data/modeling.rds")
-  }
+  # if (row == 1) {
+  #   saveRDS(this_param, "data/modeling.rds")
+  # } else {
+  #   prev <- readRDS("data/modeling.rds")
+  #   for_save <- bind_rows(prev, this_param)
+  #   saveRDS(for_save, "data/modeling.rds")
+  # }
 
   return(this_param)
 
@@ -164,6 +146,7 @@ results <- map_df(1 : nrow(grid), function(x) {
   get_metrics(grid %>% dplyr::slice(x), row = x)
 
 })
+saveRDS(results, "data/modeling.rds")
 
 # plot
 results %>%
@@ -178,33 +161,33 @@ results %>%
   labs(x = NULL, y = "logloss") +
   theme_minimal()
 
-
-# [1124] test-merror:0.676584+0.008136	test-mlogloss:2.858089+0.027665
-
+best_model <- results %>%
+  dplyr::arrange(logloss) %>%
+  dplyr::slice(1)
 
 # **************************************************************************************
 # train
 
-nrounds = 157
+nrounds = best_model$iter
 params <-
   list(
     booster = "gbtree",
     objective = "multi:softprob",
     eval_metric = c("mlogloss"),
     num_class = 76,
-    eta = .07,
-    gamma = 4.325037e-09,
-    subsample=0.5385424,
-    colsample_bytree=0.6666667,
-    max_depth = 4,
-    min_child_weight = 7
+    eta = best_model$eta,
+    gamma = best_model$gamma,
+    subsample = best_model$subsample,
+    colsample_bytree = best_model$colsample_bytree,
+    max_depth = best_model$max_depth,
+    min_child_weight = best_model$min_child_weight
   )
 
 full_train = xgboost::xgb.DMatrix(model.matrix(~.+0, data = model_vars %>% dplyr::select(-label)), label = as.integer(model_vars$label))
 fd_model <- xgboost::xgboost(params = params, data = full_train, nrounds = nrounds, verbose = 2)
 
 #saveRDS(fd_model, file = 'data/fd_model.RDS')
-usethis::use_data(fd_model,internal = TRUE,overwrite = FALSE)
+usethis::use_data(fd_model, internal = TRUE, overwrite = T)
 
 importance <- xgboost::xgb.importance(feature_names = colnames(fd_model), model = fd_model)
 xgboost::xgb.ggplot.importance(importance_matrix = importance)
@@ -215,14 +198,15 @@ xgboost::xgb.ggplot.importance(importance_matrix = importance)
 # saveRDS(yard_model,"yard_model.RDS")
 
 
-#"https://github.com/saiemgilani/game-on-paper-app/blob/main/python/models/wp_spread.model"
+#"https://github.com/sportsdataverse/sportsdataverse-py/blob/main/sportsdataverse/cfb/models/wp_spread.model"
 # Spread WP model from gameonpaper.com
-usethis::use_data(wp_model, internal = TRUE, overwrite = FALSE)
+wp_model <- xgboost::xgb.load(paste0(here::here(), "/data/wp_spread.model"))
+usethis::use_data(wp_model, internal = TRUE, overwrite = T)
 
 
 # EP model from cfbfastR
 ep_model <- cfbfastR:::ep_model
-usethis::use_data(ep_model, internal = TRUE, overwrite = FALSE)
+usethis::use_data(ep_model, internal = TRUE, overwrite = T)
 
 
 # Team Info from cfbfastR
@@ -230,4 +214,4 @@ team_info <- cfbfastR::cfbd_team_info()
 
 
 # ADD EVERYTHING
-usethis::use_data(ep_model,wp_model,fd_model,punt_df,fg_model,team_info, internal = TRUE, overwrite = TRUE)
+usethis::use_data(team_info, internal = TRUE, overwrite = TRUE)
