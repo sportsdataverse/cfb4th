@@ -14,8 +14,8 @@ get_density <- function(x, y, ...) {
 }
 
 points <- pbp %>%
-  select(play_text, yards_to_goal,punt, kick_distance=yds_punted, return_yards=yds_punt_return,punt_blocked) %>%
-  mutate(
+  dplyr::select(play_text, yards_to_goal,punt, kick_distance=yds_punted, return_yards=yds_punt_return, punt_blocked) %>%
+  dplyr::mutate(
     # give return yards too
     yards_to_goal_end = yards_to_goal - kick_distance + return_yards,
     yards_to_goal_end =
@@ -34,21 +34,21 @@ points <- pbp %>%
     # this isn't a muffed punt
   ) %>%
   # there's like 10 of these for some reason
-  filter(!is.na(yards_to_goal_end)) %>%
-  select(play_text, yards_to_goal, yards_to_goal_end, blocked, return_td)
+  dplyr::filter(!is.na(yards_to_goal_end)) %>%
+  dplyr::select(play_text, yards_to_goal, yards_to_goal_end, blocked, return_td)
 
 points
 
 outliers <- points %>%
-  group_by(yards_to_goal) %>%
-  summarize(
+  dplyr::group_by(yards_to_goal) %>%
+  dplyr::summarize(
     #muffed = sum(fumble_lost),
     blocked = sum(blocked),
     return_td = sum(return_td),
     n = n()
   ) %>%
-  ungroup() %>%
-  mutate(
+  dplyr::ungroup() %>%
+  dplyr::mutate(
     bin = case_when(
       yards_to_goal < 40 ~ 0,
       between(yards_to_goal, 40, 49) ~ 1,
@@ -59,8 +59,8 @@ outliers <- points %>%
       between(yards_to_goal, 90, 99) ~ 6
     )
   ) %>%
-  group_by(bin) %>%
-  mutate(
+  dplyr::group_by(bin) %>%
+  dplyr::mutate(
    # muffed = sum(muffed),
     blocked = sum(blocked),
     return_td = sum(return_td),
@@ -69,70 +69,70 @@ outliers <- points %>%
     bin_blocked_pct = blocked / n,
     bin_td_pct = return_td / n,
   ) %>%
-  ungroup()
+  dplyr::ungroup()
 
 return_tds <- outliers %>%
-  mutate(
+  dplyr::mutate(
     yards_to_goal_end = 100,
     density = bin_blocked_pct
   ) %>%
-  select(yards_to_goal, yards_to_goal_end, density) %>%
-  filter(density > 0)
+  dplyr::select(yards_to_goal, yards_to_goal_end, density) %>%
+  dplyr::filter(density > 0)
 
 blocks <- outliers %>%
-  mutate(
+  dplyr::mutate(
     # not used for anything except to pick these out later
     yards_to_goal_end = 999,
     density = bin_td_pct
   ) %>%
-  select(yards_to_goal, yards_to_goal_end, density) %>%
-  filter(density > 0)
+  dplyr::select(yards_to_goal, yards_to_goal_end, density) %>%
+  dplyr::filter(density > 0)
 
 # get density excluding blocks and returns. will add those later
 density_map_normal <- points %>%
-  filter(blocked == 0 & return_td == 0) %>%
-  select(yards_to_goal, yards_to_goal_end) %>%
-  mutate(density = get_density(yards_to_goal, yards_to_goal_end, n = 100))
+  dplyr::filter(blocked == 0 & return_td == 0) %>%
+  dplyr::select(yards_to_goal, yards_to_goal_end) %>%
+  dplyr::mutate(density = get_density(yards_to_goal, yards_to_goal_end, n = 100))
 
 # get final percentages
 df <- density_map_normal %>%
-  group_by(yards_to_goal, yards_to_goal_end) %>%
+  dplyr::group_by(yards_to_goal, yards_to_goal_end) %>%
   dplyr::slice(1) %>%
-  ungroup() %>%
-  arrange(yards_to_goal, yards_to_goal_end) %>%
-  group_by(yards_to_goal) %>%
-  mutate(
+  dplyr::ungroup() %>%
+  dplyr::arrange(yards_to_goal, yards_to_goal_end) %>%
+  dplyr::group_by(yards_to_goal) %>%
+  dplyr::mutate(
     tot_dens = sum(density),
     pct = density / tot_dens
   ) %>%
-  ungroup() %>%
-  bind_rows(blocks) %>%
-  bind_rows(return_tds) %>%
-  arrange(yards_to_goal, yards_to_goal_end) %>%
-  group_by(yards_to_goal) %>%
-  mutate(
+  dplyr::ungroup() %>%
+  dplyr::bind_rows(blocks) %>%
+  dplyr::bind_rows(return_tds) %>%
+  dplyr::arrange(yards_to_goal, yards_to_goal_end) %>%
+  dplyr::group_by(yards_to_goal) %>%
+  dplyr::mutate(
     outlier_pct = sum(density * (yards_to_goal_end == 100)) + sum(density * (yards_to_goal_end == 999)),
     non_outlier_pct = 1 - outlier_pct,
     pct = pct * non_outlier_pct,
-    pct = ifelse(is.na(pct), density, pct),
-    yards_to_goal_end = ifelse(yards_to_goal_end == 999, yards_to_goal, yards_to_goal_end)
+    pct = dplyr::if_else(is.na(pct), density, pct),
+    yards_to_goal_end = dplyr::if_else(yards_to_goal_end == 999, yards_to_goal, yards_to_goal_end)
   ) %>%
-  ungroup() %>%
+  dplyr::ungroup() %>%
   # left_join(
   #   outliers %>% select(yards_to_goal, bin_muffed_pct), by = "yards_to_goal"
   # ) %>%
-  arrange(yards_to_goal, yards_to_goal_end) %>%
-  select(yards_to_goal, yards_to_goal_end, pct) %>% #, bin_muffed_pct) %>%
-  filter(yards_to_goal > 30)
+  dplyr::arrange(yards_to_goal, yards_to_goal_end) %>%
+  dplyr::select(yards_to_goal, yards_to_goal_end, pct) %>% #, bin_muffed_pct) %>%
+  dplyr::filter(yards_to_goal > 30)
 
 punt_df <- bind_rows(
   # get a df without the return and blocked probs
   df %>%
-    filter(yards_to_goal_end != 100 & yards_to_goal != yards_to_goal_end),
+    dplyr::filter(yards_to_goal_end != 100 & yards_to_goal != yards_to_goal_end),
   df
 ) %>%
-  arrange(yards_to_goal, yards_to_goal_end) %>%
-  group_by(yards_to_goal, yards_to_goal_end) %>%
+  dplyr::arrange(yards_to_goal, yards_to_goal_end) %>%
+  dplyr::group_by(yards_to_goal, yards_to_goal_end) %>%
   # mutate(
   #   muff = 1 : n() - 1,
   #   #pct = ifelse(muff == 1, bin_muffed_pct * pct, pct),
@@ -141,10 +141,10 @@ punt_df <- bind_rows(
   #   )
   # ) %>%
   # one last making sure all the pct add up to 1
-  group_by(yards_to_goal) %>%
-  mutate(tot_pct = sum(pct), pct = pct / tot_pct) %>%
-  ungroup() %>%
-  select(
+  dplyr::group_by(yards_to_goal) %>%
+  dplyr::mutate(tot_pct = sum(pct), pct = pct / tot_pct) %>%
+  dplyr::ungroup() %>%
+  dplyr::select(
     yards_to_goal, yards_to_goal_end, pct#, muff
   )
 

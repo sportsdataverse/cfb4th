@@ -6,7 +6,7 @@ if (!exists("pbp")) {
 }
 
 fgs_data <- pbp %>%
-  filter(str_detect(play_type,"Field Goal")) %>%
+  dplyr::filter(str_detect(play_type,"Field Goal")) %>%
   transmute(yards_to_goal,result = ifelse(str_detect(play_type,"Good"),1,0))
 
 
