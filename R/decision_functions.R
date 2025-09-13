@@ -188,7 +188,7 @@ get_go_wp <- function(pbp) {
 
   # get model output from situation
   preds_df <- stats::predict(
-    fd_model,
+    cfb4th:::fd_model,
     data
   ) %>%
     tibble::as_tibble() %>%

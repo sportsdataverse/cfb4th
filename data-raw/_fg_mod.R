@@ -11,10 +11,9 @@ fgs_data <- pbp %>%
 
 
 
-fg_model <- mgcv::bam(result ~ s(yards_to_goal),
-                      data = fgs_data, family = "binomial")
+fg_model <- mgcv::bam(result ~ s(yards_to_goal), data = fgs_data, family = "binomial")
 #saveRDS(fg_model,"fg_model.RDS")
-usethis::use_data(fg_model, internal = TRUE, overwrite = T)
+# usethis::use_data(fg_model, internal = T, overwrite = T)
 
 # # function to get WP for field goal attempt
 # get_fg_wp <- function(df) {
