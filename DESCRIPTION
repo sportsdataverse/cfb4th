@@ -43,7 +43,7 @@ Imports:
     stringr,
     tibble,
     tidyr,
-    xgboost
+    xgboost (< 2.0.0)
 Suggests: 
     future,
     gt,
