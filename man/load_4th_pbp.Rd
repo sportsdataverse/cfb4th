@@ -19,7 +19,7 @@ load_4th_pbp(seasons)
 Load calculated 4th down probabilities from `cfbfastR` data.
 }
 \examples{
-\donttest{
+\dontrun{
   cfb4th::load_4th_pbp(2020)
 }
 }

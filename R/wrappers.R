@@ -124,7 +124,7 @@ add_4th_probs <- function(df) {
 #' }
 #' @export
 #' @examples
-#' \donttest{
+#' \dontrun{
 #'   cfb4th::load_4th_pbp(2020)
 #' }
 

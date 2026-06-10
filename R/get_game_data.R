@@ -26,7 +26,7 @@
 #' }
 #' @export
 #' @examples
-#' \donttest{
+#' \dontrun{
 #'
 #' game <- cfbfastR::cfbd_game_info(2019, team = "Utah", week = 3)
 #' plays <- cfb4th::get_4th_plays(game)
