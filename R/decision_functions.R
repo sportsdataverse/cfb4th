@@ -187,10 +187,12 @@ get_go_wp <- function(pbp) {
     as.matrix()
 
   # get model output from situation
-  preds_df <- stats::predict(
-    fd_model,
-    data
-  ) %>%
+  fd_preds <- stats::predict(fd_model, data)
+  # xgboost >= 2.0 returns an (n_plays x 76) matrix for multi:softprob; flatten
+  # row-major to the long [play1 classes..., play2 classes..., ...] vector that
+  # the gain mapping below expects (older xgboost returned this flat vector).
+  if (is.matrix(fd_preds)) fd_preds <- as.vector(t(fd_preds))
+  preds_df <- fd_preds %>%
     tibble::as_tibble() %>%
     dplyr::rename("prob" = "value") %>%
     dplyr::bind_cols(

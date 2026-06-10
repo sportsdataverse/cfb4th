@@ -5,7 +5,6 @@
 ^\.github$
 ^_pkgdown\.yml$
 ^docs$
-^inst*
 ^pkgdown$
 ^logo$
 ^data-raw$

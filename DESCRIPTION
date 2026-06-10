@@ -1,35 +1,26 @@
-Package: cfb4th
 Type: Package
-Title: Functions to Calculate Optimal Fourth Down Decisions for NCAA Football
+Package: cfb4th
+Title: Functions to Calculate Optimal Fourth Down Decisions for NCAA
+    Football
 Version: 0.1.2
-Authors@R: 
-    c(person(given = "Jared",
-             family = "Lee",
-             role = c("aut", "cre", "cph"),
-             email = "13jaredlee@gmail.com"),
-      person(given = "Ben",
-             family = "Baldwin",
-             role = c("aut"),
-             email = "bbaldwin206@gmail.com"),
-      person(given = "Sebastian",
-             family = "Carl",
-             role = "ctb",
-             email = "mrcaseb@gmail.com"))
+Authors@R: c(
+    person("Jared", "Lee", , "13jaredlee@gmail.com", role = c("aut", "cre", "cph")),
+    person("Ben", "Baldwin", , "bbaldwin206@gmail.com", role = "aut"),
+    person("Sebastian", "Carl", , "mrcaseb@gmail.com", role = "ctb")
+  )
 Maintainer: Jared Lee <13jaredlee@gmail.com>
-Description: A set of functions to estimate outcomes of fourth down
-    plays in NCAA football and obtain fourth down plays
-    from <https://www.espn.com/>.
+Description: A set of functions to estimate outcomes of fourth down plays
+    in NCAA football and obtain fourth down plays from
+    <https://www.espn.com/>.
 License: MIT + file LICENSE
-Encoding: UTF-8
-LazyData: true
 URL: https://cfb4th.sportsdataverse.org/,
     https://github.com/sportsdataverse/cfb4th,
     http://cfb4th.sportsdataverse.org/
 BugReports: https://github.com/sportsdataverse/cfb4th/issues
 Depends: 
     R (>= 3.5.0)
-RoxygenNote: 7.2.3
 Imports: 
+    cfbfastR (>= 1.4.0),
     dplyr,
     glue,
     httr,
@@ -38,18 +29,20 @@ Imports:
     magrittr,
     mgcv,
     nnet,
-    cfbfastR (>= 1.4.0),
     purrr,
     stringr,
     tibble,
     tidyr,
-    xgboost
+    xgboost (>= 2.0.0)
 Suggests: 
     future,
     gt,
     rmarkdown,
+    testthat (>= 3.0.0),
     tictoc,
     tidyselect,
-    tidyverse,
-    testthat (>= 3.0.0)
+    tidyverse
 Config/testthat/edition: 3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.3
