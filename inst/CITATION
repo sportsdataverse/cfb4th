@@ -1,20 +1,23 @@
-year <- sub("-.*", "", meta$Date)
+## DESCRIPTION carries no Date field, so fall back to the build year.
+year <- if (!is.null(meta$Date)) sub("-.*", "", meta$Date) else format(Sys.Date(), "%Y")
 note <- sprintf("R package version %s", meta$Version)
 
-citHeader("To cite the cfb4th R package in publications, use:")
-
-citEntry(entry = "Misc",
-         author = personList(
-         as.person("Jared Lee"),
-         as.person("Sebastian Carl"),
-         as.person("Ben Baldwin")
-         ),
-         title = "cfb4th: The SportsDataverse's R Package for College Football 4th Down Modeling.",
-         url = c("https://cfb4th.sportsdataverse.org/"),
-         year = year,
-         note = note,
-         textVersion = paste(
-    "Jared Lee and Sebastian Carl and Ben Baldwin. cfb4th: The SportsDataverse's R Package for College Football 4th Down Modeling.",
-    "Retrieved from https://cfb4th.sportsdataverse.org/"
+bibentry(
+  bibtype  = "Misc",
+  header   = "To cite the cfb4th R package in publications, use:",
+  key      = "lee_cfb4th",
+  author   = c(
+    person("Jared", "Lee"),
+    person("Ben", "Baldwin"),
+    person("Sebastian", "Carl")
+  ),
+  title    = "cfb4th: The SportsDataverse's R Package for College Football 4th Down Modeling.",
+  url      = "https://cfb4th.sportsdataverse.org/",
+  year     = year,
+  note     = note,
+  textVersion = paste0(
+    "Jared Lee, Ben Baldwin, and Sebastian Carl (", year, "). cfb4th: The ",
+    "SportsDataverse's R Package for College Football 4th Down Modeling. ",
+    note, ". Retrieved from https://cfb4th.sportsdataverse.org/"
   )
 )
