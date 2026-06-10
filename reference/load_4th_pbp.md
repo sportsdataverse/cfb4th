@@ -27,13 +27,7 @@ added and also the following:
 ## Examples
 
 ``` r
-# \donttest{
+if (FALSE) { # \dontrun{
   cfb4th::load_4th_pbp(2020)
-#> Loading season 2020
-#> Error in map(.x, .f, ...): ℹ In index: 1.
-#> Caused by error in `dplyr::filter()`:
-#> ℹ In argument: `!is.na(.data$spread)`.
-#> Caused by error in `.data$spread`:
-#> ! Column `spread` not found in `.data`.
-# }
+} # }
 ```
