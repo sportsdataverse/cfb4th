@@ -155,7 +155,7 @@ small.nav-text {
 
 .dropdown-toggle
 
-.navbar-dark .navbar-nav .nav-link {
+.navbar-nav .nav-link {
     font-family: "Fira Mono";
     font-size: small;
     color: #EC261C;
@@ -165,28 +165,28 @@ small.nav-text {
     padding-bottom: 0.5rem;
     padding-left: 1rem;
 }
-.navbar-dark .navbar-nav {
+.navbar-nav {
     font-family: "Fira Mono";
     font-size: small;
 }
-.navbar-dark .navbar-nav {
+.navbar-nav {
     font-family: "Fira Mono";
     font-size: small;
 }
 .nav-link:hover, .nav-link:focus {
     color: #EC261C;
 }
-.navbar-dark .navbar-nav .active>.nav-link, .navbar-dark .navbar-nav .focus>.nav-link{
+.navbar-nav .active>.nav-link, .navbar-nav .focus>.nav-link{
     font-family: "Fira Mono";
     font-size: small;
     background: #574646;
     color: #EC261C;
 }
-.navbar-dark .navbar-nav .nav-item>.nav-link:hover, .navbar-light .navbar-nav .nav-item>.nav-link:hover {
+.navbar-nav .nav-item>.nav-link:hover, .navbar-nav .nav-item>.nav-link:hover {
     background: rgba(34,26,77,0.1);
     color: #EC261C;
 }
-.navbar-dark .navbar-nav .show>.nav-link, .navbar-dark .navbar-nav .nav-link.active, .navbar-dark .navbar-nav .nav-link:hover, .navbar-dark .navbar-nav .nav-link:focus {
+.navbar-nav .show>.nav-link, .navbar-nav .nav-link.active, .navbar-nav .nav-link:hover, .navbar-nav .nav-link:focus {
     font-family: "Fira Mono";
     font-size: small;
     color: #EC261C;
@@ -219,7 +219,7 @@ small.nav-text {
     animation: glow 3s ease-in-out infinite alternate;
 }
 
-.navbar-dark .navbar-brand {
+.navbar-brand {
     font-family: "Bungee";
     font-size: 16px;
     color: #FDFDFD;
@@ -233,7 +233,7 @@ small.nav-text {
     border-top: 1px solid #ffffff;
 }
 
-.navbar-dark input[type="search"] {
+input[type="search"] {
     border-color: #EC261C;
     background-color: #ffffff;
     color: #3b3e3f;
@@ -243,3 +243,9 @@ small.nav-text {
     color: #EC261C;
 
 }
+
+/* Restore the dark navbar (BS5 color-mix had regressed it to light, hiding the
+   white brand). */
+.navbar { background-color: #222222 !important; }
+/* Version badge legible on the dark navbar (BS5 .text-muted otherwise wins). */
+small.nav-text.text-muted { color: #EAEBEC !important; }

@@ -37,11 +37,11 @@ template:
 
 authors:
   Jared Lee:
-    href: https://twitter.com/JaredDLee
+    href: https://x.com/JaredDLee
   Ben Baldwin:
-    href: https://twitter.com/benbbaldwin
+    href: https://x.com/benbbaldwin
   Sebastian Carl:
-    href: https://twitter.com/mrcaseb
+    href: https://x.com/mrcaseb
 
 
 home:
@@ -141,8 +141,8 @@ navbar:
       - text: "Raw Data Repository"
         href: https://github.com/sportsdataverse/cfbfastR-raw
     twitter:
-      icon: "fab fa-twitter fa-lg"
-      href: http://twitter.com/aisports_4th
+      icon: "fab fa-x-twitter fa-lg"
+      href: https://x.com/aisports_4th
     github:
       icon: "fab fa-github fa-lg"
       href: https://github.com/sportsdataverse/cfb4th/
