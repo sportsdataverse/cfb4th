@@ -2,6 +2,7 @@ url: https://cfb4th.sportsdataverse.org/
 
 template:
   bootstrap: 5
+  light-switch: true
   bootswatch: cosmo
   includes:
     in_header: |
@@ -54,7 +55,7 @@ home:
 navbar:
   structure:
     left: [home, intro, reference, news, games, network, data, repo]
-    right: [twitter, github]
+    right: [search, twitter, github, lightswitch]
   components:
     articles:
       icon: "fas fa-book-reader"
@@ -142,7 +143,9 @@ navbar:
         href: https://github.com/sportsdataverse/cfbfastR-raw
     twitter:
       icon: "fab fa-x-twitter fa-lg"
+      aria-label: X (Twitter)
       href: https://x.com/aisports_4th
     github:
       icon: "fab fa-github fa-lg"
+      aria-label: GitHub
       href: https://github.com/sportsdataverse/cfb4th/
