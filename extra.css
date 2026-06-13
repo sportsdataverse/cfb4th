@@ -268,3 +268,9 @@ small.nav-text.text-muted { color: #EAEBEC !important; }
 [data-bs-theme="dark"] :is(#main, aside) a {
   color: #2680E4;
 }
+
+/* Navbar menu text light gray (the un-deaded rule set it brand-red); hover/active
+   keep the red accent. Navbar is #222222 in both modes, so this works in both. */
+.navbar-nav .nav-link {
+  color: #D3D3D3;
+}
