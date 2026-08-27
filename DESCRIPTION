@@ -4,11 +4,12 @@ Title: Functions to Calculate Optimal Fourth Down Decisions for NCAA
     Football
 Version: 0.1.2
 Authors@R: c(
-    person("Jared", "Lee", , "13jaredlee@gmail.com", role = c("aut", "cre", "cph")),
+    person("Jared", "Lee", , "13jaredlee@gmail.com", role = c("aut", "cph")),
     person("Ben", "Baldwin", , "bbaldwin206@gmail.com", role = "aut"),
-    person("Sebastian", "Carl", , "mrcaseb@gmail.com", role = "ctb")
+    person("Sebastian", "Carl", , "mrcaseb@gmail.com", role = "ctb"),
+    person("Saiem", "Gilani", , "saiem.gilani@gmail.com", role = c("aut", "cre"))
   )
-Maintainer: Jared Lee <13jaredlee@gmail.com>
+Maintainer: Saiem Gilani <saiem.gilani@gmail.com>
 Description: A set of functions to estimate outcomes of fourth down plays
     in NCAA football and obtain fourth down plays from
     <https://www.espn.com/>.
