@@ -14,7 +14,7 @@ library(tibble)
 library(gt)
 ```
 
-## Easy mode: using cfbfastR data
+### Easy mode: using cfbfastR data
 
 Here’s what the data obtained using
 [`load_4th_pbp()`](https://cfb4th.sportsdataverse.org/reference/load_4th_pbp.md)
@@ -51,7 +51,7 @@ data %>%
   knitr::kable(digits = 2)
 ```
 
-## Calculations from user input
+### Calculations from user input
 
 The below shows the bare minimum amount of information that has to be
 fed to `cfb4th` in order to compute 4th down decision recommendations.
@@ -102,7 +102,7 @@ one_play %>%
 |:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | Utah | 4 | 40 | 1.4 | 0.49 | 0.81 | 0.92 | 0.87 | 0.3 | 0.81 | 0.91 | 0.84 | 0.85 |
 
-## Make a summary table
+### Make a summary table
 
 Let’s put the play above into a table using the provided function
 [`make_table_data()`](https://cfb4th.sportsdataverse.org/reference/make_table_data.md),
@@ -128,7 +128,7 @@ one_play %>%
 Looking at the table, the offense would be expected to have 86.5% win
 probability if they had gone for it and 85% if they punted.
 
-## Getting 4th down plays from a live game
+### Getting 4th down plays from a live game
 
 `cfbfastR` isn’t available for live games and typing all the plays in by
 hand is annoying. So how does the 4th down bot work? With thanks to the
@@ -158,3 +158,52 @@ plays %>%
 | Field goal attempt |         7.6 |         72.3 |     2.2 |        9.7 |
 | Go for it          |         7.5 |         29.0 |     2.3 |       20.2 |
 | Punt               |          NA |           NA |      NA |         NA |
+
+## **Our Authors**
+
+- [Jared Lee](https://x.com/JaredDLee)
+  [![@JaredDLee](https://img.shields.io/twitter/follow/JaredDLee?color=blue&label=%40JaredDLee&logo=x&style=for-the-badge)](https://x.com/JaredDLee)
+  [![@Kazink36](https://img.shields.io/github/followers/Kazink36?color=eee&logo=Github&style=for-the-badge)](https://github.com/Kazink36)
+- [Ben Baldwin](https://x.com/benbbaldwin)
+  [![@benbbaldwin](https://img.shields.io/twitter/follow/benbbaldwin?color=blue&label=%40benbbaldwin&logo=x&style=for-the-badge)](https://x.com/benbbaldwin)
+  [![@guga31bb](https://img.shields.io/github/followers/guga31bb?color=eee&logo=Github&style=for-the-badge)](https://github.com/guga31bb)
+- [Saiem Gilani](https://x.com/saiemgilani)
+  [![@saiemgilani](https://img.shields.io/twitter/follow/saiemgilani?color=blue&label=%40saiemgilani&logo=x&style=for-the-badge)](https://x.com/saiemgilani)
+  [![@saiemgilani](https://img.shields.io/github/followers/saiemgilani?color=eee&logo=Github&style=for-the-badge)](https://github.com/saiemgilani)
+
+### **Our Contributors**
+
+- [Sebastian Carl](https://x.com/mrcaseb)
+  [![@mrcaseb](https://img.shields.io/twitter/follow/mrcaseb?color=blue&label=%40mrcaseb&logo=x&style=for-the-badge)](https://x.com/mrcaseb)
+  [![@mrcaseb](https://img.shields.io/github/followers/mrcaseb?color=eee&logo=Github&style=for-the-badge)](https://github.com/mrcaseb)
+
+### **Citation**
+
+To cite the [**`cfb4th`**](https://cfb4th.sportsdataverse.org/) R
+package in publications, use:
+
+BibTeX Citation
+
+``` bibtex
+@misc{cfb4th,
+  author = {Jared Lee and Ben Baldwin and Saiem Gilani},
+  title = {cfb4th: The SportsDataverse},
+  url = {https://cfb4th.sportsdataverse.org/},
+  year = {2026}
+}
+```
+
+### **Related SportsDataverse packages**
+
+- [**cfbfastR**](https://cfbfastR.sportsdataverse.org/) - college
+  football
+- [**hoopR**](https://hoopR.sportsdataverse.org/) - men’s basketball
+- [**wehoop**](https://wehoop.sportsdataverse.org/) - women’s basketball
+- [**baseballr**](https://baseballr.sportsdataverse.org/) - baseball
+- [**fastRhockey**](https://fastRhockey.sportsdataverse.org/) - hockey
+- [**oddsapiR**](https://oddsapiR.sportsdataverse.org/) - betting odds
+- [**sportyR**](https://sportyR.sportsdataverse.org/) - playing surfaces
+- [**sportsdataverse-py**](https://py.sportsdataverse.org/) - the Python
+  package
+- [**sportsdataverse-R**](https://r.sportsdataverse.org/) - the R
+  meta-package

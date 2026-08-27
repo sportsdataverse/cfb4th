@@ -2,12 +2,13 @@
 
 ## Authors
 
-- **[Jared Lee](https://x.com/JaredDLee)**. Author, maintainer,
-  copyright holder.
+- **[Jared Lee](https://x.com/JaredDLee)**. Author, copyright holder.
 
 - **[Ben Baldwin](https://x.com/benbbaldwin)**. Author.
 
 - **[Sebastian Carl](https://x.com/mrcaseb)**. Contributor.
+
+- **Saiem Gilani**. Author, maintainer.
 
 ## Citation
 

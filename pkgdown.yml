@@ -1,9 +1,9 @@
 pandoc: 3.8.3
-pkgdown: 2.2.0
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   cfb4th: cfb4th.html
-last_built: 2026-06-24T03:15Z
+last_built: 2026-08-27T10:49Z
 urls:
   reference: https://cfb4th.sportsdataverse.org/reference
   article: https://cfb4th.sportsdataverse.org/articles
