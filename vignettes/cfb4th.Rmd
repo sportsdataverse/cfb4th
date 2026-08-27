@@ -9,7 +9,7 @@ opengraph:
     card: summary_large_image
     creator: "@saiemgilani"
 output: html_document
-description: "First load the packages and some data. load_4th_pbp() loads cfbfastR data and computes 4th down probabilities (depending on your computer, this may take up to a minute or two per season)."
+description: "Estimating whether a team should go for it, punt or kick, using <code>load_4th_pbp()</code> and <code>add_4th_probs()</code> to attach fourth-down decision recommendations to college football play-by-play."
 ---
 
 ```{r presetup, include = FALSE}
