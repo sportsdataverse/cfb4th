@@ -102,6 +102,17 @@ article](https://cfb4th.sportsdataverse.org/articles/cfb4th.html).
   <a href="https://twitter.com/benbbaldwin" target="blank"><img src="https://img.shields.io/twitter/follow/benbbaldwin?color=blue&label=%40benbbaldwin&logo=twitter&style=for-the-badge" alt="@benbbaldwin" /></a>
   <a href="https://github.com/guga31bb" target="blank"><img src="https://img.shields.io/github/followers/guga31bb?color=eee&logo=Github&style=for-the-badge" alt="@guga31bb" /></a>
 
+<!-- cheatsheet-section -->
+## **Cheat sheet**
+
+A printable one-page reference covering **cfbplotR, cfb4th and cfbseedR** — the function families, the loaders, and what each one returns.
+
+📄 **[Download the cfb4th cheat sheet (PDF)](https://sportsdataverse.org/cheatsheets/cfbplotR-cfb4th-cfbseedR.pdf)**
+
+Free to download, print and hand out; light and dark, US Letter landscape.
+Every SportsDataverse package has one — browse them all at
+**[sportsdataverse.org/cheatsheets](https://sportsdataverse.org/cheatsheets)**.
+
 ## **Citations**
 
 To cite the [**`cfb4th`**](https://cfb4th.sportsdataverse.org/) R
@@ -111,7 +122,7 @@ BibTex Citation
 
 ``` bibtex
 @misc{lee_et_al_2021_cfb4th,
-  author = {Jared Lee and Sebastian Carl and Ben Baldwin},
+  author = {Jared Lee and Ben Baldwin and Sebastian Carl and Saiem Gilani},
   title = {cfb4th: The SportsDataverse's R Package for College Football 4th Down Modeling.},
   url = {https://cfb4th.sportsdataverse.org/},
   year = {2021}

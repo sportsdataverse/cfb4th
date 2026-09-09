@@ -9,14 +9,15 @@ bibentry(
   author   = c(
     person("Jared", "Lee"),
     person("Ben", "Baldwin"),
-    person("Sebastian", "Carl")
+    person("Sebastian", "Carl"),
+    person("Saiem", "Gilani", comment = c(ORCID = "0000-0002-7194-9067"))
   ),
   title    = "cfb4th: The SportsDataverse's R Package for College Football 4th Down Modeling.",
   url      = "https://cfb4th.sportsdataverse.org/",
   year     = year,
   note     = note,
   textVersion = paste0(
-    "Jared Lee, Ben Baldwin, and Sebastian Carl (", year, "). cfb4th: The ",
+    "Jared Lee, Ben Baldwin, Sebastian Carl, and Saiem Gilani (", year, "). cfb4th: The ",
     "SportsDataverse's R Package for College Football 4th Down Modeling. ",
     note, ". Retrieved from https://cfb4th.sportsdataverse.org/"
   )
