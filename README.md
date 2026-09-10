@@ -125,6 +125,6 @@ BibTex Citation
   author = {Jared Lee and Ben Baldwin and Sebastian Carl and Saiem Gilani},
   title = {cfb4th: The SportsDataverse's R Package for College Football 4th Down Modeling.},
   url = {https://cfb4th.sportsdataverse.org/},
-  year = {2021}
+  year = {2026}
 }
 ```
