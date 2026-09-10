@@ -16,7 +16,7 @@
 Source:
 [`inst/CITATION`](https://github.com/sportsdataverse/cfb4th/blob/main/inst/CITATION)
 
-Jared Lee, Ben Baldwin, Sebastian Carl, and Saiem Gilani (2026). cfb4th:
+Jared Lee, Ben Baldwin, Sebastian Carl, and Saiem Gilani (2021). cfb4th:
 The SportsDataverse's R Package for College Football 4th Down Modeling.
 R package version 0.1.2. Retrieved from
 https://cfb4th.sportsdataverse.org/
@@ -25,6 +25,6 @@ https://cfb4th.sportsdataverse.org/
       author = {Jared Lee and Ben Baldwin and Sebastian Carl and Saiem Gilani},
       title = {cfb4th: The SportsDataverse's R Package for College Football 4th Down Modeling.},
       url = {https://cfb4th.sportsdataverse.org/},
-      year = {2026},
+      year = {2021},
       note = {R package version 0.1.2},
     }
