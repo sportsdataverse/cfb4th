@@ -1,12 +1,24 @@
 url: https://cfb4th.sportsdataverse.org/
 
+# pkgdown renders every top-level and .github/*.md file as a page; keep the
+# contributor/agent notes out of the search index so results stay on-topic.
+search:
+  exclude:
+  - CLAUDE.html
+  - copilot-instructions.html
+
 template:
   bootstrap: 5
   light-switch: true
   bootswatch: cosmo
   includes:
     in_header: |
-      <script defer data-domain="cfb4th.sportsdataverse.org" src="https://plausible.io/js/plausible.js"></script>
+      <!-- Privacy-friendly analytics by Plausible -->
+      <script async src="https://plausible.io/js/pa-yuIHNYSjD-ZaFsbKtc6t0.js"></script>
+      <script>
+        window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+        plausible.init()
+      </script>
   bslib:
     primary: "#222222"
     secondary: "#222222"
