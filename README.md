@@ -23,7 +23,8 @@ The model is heavily based on the work and
 Baldwin](https://twitter.com/benbbaldwin) for his [4th Down Calculator
 for the NFL](https://rbsdm.com/stats/fourth_calculator/)
 
-Data freshness and pipeline status for every SportsDataverse dataset: [sportsdataverse.org/status](https://sportsdataverse.org/status).
+Data freshness and pipeline status for every SportsDataverse dataset:
+[sportsdataverse.org/status](https://sportsdataverse.org/status).
 
 ## **Installation**
 
