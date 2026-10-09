@@ -121,7 +121,7 @@ Every SportsDataverse package has one — browse them all at
 To cite the [**`cfb4th`**](https://cfb4th.sportsdataverse.org/) R
 package in publications, use:
 
-BibTex Citation
+BibTeX Citation
 
 ``` bibtex
 @misc{lee_et_al_2021_cfb4th,
