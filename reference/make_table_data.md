@@ -12,7 +12,8 @@ make_table_data(df)
 
 - df:
 
-  A data frame consisting of one play that has had \`add_4th_probs()\`
+  A data frame consisting of one play that has had
+  [`add_4th_probs()`](https://cfb4th.sportsdataverse.org/reference/add_4th_probs.md)
   already run on it.
 
 ## Value
@@ -49,10 +50,13 @@ play <-
 
   )
 
-probs <- cfb4th::add_4th_probs(play)
+# the fourth-down and win-probability models are downloaded the first time
+# they are needed; try() keeps the example from failing without network
+try({
+  probs <- cfb4th::add_4th_probs(play)
+  cfb4th::make_table_data(probs)
+})
 #> Computing probabilities for 1 plays. . .
-
-cfb4th::make_table_data(probs)
 #> # A tibble: 3 × 5
 #>   choice             choice_prob success_prob fail_wp success_wp
 #>   <chr>                    <dbl>        <dbl>   <dbl>      <dbl>

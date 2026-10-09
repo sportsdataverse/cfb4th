@@ -50,30 +50,41 @@ score expected points and win probability per game state. `R/helpers.R`
 also holds `flip_team()` / `flip_half()` / `end_game_fn()` for
 possession/half/end-of-game state transitions.
 
-## Models (mixed bundling — this is the key gotcha)
+## Models (two bundled, two downloaded on first use — the key gotcha)
 
-Four model objects are loaded in `.onLoad` (`R/zzz.R`) and assigned into
-the package namespace. They come from **two different sources**:
+Nothing loads at package load (`R/zzz.R` is a comment). Same shape as
+`nfl4th`:
 
-- **`ep_model`, `fg_model`** — downloaded at load time from the
-  **`cfbfastR-data` GitHub repo** via `url(".../models/<name>.Rdata")` +
-  [`load()`](https://rdrr.io/r/base/load.html) inside
-  [`try()`](https://rdrr.io/r/base/try.html). `ep_model` is an
-  [`nnet::multinom`](https://rdrr.io/pkg/nnet/man/multinom.html)
-  (predicted with `type = "probs"`); `fg_model` is an `mgcv` bam (scored
-  with
-  [`mgcv::predict.bam`](https://rdrr.io/pkg/mgcv/man/predict.bam.html)).
-  NEWS 0.1.2: “load [cfbfastR](https://cfbfastR.sportsdataverse.org/)
-  models in the same way that the package does (from URL).” **No network
-  → these are `NULL` and probabilities can’t be computed.**
-- **`fd_model` (go-for-it), `wp_model` (`wp_spread`)** — bundled
-  **natively in `inst/models/*.ubj`** (`fd_model.ubj` ~15 MB,
-  `wp_spread.ubj`), loaded via
-  `xgboost::xgb.load(system.file("models", ...))`. UBJ keeps them
-  readable across xgboost versions; `DESCRIPTION` pins
-  `xgboost (>= 2.0.0)`. Shipped in the wheel.
+- **`ep_model`, `fg_model`** — plain objects in **`R/sysdata.rda`**,
+  rebuilt by `data-raw/sysdata.R` from the `.Rdata` on the
+  `cfbfastR-data` GitHub repo (the legacy cfbfastR models). `ep_model`
+  is an [`nnet::multinom`](https://rdrr.io/pkg/nnet/man/multinom.html)
+  (predict with `type = "probs"`); `fg_model` is an `mgcv` bam
+  ([`mgcv::predict.bam`](https://rdrr.io/pkg/mgcv/man/predict.bam.html)).
+  Always available offline.
+- **`fd_model()`, `wp_model()`** — *functions* in `R/cache.R` (mirrors
+  `nfl4th::cached_model()`). Raw UBJ byte vectors saved with
+  [`saveRDS()`](https://rdrr.io/r/base/readRDS.html) on this repo’s
+  **`model_archive` GitHub release**
+  (<https://github.com/sportsdataverse/cfb4th/releases/tag/model_archive>),
+  downloaded on first use, read with
+  [`xgboost::xgb.load.raw()`](https://rdrr.io/pkg/xgboost/man/xgb.load.raw.html),
+  parsed once per session (`.models` env) and cached under
+  `tools::R_user_dir("cfb4th", "cache")`. To ship a retrained model,
+  upload a new asset there; users pick it up after
+  [`cfb4th_clear_cache()`](https://cfb4th.sportsdataverse.org/reference/cfb4th_clear_cache.md).
 
-`R/sysdata.rda` holds internal package data. `data-raw/_fg_mod.R`,
+`probably_cran()` (CRAN check env vars) disables cache *writes* so
+CRAN’s machines are never written to;
+`options(cfb4th.force_cache = TRUE)` overrides. A failed download is one
+informative [`stop()`](https://rdrr.io/r/base/stop.html) from
+`download_model()`, not a `NULL` that dies inside
+[`predict()`](https://rdrr.io/r/stats/predict.html). The exported
+[`cfb4th_clear_cache()`](https://cfb4th.sportsdataverse.org/reference/cfb4th_clear_cache.md)
+wipes the session copy and the disk copy.
+
+`R/sysdata.rda` holds `ep_model`, `fg_model`, `punt_df`, `team_info`
+(see `data-raw/sysdata.R`). `data-raw/_fg_mod.R`,
 `_go_for_it_cfb_mod.R`, `_punt_mod.R` are the model-training scripts
 (not run at build).
 
@@ -89,13 +100,13 @@ the package namespace. They come from **two different sources**:
 - Never hand-edit `NAMESPACE` or `man/*.Rd` — regenerate with
   `devtools::document()`.
 - `_pkgdown.yml` is the docs config (bootstrap 5, plausible analytics);
-  reference groups list the 4 exports.
+  reference groups list the 5 exports.
 
 ## Gotchas
 
-- **`ep_model`/`fg_model` need network at first load** (GitHub
-  `cfbfastR-data`). Offline → they’re `NULL` and the EP/FG legs silently
-  degrade. `fd_model`/ `wp_model` are local UBJ and always available.
+- **The xgboost models need network on first use** (then the cache
+  serves it). The tests that score plays `skip_on_cran()`; the examples
+  are `\donttest{try()}`.
 - **`load_4th_pbp(seasons)` rejects seasons \< 2014** with an explicit
   [`stop()`](https://rdrr.io/r/base/stop.html).
 - **Betting lines drive WP inputs**:

@@ -16,7 +16,7 @@ play-by-play and the shared `cfbfastR-data` EP/WP/FG models. R \>=
 
 ## Public surface
 
-Four exported functions, all driven by
+Five exported functions, four of them driven by
 [`add_4th_probs()`](https://cfb4th.sportsdataverse.org/reference/add_4th_probs.md):
 
 | Function | File | Role |
@@ -25,6 +25,7 @@ Four exported functions, all driven by
 | `get_4th_plays(df)` | `R/get_game_data.R` | Builds the per-play game-state frame [`add_4th_probs()`](https://cfb4th.sportsdataverse.org/reference/add_4th_probs.md) consumes. |
 | `load_4th_pbp(seasons)` | `R/wrappers.R` | Season loader; joins betting lines, then calls [`add_4th_probs()`](https://cfb4th.sportsdataverse.org/reference/add_4th_probs.md). |
 | `make_table_data(df)` | `R/table_functions.R` | Formats one play into `gt`-ready table data. |
+| `cfb4th_clear_cache(type)` | `R/cache.R` | Wipes the downloaded-model cache. |
 
 Pipeline: `prepare_cfbfastr_data()` -\> `prepare_df()` -\>
 `add_probs()`, which runs `get_go_wp()` / `get_fg_wp()` /
@@ -54,23 +55,25 @@ Pipeline: `prepare_cfbfastr_data()` -\> `prepare_df()` -\>
 
 ## The model-loading gotcha (most important thing here)
 
-Four model objects load in `.onLoad` (`R/zzz.R`) from **two different
-sources**:
+Nothing loads at package load. Same shape as `nfl4th`:
 
-- **`ep_model`, `fg_model`** are downloaded at load time from the
-  `cfbfastR-data` GitHub repo inside a
-  [`try()`](https://rdrr.io/r/base/try.html). **With no network they are
-  `NULL`** and the EP/FG legs silently degrade – code that assumes they
-  exist will fail confusingly. `ep_model` is an
+- **`ep_model`, `fg_model`**: plain objects in `R/sysdata.rda` (rebuilt
+  by `data-raw/sysdata.R` from the `cfbfastR-data` GitHub repo).
+  `ep_model` is an
   [`nnet::multinom`](https://rdrr.io/pkg/nnet/man/multinom.html)
   (predict with `type = "probs"`); `fg_model` is an `mgcv` bam.
-- **`fd_model`, `wp_model`** are bundled locally as `inst/models/*.ubj`
-  and loaded with `xgboost::xgb.load(system.file(...))`. Always
-  available. UBJ is used so the models stay readable across xgboost
-  versions; `DESCRIPTION` pins `xgboost (>= 2.0.0)`.
+- **`fd_model()`, `wp_model()`**: functions in `R/cache.R`. Raw UBJ byte
+  vectors (`saveRDS`) on this repo’s `model_archive` GitHub release,
+  downloaded on first use, read with
+  [`xgboost::xgb.load.raw()`](https://rdrr.io/pkg/xgboost/man/xgb.load.raw.html),
+  parsed once per session and cached under
+  `tools::R_user_dir("cfb4th", "cache")`, except during a CRAN check
+  (`probably_cran()`), where nothing is written.
 
-When adding a code path that scores a model, guard the downloaded pair
-for `NULL` rather than assuming a fitted object.
+A failed download is an informative
+[`stop()`](https://rdrr.io/r/base/stop.html);
+[`cfb4th_clear_cache()`](https://cfb4th.sportsdataverse.org/reference/cfb4th_clear_cache.md)
+(exported) forces a re-download.
 
 ## Other gotchas
 

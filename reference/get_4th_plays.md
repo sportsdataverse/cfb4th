@@ -16,7 +16,8 @@ get_4th_plays(df)
 
 ## Value
 
-Original data frame Data frame plus the following columns added:
+A data frame of the game's fourth down plays, one row per play (the
+input data frame is only used to identify the game), with the columns:
 
 - desc:
 
@@ -33,14 +34,15 @@ Original data frame Data frame plus the following columns added:
 
 - The rest:
 
-  All the columns needed for \`add_4th_probs().\`
+  All the columns needed for `add_4th_probs().`
 
 ## Details
 
-Obtains a data frame that can be used with \`add_4th_probs()\`. The
-following columns must be present:
+Obtains a data frame that can be used with
+[`add_4th_probs()`](https://cfb4th.sportsdataverse.org/reference/add_4th_probs.md).
+The following columns must be present:
 
-- game_id : ESPN game ID from ESPN or cfbfastR (eg '401114223')
+- game_id : ESPN game ID from ESPN or cfbfastR (e.g. '401114223')
 
 - home_team : Name of the home team
 

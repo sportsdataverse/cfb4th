@@ -18,7 +18,7 @@ Source:
 
 Jared Lee, Ben Baldwin, Sebastian Carl, and Saiem Gilani (2026). cfb4th:
 The SportsDataverse's R Package for College Football 4th Down Modeling.
-R package version 0.1.2. Retrieved from
+R package version 0.2.0. Retrieved from
 https://cfb4th.sportsdataverse.org/
 
     @Misc{lee_cfb4th,
@@ -26,5 +26,5 @@ https://cfb4th.sportsdataverse.org/
       title = {cfb4th: The SportsDataverse's R Package for College Football 4th Down Modeling.},
       url = {https://cfb4th.sportsdataverse.org/},
       year = {2026},
-      note = {R package version 0.1.2},
+      note = {R package version 0.2.0},
     }

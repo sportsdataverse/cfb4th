@@ -1,6 +1,6 @@
-# Load calculated 4th down probabilities from \`cfbfastR\` data
+# Load calculated 4th down probabilities from `cfbfastR` data
 
-Load calculated 4th down probabilities from \`cfbfastR\` data.
+Load calculated 4th down probabilities from `cfbfastR` data.
 
 ## Usage
 
@@ -16,8 +16,9 @@ load_4th_pbp(seasons)
 
 ## Value
 
-\`cfbfastR\` data on 4th downs with the \`add_4th_probs()\` columns
-added and also the following:
+`cfbfastR` data on 4th downs with the
+[`add_4th_probs()`](https://cfb4th.sportsdataverse.org/reference/add_4th_probs.md)
+columns added and also the following:
 
 - go:
 

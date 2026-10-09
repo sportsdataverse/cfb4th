@@ -20,4 +20,4 @@ lhs %>% rhs
 
 ## Value
 
-The result of calling \`rhs(lhs)\`.
+The result of calling `rhs(lhs)`.

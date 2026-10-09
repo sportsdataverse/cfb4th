@@ -17,7 +17,7 @@ add_4th_probs(df)
 
 ## Value
 
-Original data frame Data frame plus the following columns added:
+The input data frame with the following columns added:
 
 - go_boost:
 
@@ -90,7 +90,9 @@ Original data frame Data frame plus the following columns added:
 
   )
 
- cfb4th::add_4th_probs(play)
+ # the fourth-down and win-probability models are downloaded the first time
+ # they are needed; try() keeps the example from failing without network
+ try(cfb4th::add_4th_probs(play))
 #> Computing probabilities for 1 plays. . .
 #> # A tibble: 1 × 27
 #>   home  away  pos_team def_pos_team spread over_under  half period TimeSecsRem

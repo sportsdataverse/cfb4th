@@ -14,14 +14,30 @@ Data freshness and pipeline status for every SportsDataverse dataset:
 
 ## **Installation**
 
-You can install the development version of cfb4th from
+You can install the released version of cfb4th from
+[CRAN](https://CRAN.R-project.org) with:
+
+``` r
+
+install.packages("cfb4th")
+```
+
+And the development version from
 [GitHub](https://github.com/sportsdataverse/cfb4th) with:
 
 ``` r
 
-# install.packages("devtools")
-devtools::install_github("sportsdataverse/cfb4th")
+# install.packages("pak")
+pak::pak("sportsdataverse/cfb4th")
 ```
+
+The two `xgboost` models (fourth-down conversion and win probability)
+are not bundled with the package: each is downloaded the first time it
+is needed and cached under `tools::R_user_dir("cfb4th", "cache")`, so
+the first call to
+[`add_4th_probs()`](https://cfb4th.sportsdataverse.org/reference/add_4th_probs.md)
+needs network access. Clear the cache to force a fresh download with
+[`cfb4th_clear_cache()`](https://cfb4th.sportsdataverse.org/reference/cfb4th_clear_cache.md).
 
 ## **Features**
 
@@ -70,8 +86,7 @@ article](https://cfb4th.sportsdataverse.org/articles/cfb4th.html).
 
 ## **Our Authors**
 
-- [Jared Lee](https://twitter.com/JaredDLee)
-  [![@JaredDLee](https://img.shields.io/twitter/follow/JaredDLee?color=blue&label=%40JaredDLee&logo=twitter&style=for-the-badge)](https://twitter.com/JaredDLee)
+- [Jared Lee](https://github.com/Kazink36)
   [![@Kazink36](https://img.shields.io/github/followers/Kazink36?color=eee&logo=Github&style=for-the-badge)](https://github.com/Kazink36)
 
 - [Sebastian Carl](https://twitter.com/mrcaseb)  
@@ -117,10 +132,18 @@ BibTeX Citation
 
 - [`add_4th_probs()`](https://cfb4th.sportsdataverse.org/reference/add_4th_probs.md)
   : Get 4th down decision probabilities
+
+- [`cfb4th_clear_cache()`](https://cfb4th.sportsdataverse.org/reference/cfb4th_clear_cache.md)
+  : Reset the cfb4th model cache
+
 - [`get_4th_plays()`](https://cfb4th.sportsdataverse.org/reference/get_4th_plays.md)
   : Get 4th down plays from a game
+
 - [`load_4th_pbp()`](https://cfb4th.sportsdataverse.org/reference/load_4th_pbp.md)
-  : Load calculated 4th down probabilities from \`cfbfastR\` data
+  :
+
+  Load calculated 4th down probabilities from `cfbfastR` data
+
 - [`make_table_data()`](https://cfb4th.sportsdataverse.org/reference/make_table_data.md)
   : Get 4th down decision probabilities
 
