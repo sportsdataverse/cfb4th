@@ -41,13 +41,24 @@ cached_model <- function(name) {
   path <- cfb4th_model_path(name)
   use_cache <- !probably_cran() || force_cache()
 
+  obj <- NULL
   if (use_cache && file.exists(path)) {
-    obj <- readRDS(path)
-  } else {
+    # an interrupted earlier write can leave a truncated file: drop it and
+    # download again instead of failing on every later session
+    obj <- tryCatch(readRDS(path), error = function(e) {
+      unlink(path)
+      NULL
+    })
+  }
+  if (is.null(obj)) {
     obj <- download_model(name)
     if (use_cache) {
       dir.create(dirname(path), recursive = TRUE, showWarnings = FALSE)
-      saveRDS(obj, path)
+      # write next to the final path and rename, so the cache file only ever
+      # appears once it is complete
+      tmp <- tempfile(tmpdir = dirname(path), fileext = ".rds")
+      saveRDS(obj, tmp)
+      if (!file.rename(tmp, path)) unlink(tmp)
     }
   }
 

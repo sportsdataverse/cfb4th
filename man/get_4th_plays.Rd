@@ -10,7 +10,8 @@ get_4th_plays(df)
 \item{df}{A data frame of a game to get 4th down decisions of.}
 }
 \value{
-The input data frame with the following columns added:
+A data frame of the game's fourth down plays, one row per play (the
+input data frame is only used to identify the game), with the columns:
 \describe{
 \item{desc}{Play description from ESPN.}
 \item{type_text}{Play type text from ESPN.}

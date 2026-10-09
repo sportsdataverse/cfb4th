@@ -17,7 +17,8 @@
 #' \item{home_team : Name of the home team}
 #' \item{away_team : Name of the away team}
 #' }
-#' @return The input data frame with the following columns added:
+#' @return A data frame of the game's fourth down plays, one row per play (the
+#'   input data frame is only used to identify the game), with the columns:
 #' \describe{
 #' \item{desc}{Play description from ESPN.}
 #' \item{type_text}{Play type text from ESPN.}

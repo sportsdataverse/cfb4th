@@ -36,6 +36,18 @@ test_that("a failed model download is one informative error", {
   testthat::expect_error(cfb4th:::download_model("fd_model"), "could not be downloaded")
 })
 
+test_that("a truncated cache file is replaced, not fatal", {
+  testthat::skip_on_cran()
+
+  cfb4th_clear_cache("wp_model")
+  path <- cfb4th:::cfb4th_model_path("wp_model")
+  dir.create(dirname(path), recursive = TRUE, showWarnings = FALSE)
+  writeBin(as.raw(1:10), path)   # what an interrupted saveRDS() leaves behind
+
+  testthat::expect_s3_class(cfb4th:::wp_model(), "xgb.Booster")
+  testthat::expect_type(readRDS(path), "raw")   # re-downloaded and re-cached
+})
+
 test_that("cfb4th_clear_cache() clears the session copy and the disk copy", {
   testthat::skip_on_cran()
 

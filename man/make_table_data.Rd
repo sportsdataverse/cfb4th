@@ -43,8 +43,8 @@ play <-
 
   )
 
-# the EP and FG models are downloaded when the package loads; try() keeps
-# the example from failing on a machine without network access
+# the fourth-down and win-probability models are downloaded the first time
+# they are needed; try() keeps the example from failing without network
 try({
   probs <- cfb4th::add_4th_probs(play)
   cfb4th::make_table_data(probs)
