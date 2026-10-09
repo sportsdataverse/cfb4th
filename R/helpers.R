@@ -314,7 +314,7 @@ add_wp <- function(game_state) {
     # Down is encoded as a factor, this prevents creating a character matrix
     dplyr::mutate(down = as.numeric(.data$down)) %>%
     as.matrix()
-  game_state$wp <- predict(wp_model, newdata = wp_vars)
+  game_state$wp <- predict(wp_model(), newdata = wp_vars)
   return(game_state)
 }
 

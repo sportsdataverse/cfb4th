@@ -33,9 +33,12 @@
 #'
 #'   )
 #'
-#' probs <- cfb4th::add_4th_probs(play)
-#'
-#' cfb4th::make_table_data(probs)
+#' # the fourth-down and win-probability models are downloaded the first time
+#' # they are needed; try() keeps the example from failing without network
+#' try({
+#'   probs <- cfb4th::add_4th_probs(play)
+#'   cfb4th::make_table_data(probs)
+#' })
 #'}
 
 make_table_data <- function(df) {

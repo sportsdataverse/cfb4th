@@ -1,6 +1,19 @@
-# cfb4th (development version)
+# cfb4th 0.2.0
 
-## cfb4th 0.1.2
+* First CRAN release.
+* Model loading now mirrors `nfl4th`. The expected-points and field-goal
+  models ship with the package (the field-goal model refreshed to the copy on
+  `cfbfastR-data`), so nothing is downloaded when the package is attached. The
+  two `xgboost` models (fourth-down conversion and win probability), 17 MB
+  together, are no longer bundled: each is downloaded from the package's
+  `model_archive` GitHub release the first time it is needed and cached under
+  `tools::R_user_dir("cfb4th", "cache")`; the new `cfb4th_clear_cache()` forces
+  a fresh download. The installed package shrinks from 17 MB to about 2 MB, and
+  a failed download is one informative error instead of a failure inside a
+  model call.
+* `get_4th_plays()` requests the ESPN game summary over HTTPS.
+
+# cfb4th 0.1.2
 
 * Tidy-select and data-masking fixes to reduce notes/warnings/errors for checks
 * Load `{cfbfastR}` models in the same way that the package does (from URL)

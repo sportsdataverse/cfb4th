@@ -13,11 +13,12 @@
 #' @details Obtains a data frame that can be used with `add_4th_probs()`. The following columns
 #' must be present:
 #' \itemize{
-#' \item{game_id : ESPN game ID from ESPN or cfbfastR (eg '401114223')}
+#' \item{game_id : ESPN game ID from ESPN or cfbfastR (e.g. '401114223')}
 #' \item{home_team : Name of the home team}
 #' \item{away_team : Name of the away team}
 #' }
-#' @return Original data frame Data frame plus the following columns added:
+#' @return A data frame of the game's fourth down plays, one row per play (the
+#'   input data frame is only used to identify the game), with the columns:
 #' \describe{
 #' \item{desc}{Play description from ESPN.}
 #' \item{type_text}{Play type text from ESPN.}
@@ -54,7 +55,7 @@ get_4th_plays <- function(df) {
     expr = {
 
       warn <- 0
-      pbp <- httr::GET(url = glue::glue("http://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event={espn_game_id}")) %>%
+      pbp <- httr::GET(url = glue::glue("https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event={espn_game_id}")) %>%
         httr::content(as = "text", encoding = "UTF-8") %>%
         jsonlite::fromJSON(flatten = TRUE)
 

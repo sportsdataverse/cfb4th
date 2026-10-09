@@ -28,33 +28,36 @@ Data freshness and pipeline status for every SportsDataverse dataset:
 
 ## **Installation**
 
-<!-- You can install the released version of cfb4th from [CRAN](https://CRAN.R-project.org) with: -->
-<!-- ``` r -->
-<!-- install.packages("cfb4th") -->
-<!-- ``` -->
-<!-- And the development version from [GitHub](https://github.com/) with: -->
-<!-- ``` r -->
-<!-- # install.packages("devtools") -->
-<!-- devtools::install_github("sportsdataverse/cfb4th") -->
-<!-- ``` -->
+You can install the released version of cfb4th from
+[CRAN](https://CRAN.R-project.org) with:
 
-You can install the development version of cfb4th from
+``` r
+install.packages("cfb4th")
+```
+
+And the development version from
 [GitHub](https://github.com/sportsdataverse/cfb4th) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("sportsdataverse/cfb4th")
+# install.packages("pak")
+pak::pak("sportsdataverse/cfb4th")
 ```
+
+The two `xgboost` models (fourth-down conversion and win probability)
+are not bundled with the package: each is downloaded the first time it
+is needed and cached under `tools::R_user_dir("cfb4th", "cache")`, so
+the first call to `add_4th_probs()` needs network access. Clear the
+cache to force a fresh download with `cfb4th_clear_cache()`.
 
 ## **Features**
 
-- The **go for it** model gives probabilities for possibilities of yards
-  gained and includes the possibility of earning a first down via
-  defensive penalty
-- The **punt** model includes the possibility for getting blocked,
-  returned for a touchdown, or fumbled on the return
-- The **field goal** model is a simple model of field goal % by distance
-  and roof type
+  - The **go for it** model gives probabilities for possibilities of
+    yards gained and includes the possibility of earning a first down
+    via defensive penalty
+  - The **punt** model includes the possibility for getting blocked,
+    returned for a touchdown, or fumbled on the return
+  - The **field goal** model is a simple model of field goal % by
+    distance and roof type
 
 ## **Current limitations**
 
@@ -63,57 +66,60 @@ make a marginal difference to the recommendations as they are largely
 edge cases (e.g. the possibility for a field goal to be blocked and
 returned).
 
-- The **go for it** model does not allow for the possibility of a
-  turnover return. However, long returns are extremely rare: For
-  example, in 2018 and 2019 in the NFL there were only four defensive
-  touchdowns on plays where teams went for fourth downs out of 1,236
-  plays, and all of these happened when the game was well in hand for
-  the other team. Additionally, it assumes that a touchdown is worth 7
-  points and doesn’t account for go-for-2 situations (Future Work)
-- The **punt** model doesn’t account for the punter or returner, ignores
-  penalties on returns and ignores the potential for blocked punts to be
-  returned for touchdowns
-- The **field goal** model doesn’t account for who the kicker is, what
-  the weather is (only relevant for outdoor games), or the possibility
-  of a kick being blocked and returned for a touchdown
+  - The **go for it** model does not allow for the possibility of a
+    turnover return. However, long returns are extremely rare: For
+    example, in 2018 and 2019 in the NFL there were only four defensive
+    touchdowns on plays where teams went for fourth downs out of 1,236
+    plays, and all of these happened when the game was well in hand for
+    the other team. Additionally, it assumes that a touchdown is worth 7
+    points and doesn’t account for go-for-2 situations (Future Work)
+  - The **punt** model doesn’t account for the punter or returner,
+    ignores penalties on returns and ignores the potential for blocked
+    punts to be returned for touchdowns
+  - The **field goal** model doesn’t account for who the kicker is, what
+    the weather is (only relevant for outdoor games), or the possibility
+    of a kick being blocked and returned for a touchdown
 
 ## **Get Started**
 
 To get started with cfb4th please see [this
 article](https://cfb4th.sportsdataverse.org/articles/cfb4th.html).
 
-- [The logic of the shiny
-  app](https://github.com/Kazink36/cfb_fourth_down/blob/main/app.R)
+  - [The logic of the shiny
+    app](https://github.com/Kazink36/cfb_fourth_down/blob/main/app.R)
 
-- [The code that powers the
-  bot](https://github.com/Kazink36/cfb_fourth_down/tree/main/bot)
+  - [The code that powers the
+    bot](https://github.com/Kazink36/cfb_fourth_down/tree/main/bot)
 
-- [The bot can be found on twitter
-  here.](https://twitter.com/aisports_4th)
+  - [The bot can be found on twitter
+    here.](https://twitter.com/aisports_4th)
 
 ## **Our Authors**
 
-- [Jared Lee](https://twitter.com/JaredDLee) </br>
-  <a href="https://twitter.com/JaredDLee" target="blank"><img src="https://img.shields.io/twitter/follow/JaredDLee?color=blue&label=%40JaredDLee&logo=twitter&style=for-the-badge" alt="@JaredDLee" /></a>
-  <a href="https://github.com/Kazink36" target="blank"><img src="https://img.shields.io/github/followers/Kazink36?color=eee&logo=Github&style=for-the-badge" alt="@Kazink36" /></a>
+  - [Jared Lee](https://github.com/Kazink36) </br>
+    <a href="https://github.com/Kazink36" target="blank"><img src="https://img.shields.io/github/followers/Kazink36?color=eee&logo=Github&style=for-the-badge" alt="@Kazink36" /></a>
 
-- [Sebastian Carl](https://twitter.com/mrcaseb)  
-  <a href="https://twitter.com/mrcaseb" target="blank"><img src="https://img.shields.io/twitter/follow/mrcaseb?color=blue&label=%40mrcaseb&logo=twitter&style=for-the-badge" alt="@mrcaseb" /></a>
-  <a href="https://github.com/mrcaseb" target="blank"><img src="https://img.shields.io/github/followers/mrcaseb?color=eee&logo=Github&style=for-the-badge" alt="@mrcaseb" /></a>
+  - [Sebastian Carl](https://twitter.com/mrcaseb)  
+    <a href="https://twitter.com/mrcaseb" target="blank"><img src="https://img.shields.io/twitter/follow/mrcaseb?color=blue&label=%40mrcaseb&logo=twitter&style=for-the-badge" alt="@mrcaseb" /></a>
+    <a href="https://github.com/mrcaseb" target="blank"><img src="https://img.shields.io/github/followers/mrcaseb?color=eee&logo=Github&style=for-the-badge" alt="@mrcaseb" /></a>
 
-- [Ben Baldwin](https://twitter.com/benbbaldwin)  
-  <a href="https://twitter.com/benbbaldwin" target="blank"><img src="https://img.shields.io/twitter/follow/benbbaldwin?color=blue&label=%40benbbaldwin&logo=twitter&style=for-the-badge" alt="@benbbaldwin" /></a>
-  <a href="https://github.com/guga31bb" target="blank"><img src="https://img.shields.io/github/followers/guga31bb?color=eee&logo=Github&style=for-the-badge" alt="@guga31bb" /></a>
+  - [Ben Baldwin](https://twitter.com/benbbaldwin)  
+    <a href="https://twitter.com/benbbaldwin" target="blank"><img src="https://img.shields.io/twitter/follow/benbbaldwin?color=blue&label=%40benbbaldwin&logo=twitter&style=for-the-badge" alt="@benbbaldwin" /></a>
+    <a href="https://github.com/guga31bb" target="blank"><img src="https://img.shields.io/github/followers/guga31bb?color=eee&logo=Github&style=for-the-badge" alt="@guga31bb" /></a>
 
 <!-- cheatsheet-section -->
+
 ## **Cheat sheet**
 
-A printable one-page reference covering **cfbplotR, cfb4th and cfbseedR** — the function families, the loaders, and what each one returns.
+A printable one-page reference covering **cfbplotR, cfb4th and
+cfbseedR** — the function families, the loaders, and what each one
+returns.
 
-📄 **[Download the cfb4th cheat sheet (PDF)](https://sportsdataverse.org/cheatsheets/cfbplotR-cfb4th-cfbseedR.pdf)**
+📄 **[Download the cfb4th cheat sheet
+(PDF)](https://sportsdataverse.org/cheatsheets/cfbplotR-cfb4th-cfbseedR.pdf)**
 
-Free to download, print and hand out; light and dark, US Letter landscape.
-Every SportsDataverse package has one — browse them all at
+Free to download, print and hand out; light and dark, US Letter
+landscape. Every SportsDataverse package has one — browse them all at
 **[sportsdataverse.org/cheatsheets](https://sportsdataverse.org/cheatsheets)**.
 
 ## **Citations**
