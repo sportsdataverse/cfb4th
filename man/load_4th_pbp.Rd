@@ -2,7 +2,7 @@
 % Please edit documentation in R/wrappers.R
 \name{load_4th_pbp}
 \alias{load_4th_pbp}
-\title{Load calculated 4th down probabilities from `cfbfastR` data}
+\title{Load calculated 4th down probabilities from \code{cfbfastR} data}
 \usage{
 load_4th_pbp(seasons)
 }
@@ -10,13 +10,13 @@ load_4th_pbp(seasons)
 \item{seasons}{Seasons to load. Must be 2014 and later.}
 }
 \value{
-`cfbfastR` data on 4th downs with the `add_4th_probs()` columns added and also the following:
+\code{cfbfastR} data on 4th downs with the \code{add_4th_probs()} columns added and also the following:
 \describe{
 \item{go}{100 if a team went for it on 4th down, 0 otherwise. It's 100 and 0 as a convenience for obtaining percent of times going for it.}
 }
 }
 \description{
-Load calculated 4th down probabilities from `cfbfastR` data.
+Load calculated 4th down probabilities from \code{cfbfastR} data.
 }
 \examples{
 \dontrun{

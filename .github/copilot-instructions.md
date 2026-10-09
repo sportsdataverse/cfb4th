@@ -15,7 +15,7 @@ default and release branch.
 
 ## Public surface
 
-Four exported functions, all driven by `add_4th_probs()`:
+Five exported functions, four of them driven by `add_4th_probs()`:
 
 | Function | File | Role |
 | --- | --- | --- |
@@ -23,6 +23,7 @@ Four exported functions, all driven by `add_4th_probs()`:
 | `get_4th_plays(df)` | `R/get_game_data.R` | Builds the per-play game-state frame `add_4th_probs()` consumes. |
 | `load_4th_pbp(seasons)` | `R/wrappers.R` | Season loader; joins betting lines, then calls `add_4th_probs()`. |
 | `make_table_data(df)` | `R/table_functions.R` | Formats one play into `gt`-ready table data. |
+| `cfb4th_clear_cache(type)` | `R/cache.R` | Wipes the downloaded-model cache. |
 
 Pipeline: `prepare_cfbfastr_data()` -> `prepare_df()` -> `add_probs()`, which
 runs `get_go_wp()` / `get_fg_wp()` / `get_punt_wp()` from
@@ -47,20 +48,19 @@ transitions.
 
 ## The model-loading gotcha (most important thing here)
 
-Four model objects load in `.onLoad` (`R/zzz.R`) from **two different sources**:
+Nothing loads at package load. Same shape as `nfl4th`:
 
-- **`ep_model`, `fg_model`** are downloaded at load time from the
-  `cfbfastR-data` GitHub repo inside a `try()`. **With no network they are
-  `NULL`** and the EP/FG legs silently degrade -- code that assumes they exist
-  will fail confusingly. `ep_model` is an `nnet::multinom` (predict with
-  `type = "probs"`); `fg_model` is an `mgcv` bam.
-- **`fd_model`, `wp_model`** are bundled locally as `inst/models/*.ubj` and
-  loaded with `xgboost::xgb.load(system.file(...))`. Always available. UBJ is
-  used so the models stay readable across xgboost versions; `DESCRIPTION` pins
-  `xgboost (>= 2.0.0)`.
+- **`ep_model`, `fg_model`**: plain objects in `R/sysdata.rda` (rebuilt by
+  `data-raw/sysdata.R` from the `cfbfastR-data` GitHub repo). `ep_model` is an
+  `nnet::multinom` (predict with `type = "probs"`); `fg_model` is an `mgcv` bam.
+- **`fd_model()`, `wp_model()`**: functions in `R/cache.R`. Raw UBJ byte
+  vectors (`saveRDS`) on this repo's `model_archive` GitHub release, downloaded
+  on first use, read with `xgboost::xgb.load.raw()`, parsed once per session and
+  cached under `tools::R_user_dir("cfb4th", "cache")`, except during a CRAN
+  check (`probably_cran()`), where nothing is written.
 
-When adding a code path that scores a model, guard the downloaded pair for
-`NULL` rather than assuming a fitted object.
+A failed download is an informative `stop()`; `cfb4th_clear_cache()` (exported)
+forces a re-download.
 
 ## Other gotchas
 

@@ -29,25 +29,24 @@ Data freshness and pipeline status for every SportsDataverse dataset: [sportsdat
 
 ## **Installation**
 
-<!-- You can install the released version of cfb4th from [CRAN](https://CRAN.R-project.org) with: -->
-
-<!-- ``` r -->
-<!-- install.packages("cfb4th") -->
-<!-- ``` -->
-
-<!-- And the development version from [GitHub](https://github.com/) with: -->
-
-<!-- ``` r -->
-<!-- # install.packages("devtools") -->
-<!-- devtools::install_github("sportsdataverse/cfb4th") -->
-<!-- ``` -->
-
-You can install the development version of cfb4th from [GitHub](https://github.com/sportsdataverse/cfb4th) with:
+You can install the released version of cfb4th from [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("sportsdataverse/cfb4th")
+install.packages("cfb4th")
 ```
+
+And the development version from [GitHub](https://github.com/sportsdataverse/cfb4th) with:
+
+``` r
+# install.packages("pak")
+pak::pak("sportsdataverse/cfb4th")
+```
+
+The two `xgboost` models (fourth-down conversion and win probability) are
+not bundled with the package: each is downloaded the first time it is needed
+and cached under `tools::R_user_dir("cfb4th", "cache")`, so the first call to
+`add_4th_probs()` needs network access. Clear the cache to force a fresh
+download with `cfb4th_clear_cache()`.
 
 ## **Features**
 
@@ -76,8 +75,7 @@ To get started with cfb4th please see [this article](https://cfb4th.sportsdatave
 
 ## **Our Authors**
 
--   [Jared Lee](https://twitter.com/JaredDLee) </br>
-<a href="https://twitter.com/JaredDLee" target="blank"><img src="https://img.shields.io/twitter/follow/JaredDLee?color=blue&label=%40JaredDLee&logo=twitter&style=for-the-badge" alt="@JaredDLee" /></a>
+-   [Jared Lee](https://github.com/Kazink36) </br>
 <a href="https://github.com/Kazink36" target="blank"><img src="https://img.shields.io/github/followers/Kazink36?color=eee&logo=Github&style=for-the-badge" alt="@Kazink36" /></a>
 
 -   [Sebastian Carl](https://twitter.com/mrcaseb)                   

@@ -10,7 +10,7 @@ add_4th_probs(df)
 \item{df}{A data frame of decisions to be computed for.}
 }
 \value{
-Original data frame Data frame plus the following columns added:
+The input data frame with the following columns added:
 \describe{
 \item{go_boost}{Gain (or loss) in win prob associated with choosing to go for it (percentage points).}
 \item{first_down_prob}{Probability of earning a first down if going for it on 4th down.}
@@ -56,7 +56,9 @@ for it, kick field goal, punt).
 
   )
 
- cfb4th::add_4th_probs(play)
+ # the EP and FG models are downloaded when the package loads; try() keeps
+ # the example from failing on a machine without network access
+ try(cfb4th::add_4th_probs(play))
 
 }
 }

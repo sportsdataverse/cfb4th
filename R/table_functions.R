@@ -33,9 +33,12 @@
 #'
 #'   )
 #'
-#' probs <- cfb4th::add_4th_probs(play)
-#'
-#' cfb4th::make_table_data(probs)
+#' # the EP and FG models are downloaded when the package loads; try() keeps
+#' # the example from failing on a machine without network access
+#' try({
+#'   probs <- cfb4th::add_4th_probs(play)
+#'   cfb4th::make_table_data(probs)
+#' })
 #'}
 
 make_table_data <- function(df) {

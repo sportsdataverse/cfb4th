@@ -187,7 +187,7 @@ get_go_wp <- function(pbp) {
     as.matrix()
 
   # get model output from situation
-  fd_preds <- stats::predict(fd_model, data)
+  fd_preds <- stats::predict(fd_model(), data)
   # xgboost >= 2.0 returns an (n_plays x 76) matrix for multi:softprob; flatten
   # row-major to the long [play1 classes..., play2 classes..., ...] vector that
   # the gain mapping below expects (older xgboost returned this flat vector).

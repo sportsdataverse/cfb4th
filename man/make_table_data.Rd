@@ -7,7 +7,7 @@
 make_table_data(df)
 }
 \arguments{
-\item{df}{A data frame consisting of one play that has had `add_4th_probs()` already run on it.}
+\item{df}{A data frame consisting of one play that has had \code{add_4th_probs()} already run on it.}
 }
 \value{
 A table showing the probabilities associated with each possible choice.
@@ -43,8 +43,11 @@ play <-
 
   )
 
-probs <- cfb4th::add_4th_probs(play)
-
-cfb4th::make_table_data(probs)
+# the EP and FG models are downloaded when the package loads; try() keeps
+# the example from failing on a machine without network access
+try({
+  probs <- cfb4th::add_4th_probs(play)
+  cfb4th::make_table_data(probs)
+})
 }
 }

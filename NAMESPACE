@@ -2,6 +2,7 @@
 
 export("%>%")
 export(add_4th_probs)
+export(cfb4th_clear_cache)
 export(get_4th_plays)
 export(load_4th_pbp)
 export(make_table_data)

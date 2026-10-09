@@ -10,22 +10,22 @@ get_4th_plays(df)
 \item{df}{A data frame of a game to get 4th down decisions of.}
 }
 \value{
-Original data frame Data frame plus the following columns added:
+The input data frame with the following columns added:
 \describe{
 \item{desc}{Play description from ESPN.}
 \item{type_text}{Play type text from ESPN.}
 \item{index}{Index number of play from a given game. Useful for tracking plays (e.g. for 4th down bot).}
-\item{The rest}{All the columns needed for `add_4th_probs().`}
+\item{The rest}{All the columns needed for \verb{add_4th_probs().}}
 }
 }
 \description{
 Get 4th down plays from a game.
 }
 \details{
-Obtains a data frame that can be used with `add_4th_probs()`. The following columns
+Obtains a data frame that can be used with \code{add_4th_probs()}. The following columns
 must be present:
 \itemize{
-\item{game_id : ESPN game ID from ESPN or cfbfastR (eg '401114223')}
+\item{game_id : ESPN game ID from ESPN or cfbfastR (e.g. '401114223')}
 \item{home_team : Name of the home team}
 \item{away_team : Name of the away team}
 }
