@@ -94,7 +94,11 @@ article](https://cfb4th.sportsdataverse.org/articles/cfb4th.html).
   - [The bot can be found on twitter
     here.](https://twitter.com/aisports_4th)
 
-## Star History
+## **Follow the SportsDataverse (@SportsDataverse) on X and star this repo**
+
+[![X Follow](https://img.shields.io/twitter/follow/SportsDataverse?color=blue&label=%40SportsDataverse&logo=x&style=for-the-badge)](https://x.com/SportsDataverse)
+
+[![GitHub stars](https://img.shields.io/github/stars/sportsdataverse/cfb4th.svg?color=eee&logo=github&style=for-the-badge&label=Star%20cfb4th&maxAge=2592000)](https://github.com/sportsdataverse/cfb4th)
 
 <a href="https://github.com/sportsdataverse/cfb4th/stargazers">
   <picture>
