@@ -158,19 +158,29 @@ load_4th_pbp <- function(seasons) {
              over_under = as.numeric(.data$over_under)
              ) %>%
       dplyr::group_by(.data$game_id) %>%
-      dplyr::arrange(.data$provider) %>%
+      # a provider with a spread first, then by provider rank
+      dplyr::arrange(is.na(.data$spread), .data$provider) %>%
       dplyr::slice(1) %>%
+      dplyr::ungroup() %>%
+      dplyr::mutate(provider = as.character(.data$provider)) %>%
       dplyr::select(
         "game_id",
+        "provider",
         "spread",
-        "over_under")
+        "over_under",
+        dplyr::any_of("formatted_spread"))
       }
     )
-    # cfbfastR >= 3 pbp already carries spread/over_under; replace them with
-    # the provider-ranked lines above instead of splitting into .x/.y
+    # cfbfastR >= 3 pbp already carries a line (spread, over_under, provider,
+    # formatted_spread). The provider-ranked line above replaces it, so the
+    # metadata describes the line used, and the pbp's own spread/over_under
+    # fill in where that line has none.
     cfbfastR::load_cfb_pbp(.x) %>%
-      dplyr::select(-dplyr::any_of(c("spread", "over_under"))) %>%
+      dplyr::rename(dplyr::any_of(c(pbp_spread = "spread", pbp_over_under = "over_under"))) %>%
+      dplyr::select(-dplyr::any_of(c("provider", "formatted_spread"))) %>%
       dplyr::left_join(bets, by = "game_id") %>%
+      fill_line("spread") %>%
+      fill_line("over_under") %>%
       cfb4th::add_4th_probs() %>%
       return()
   }) %>%
@@ -210,3 +220,15 @@ load_4th_pbp <- function(seasons) {
 
 }
 
+
+# `col` from the joined betting line, falling back to the pbp's own value
+# (`pbp_<col>`) where the line has none; drops `pbp_<col>`.
+fill_line <- function(df, col) {
+  pbp_col <- paste0("pbp_", col)
+  if (!col %in% names(df)) df[[col]] <- NA_real_
+  if (pbp_col %in% names(df)) {
+    df[[col]] <- dplyr::coalesce(df[[col]], as.numeric(df[[pbp_col]]))
+    df[[pbp_col]] <- NULL
+  }
+  df
+}

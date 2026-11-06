@@ -21,7 +21,10 @@
 * `load_4th_pbp()` works again with 'cfbfastR' 3.x, whose play-by-play
   already has `spread` and `over_under` columns: they are replaced by the
   provider-ranked betting lines instead of being split into `.x`/`.y`
-  columns, which made `add_4th_probs()` fail.
+  columns, which made `add_4th_probs()` fail. A provider with a spread is
+  preferred, the play-by-play's own line fills in where the chosen provider
+  has none, and `provider` / `formatted_spread` describe the line used.
+* `dplyr (>= 1.0.0)` is required, for `any_of()`.
 * Removed unused suggested packages (`future`, `gt`, `rmarkdown`, `tictoc`,
   `tidyselect`, `tidyverse`).
 
