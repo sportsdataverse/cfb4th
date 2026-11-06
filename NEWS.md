@@ -18,6 +18,10 @@
   and the model download allows at least 300 seconds.
 * The `get_4th_plays()` and `load_4th_pbp()` examples now run (under
   `\donttest`); `load_4th_pbp()` only runs when a CFBD API key is set.
+* `load_4th_pbp()` works again with 'cfbfastR' 3.x, whose play-by-play
+  already has `spread` and `over_under` columns: they are replaced by the
+  provider-ranked betting lines instead of being split into `.x`/`.y`
+  columns, which made `add_4th_probs()` fail.
 * Removed unused suggested packages (`future`, `gt`, `rmarkdown`, `tictoc`,
   `tidyselect`, `tidyverse`).
 
