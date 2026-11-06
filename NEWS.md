@@ -12,6 +12,14 @@
   a failed download is one informative error instead of a failure inside a
   model call.
 * `get_4th_plays()` requests the ESPN game summary over HTTPS.
+* The model cache is kept in a folder named after the package version, and
+  caching a model removes the caches of other versions, so an upgrade never
+  leaves stale models behind. Caching a model now prints where it was saved,
+  and the model download allows at least 300 seconds.
+* The `get_4th_plays()` and `load_4th_pbp()` examples now run (under
+  `\donttest`); `load_4th_pbp()` only runs when a CFBD API key is set.
+* Removed unused suggested packages (`future`, `gt`, `rmarkdown`, `tictoc`,
+  `tidyselect`, `tidyverse`).
 
 # cfb4th 0.1.2
 
