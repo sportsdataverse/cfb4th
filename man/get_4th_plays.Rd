@@ -32,11 +32,9 @@ must be present:
 }
 }
 \examples{
-\dontrun{
-
-game <- cfbfastR::cfbd_game_info(2019, team = "Utah", week = 3)
-plays <- cfb4th::get_4th_plays(game)
-
-dplyr::glimpse(plays)
+\donttest{
+# Utah at BYU, 2019 week 1, identified by its ESPN game id
+game <- data.frame(game_id = 401114223, home_team = "BYU", away_team = "Utah", week = 1)
+try(dplyr::glimpse(cfb4th::get_4th_plays(game)))
 }
 }
