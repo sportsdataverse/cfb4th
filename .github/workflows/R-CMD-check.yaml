@@ -35,7 +35,6 @@ jobs:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       CFBD_API_KEY: ${{ secrets.CFBD_API_KEY }}
-      RSPM: "https://packagemanager.rstudio.com/cran/__linux__/jammy/latest"
 
     steps:
       - uses: actions/checkout@v5
@@ -52,8 +51,6 @@ jobs:
         with:
           extra-packages: any::rcmdcheck
           needs: check
-          # bumped: the cached stringi was built against a libicu the runner no longer has
-          cache-version: 2
 
       - uses: r-lib/actions/check-r-package@v2
         with:
