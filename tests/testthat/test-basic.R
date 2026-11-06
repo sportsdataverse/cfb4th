@@ -76,3 +76,28 @@ test_that("caching a model removes other versions' caches", {
 
   testthat::expect_identical(list.files(root), basename(current))
 })
+
+test_that("load_4th_pbp() joins betting lines onto pbp that already has spread/over_under", {
+  pbp <- tibble::tibble(
+    game_id = c(1L, 2L), spread = c(99, 99), over_under = c(99, 99),
+    rush = c(1, 0), pass = c(0, 0), play_type = c("Rush", "Punt")
+  )
+  lines <- function(year, season_type = "regular", ...) {
+    if (season_type != "regular") return(tibble::tibble())
+    tibble::tibble(
+      game_id = c(1L, 1L, 2L), provider = c("Bovada", "consensus", "Bovada"),
+      spread = c("-3", "-7", "2.5"), over_under = c("50", "55", "60")
+    )
+  }
+  testthat::local_mocked_bindings(
+    load_cfb_pbp = function(...) pbp, cfbd_betting_lines = lines, .package = "cfbfastR"
+  )
+  testthat::local_mocked_bindings(add_4th_probs = function(df, ...) df, .package = "cfb4th")
+
+  out <- suppressMessages(cfb4th::load_4th_pbp(2020))
+
+  testthat::expect_false(any(c("spread.x", "spread.y", "over_under.x") %in% names(out)))
+  testthat::expect_equal(out$spread, c(-7, 2.5))      # consensus preferred over Bovada
+  testthat::expect_equal(out$over_under, c(55, 60))
+  testthat::expect_equal(out$go, c(100, 0))
+})

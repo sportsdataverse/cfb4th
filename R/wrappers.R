@@ -166,7 +166,10 @@ load_4th_pbp <- function(seasons) {
         "over_under")
       }
     )
+    # cfbfastR >= 3 pbp already carries spread/over_under; replace them with
+    # the provider-ranked lines above instead of splitting into .x/.y
     cfbfastR::load_cfb_pbp(.x) %>%
+      dplyr::select(-dplyr::any_of(c("spread", "over_under"))) %>%
       dplyr::left_join(bets, by = "game_id") %>%
       cfb4th::add_4th_probs() %>%
       return()
