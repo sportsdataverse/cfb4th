@@ -33,7 +33,10 @@ test_that("a failed model download is one informative error", {
     model_url = function(name) "http://127.0.0.1:9/fd_model.rds",
     .package = "cfb4th"
   )
-  testthat::expect_error(cfb4th:::download_model("fd_model"), "could not be downloaded")
+  # the failed connection also warns ("cannot open URL"); only the error matters
+  suppressWarnings(
+    testthat::expect_error(cfb4th:::download_model("fd_model"), "could not be downloaded")
+  )
 })
 
 test_that("a truncated cache file is replaced, not fatal", {
@@ -57,4 +60,19 @@ test_that("cfb4th_clear_cache() clears the session copy and the disk copy", {
   testthat::expect_true(cfb4th_clear_cache("fd_model"))
   testthat::expect_false(exists("fd_model", envir = cfb4th:::.models))
   testthat::expect_false(file.exists(cfb4th:::cfb4th_model_path("fd_model")))
+})
+
+test_that("caching a model removes other versions' caches", {
+  root <- tempfile("cfb4th-cache")
+  dir.create(root)
+  on.exit(unlink(root, recursive = TRUE), add = TRUE)
+  testthat::local_mocked_bindings(cfb4th_cache_root = function() root, .package = "cfb4th")
+  current <- cfb4th:::cfb4th_cache_dir()
+  dir.create(file.path(root, "0.0.1"))
+  dir.create(current)
+  file.create(file.path(root, "fd_model.rds"))   # pre-versioned layout
+
+  cfb4th:::prune_cache()
+
+  testthat::expect_identical(list.files(root), basename(current))
 })
