@@ -94,6 +94,8 @@ The input data frame with the following columns added:
  # they are needed; try() keeps the example from failing without network
  try(cfb4th::add_4th_probs(play))
 #> Computing probabilities for 1 plays. . .
+#> Caching the cfb4th fd_model in /home/runner/.cache/R/cfb4th/0.2.0
+#> Caching the cfb4th wp_model in /home/runner/.cache/R/cfb4th/0.2.0
 #> # A tibble: 1 × 27
 #>   home  away  pos_team def_pos_team spread over_under  half period TimeSecsRem
 #>   <chr> <chr> <chr>    <chr>         <dbl>      <dbl> <dbl>  <dbl>       <dbl>

@@ -93,7 +93,7 @@ Follow](https://img.shields.io/twitter/follow/SportsDataverse?color=blue&label=%
 stars](https://img.shields.io/github/stars/sportsdataverse/cfb4th.svg?color=eee&logo=github&style=for-the-badge&label=Star%20cfb4th&maxAge=2592000)](https://github.com/sportsdataverse/cfb4th)
 
 [![Star history of
-sportsdataverse/cfb4th](https://raw.githubusercontent.com/sportsdataverse/cfb4th/star-history/star-history.png)](https://github.com/sportsdataverse/cfb4th/stargazers)
+sportsdataverse/cfb4th](https://raw.githubusercontent.com/sportsdataverse/cfb4th/star-history/star-history.png)](https://github.com/sportsdataverse/cfb4th)
 
 ## **Our Authors**
 
