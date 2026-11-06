@@ -26,9 +26,9 @@ Local runs, all with `--as-cran` and incoming checks on unless stated:
 * with the network blocked, `--run-donttest`: Status OK. Every example
   that needs the network fails gracefully inside `try()`.
 * with a CFBD API key set, `--run-donttest`: a second NOTE, because the
-  `load_4th_pbp()` example takes about 15 s elapsed (4 s CPU). That example
-  loads a whole season and runs only when `cfbfastR::has_cfbd_key()` is TRUE,
-  so it is skipped on CRAN's machines.
+  `load_4th_pbp()` example takes about 52 s elapsed (64 s CPU) on a loaded
+  machine. That example loads and scores a whole season, and runs only when
+  `cfbfastR::has_cfbd_key()` is TRUE, so it is skipped on CRAN's machines.
 
 ## Notes for the CRAN team
 
