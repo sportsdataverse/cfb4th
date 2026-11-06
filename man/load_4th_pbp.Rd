@@ -19,7 +19,8 @@ load_4th_pbp(seasons)
 Load calculated 4th down probabilities from \code{cfbfastR} data.
 }
 \examples{
-\dontrun{
-  cfb4th::load_4th_pbp(2020)
+\donttest{
+# the betting lines come from the CFBD API, which needs a CFBD_API_KEY
+if (cfbfastR::has_cfbd_key()) try(cfb4th::load_4th_pbp(2020))
 }
 }

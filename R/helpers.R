@@ -9,7 +9,7 @@ prepare_df <- function(df) {
 
   df %>%
     # if an nflfastR df is passed, need to drop all this so we don't get redundant cols
-    dplyr::select(-tidyselect::any_of(drop.cols)) %>%
+    dplyr::select(-dplyr::any_of(drop.cols)) %>%
     #left_join(.games_nfl4th, by = c("home_team", "away_team", "type", "season")) %>%
     dplyr::mutate(
       # simple way to deal with random errors from mismatched names

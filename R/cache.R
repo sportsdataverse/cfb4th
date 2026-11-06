@@ -7,9 +7,23 @@
 # saved under tools::R_user_dir() so the next session reads it from disk. On a
 # CRAN check machine (probably_cran()) nothing is written: the model is
 # downloaded and used in memory only.
+#
+# The cache is keyed by package version (<R_user_dir>/<version>/), and writing
+# a model removes every other version's cache, so an upgrade fetches fresh
+# models and never leaves the old ones behind.
+
+cfb4th_cache_root <- function() {
+  tools::R_user_dir("cfb4th", "cache")
+}
 
 cfb4th_cache_dir <- function() {
-  tools::R_user_dir("cfb4th", "cache")
+  file.path(cfb4th_cache_root(), getNamespaceVersion("cfb4th"))
+}
+
+# drop cache entries left by other cfb4th versions
+prune_cache <- function() {
+  old <- list.files(cfb4th_cache_root(), full.names = TRUE)
+  unlink(old[basename(old) != getNamespaceVersion("cfb4th")], recursive = TRUE)
 }
 
 cfb4th_model_path <- function(name) {
@@ -53,7 +67,9 @@ cached_model <- function(name) {
   if (is.null(obj)) {
     obj <- download_model(name)
     if (use_cache) {
+      prune_cache()
       dir.create(dirname(path), recursive = TRUE, showWarnings = FALSE)
+      message("Caching the cfb4th ", name, " in ", dirname(path))
       # write next to the final path and rename, so the cache file only ever
       # appears once it is complete
       tmp <- tempfile(tmpdir = dirname(path), fileext = ".rds")
@@ -69,8 +85,11 @@ cached_model <- function(name) {
 
 download_model <- function(name) {
   url <- model_url(name)
+  # the models are a few MB; R's default 60 s timeout is short on a slow link
+  op <- options(timeout = max(300, getOption("timeout")))
+  on.exit(options(op), add = TRUE)
   con <- url(url)
-  on.exit(close(con))
+  on.exit(close(con), add = TRUE)
   obj <- try(readRDS(con), silent = TRUE)
   if (inherits(obj, "try-error")) {
     stop(
@@ -103,8 +122,9 @@ force_cache <- function() {
 #'
 #' The fourth-down conversion and win-probability models are downloaded the
 #' first time they are needed and cached under
-#' `tools::R_user_dir("cfb4th", "cache")`. Clear the cache to force a fresh
-#' download, for example after a model update.
+#' `tools::R_user_dir("cfb4th", "cache")`, in a folder named after the package
+#' version; caches left by other versions are removed when a model is cached.
+#' Clear the cache to force a fresh download, for example after a model update.
 #'
 #' @param type One of `"all"` (the default), `"fd_model"` or `"wp_model"`.
 #'
