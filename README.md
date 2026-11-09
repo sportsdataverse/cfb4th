@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# **cfb4th** <a href='https://cfb4th.sportsdataverse.org'><img src='https://raw.githubusercontent.com/sportsdataverse/cfb4th/main/man/figures/logo.png' align="right" width="25%" min-width="120px" /></a>
+# **cfb4th** <a href='https://cfb4th.sportsdataverse.org'><img alt="cfb4th hex logo" src='https://raw.githubusercontent.com/sportsdataverse/cfb4th/main/man/figures/logo.png' align="right" width="25%" min-width="120px" /></a>
 
 <!-- badges: start -->
 
@@ -13,7 +13,7 @@
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg?style=for-the-badge&logo=github)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](https://github.com/sportsdataverse/cfb4th/blob/main/LICENSE.md)
 [![Contributors](https://img.shields.io/github/contributors/sportsdataverse/cfb4th?style=for-the-badge)](https://github.com/sportsdataverse/cfb4th/graphs/contributors)
-[![GitHub stars](https://img.shields.io/github/stars/sportsdataverse/cfb4th?style=for-the-badge&logo=github)](https://github.com/sportsdataverse/cfb4th/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/sportsdataverse/cfb4th?style=for-the-badge&logo=github)](https://github.com/sportsdataverse/cfb4th)
 [![X Follow](https://img.shields.io/twitter/follow/aisports_4th?color=blue&label=%40aisports_4th&logo=x&style=for-the-badge)](https://x.com/aisports_4th)
 [![X Follow](https://img.shields.io/twitter/follow/SportsDataverse?color=blue&label=%40SportsDataverse&logo=x&style=for-the-badge)](https://x.com/SportsDataverse)
 
@@ -44,7 +44,9 @@ You can install the development version of [**`cfb4th`**](https://github.com/spo
 ```r
 if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")
 pak::pak("sportsdataverse/cfb4th")
-# or: remotes::install_github("sportsdataverse/cfb4th")
+# or, with remotes:
+# if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+# remotes::install_github("sportsdataverse/cfb4th")
 ```
 
 The two `xgboost` models (fourth-down conversion and win probability)
