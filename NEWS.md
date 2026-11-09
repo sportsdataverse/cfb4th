@@ -35,6 +35,8 @@
 * `load_4th_pbp()` gives a clear error when a season's play-by-play is empty,
   and `add_4th_probs()` returns `NA` probabilities (with a warning, for a
   non-empty input) instead of failing when no play can be scored.
+* The `cfb4th_clear_cache()` example uses a temporary cache folder, so it no
+  longer deletes the user's cached models.
 * `dplyr (>= 1.0.0)` is required, for `any_of()`. `cli` is a new import.
 * Removed unused suggested packages (`future`, `gt`, `rmarkdown`, `tictoc`,
   `tidyselect`, `tidyverse`).
