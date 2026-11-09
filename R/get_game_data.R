@@ -9,9 +9,10 @@
 #'
 #' @description Get 4th down plays from a game.
 #'
-#' @param df A data frame of a game to get 4th down decisions of.
-#' @details Obtains a data frame that can be used with `add_4th_probs()`. The following columns
-#' must be present:
+#' @param df A one-row data frame identifying the game to get 4th down decisions of.
+#' @details Obtains a data frame that can be used with `add_4th_probs()`. `df`
+#' must have exactly one row (otherwise `get_4th_plays()` errors) and the
+#' following columns:
 #' \itemize{
 #' \item{game_id : ESPN game ID from ESPN or cfbfastR (e.g. '401114223')}
 #' \item{home_team : Name of the home team}
@@ -35,6 +36,19 @@
 
 get_4th_plays <- function(df) {
 
+  # a failed lookup upstream (e.g. cfbfastR::cfbd_game_info() without a working
+  # CFBD key returns a zero-row data frame) must fail here, by name, not as a
+  # column-less result that breaks the caller's next select()
+  needed <- c("game_id", "home_team", "away_team")
+  if (!is.data.frame(df) || nrow(df) != 1 || !all(needed %in% names(df))) {
+    stop(
+      "`df` must be a data frame with one row (one game) and the columns ",
+      paste(needed, collapse = ", "), "; got ",
+      if (is.data.frame(df)) paste(nrow(df), "rows") else class(df)[[1]], ".",
+      call. = FALSE
+    )
+  }
+
   espn_game_id <- df$game_id
   home <- df$home_team
   away <- df$away_team
@@ -53,9 +67,7 @@ get_4th_plays <- function(df) {
     expr = {
 
       warn <- 0
-      pbp <- httr::GET(url = glue::glue("https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event={espn_game_id}")) %>%
-        httr::content(as = "text", encoding = "UTF-8") %>%
-        jsonlite::fromJSON(flatten = TRUE)
+      pbp <- espn_summary(espn_game_id)
 
       if ("code" %in% names(pbp)) {
         warning(warn <- 1)
@@ -358,6 +370,13 @@ get_4th_plays <- function(df) {
 
 
 
+
+# ESPN's game summary for one game, parsed (a function so tests can mock it)
+espn_summary <- function(game_id) {
+  httr::GET(url = glue::glue("https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event={game_id}")) %>%
+    httr::content(as = "text", encoding = "UTF-8") %>%
+    jsonlite::fromJSON(flatten = TRUE)
+}
 
 # One line from ESPN's pickcenter, ranked by provider (provider_rank); NA when
 # ESPN has no lines for the game (common for FCS games) or a field is missing.

@@ -7,7 +7,7 @@
 get_4th_plays(df)
 }
 \arguments{
-\item{df}{A data frame of a game to get 4th down decisions of.}
+\item{df}{A one-row data frame identifying the game to get 4th down decisions of.}
 }
 \value{
 A data frame of the game's fourth down plays, one row per play (the
@@ -23,8 +23,9 @@ input data frame is only used to identify the game), with the columns:
 Get 4th down plays from a game.
 }
 \details{
-Obtains a data frame that can be used with \code{add_4th_probs()}. The following columns
-must be present:
+Obtains a data frame that can be used with \code{add_4th_probs()}. \code{df}
+must have exactly one row (otherwise \code{get_4th_plays()} errors) and the
+following columns:
 \itemize{
 \item{game_id : ESPN game ID from ESPN or cfbfastR (e.g. '401114223')}
 \item{home_team : Name of the home team}

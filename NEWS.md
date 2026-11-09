@@ -15,6 +15,11 @@
   a failed download is one informative error instead of a failure inside a
   model call.
 * `get_4th_plays()` requests the ESPN game summary over HTTPS.
+* `get_4th_plays()` errors clearly unless `df` is one row with `game_id`,
+  `home_team` and `away_team`. Before, an empty input (what
+  `cfbfastR::cfbd_game_info()` returns when the CFBD API rejects the key)
+  gave a data frame with no columns, so the caller failed later with
+  "Column `desc` doesn't exist".
 * The model cache is kept in a folder named after the package version, and
   caching a model removes the caches of other versions, so an upgrade never
   leaves stale models behind. Caching a model now prints where it was saved,
