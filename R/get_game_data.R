@@ -44,7 +44,14 @@ get_4th_plays <- function(df) {
     stop(
       "`df` must be a data frame with one row (one game) and the columns ",
       paste(needed, collapse = ", "), "; got ",
-      if (is.data.frame(df)) paste(nrow(df), "rows") else class(df)[[1]], ".",
+      if (!is.data.frame(df)) {
+        class(df)[[1]]
+      } else if (nrow(df) != 1) {
+        paste(nrow(df), "rows")
+      } else {
+        paste("no", paste(setdiff(needed, names(df)), collapse = ", "), "column")
+      },
+      ".",
       call. = FALSE
     )
   }

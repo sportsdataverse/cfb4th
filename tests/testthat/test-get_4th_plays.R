@@ -2,7 +2,7 @@
 # ESPN's game summary for Utah at USC, 2019 week 4 (game 401114220), captured
 # 2026-11-09. get_4th_plays() reads only those three parts.
 espn_fixture <- function() {
-  jsonlite::fromJSON(test_path("fixtures", "espn_summary_401114220.json.gz"), flatten = TRUE)
+  jsonlite::fromJSON(gzfile(test_path("fixtures", "espn_summary_401114220.json.gz")), flatten = TRUE)
 }
 
 usc_utah <- data.frame(game_id = 401114220, home_team = "USC", away_team = "Utah", week = 4)
@@ -34,7 +34,7 @@ test_that("get_4th_plays() returns its documented columns (offline ESPN fixture)
 
 test_that("get_4th_plays() errors by name on a failed game lookup", {
   # what cfbfastR::cfbd_game_info() returns when the CFBD API rejects the key
-  expect_error(get_4th_plays(usc_utah[0, ]), "one row")
-  expect_error(get_4th_plays(NULL), "one row")
-  expect_error(get_4th_plays(usc_utah["game_id"]), "home_team")
+  expect_error(get_4th_plays(usc_utah[0, ]), "got 0 rows")
+  expect_error(get_4th_plays(NULL), "got NULL")
+  expect_error(get_4th_plays(usc_utah["game_id"]), "got no home_team, away_team column")
 })
