@@ -27,6 +27,7 @@ Depends:
     R (>= 4.1.0)
 Imports:
     cfbfastR (>= 1.4.0),
+    cli,
     dplyr (>= 1.0.0),
     glue,
     httr,

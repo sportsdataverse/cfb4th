@@ -91,20 +91,7 @@ get_4th_plays <- function(df) {
           tidyr::unnest("plays")
       }
 
-      line <- pbp$pickcenter %>%
-        dplyr::mutate(provider = factor(.data$provider.name,
-                                        c(
-                                          "consensus",
-                                          "teamrankings",
-                                          "numberfire",
-                                          "Caesars",
-                                          "Caesars (Pennsylvania)",
-                                          "William Hill (New Jersey)",
-                                          "SugarHouse",
-                                          "Bovada"
-                                        ))) %>%
-        dplyr::arrange(.data$provider) %>%
-        slice(1)
+      line <- espn_line(pbp$pickcenter)
 
       suppressWarnings(
 
@@ -372,3 +359,20 @@ get_4th_plays <- function(df) {
 
 
 
+# One line from ESPN's pickcenter, ranked by provider (provider_rank); NA when
+# ESPN has no lines for the game (common for FCS games) or a field is missing.
+espn_line <- function(pickcenter) {
+  if (!is.data.frame(pickcenter) || nrow(pickcenter) == 0) {
+    return(tibble::tibble(spread = NA_real_, overUnder = NA_real_))
+  }
+  for (col in c("provider.name", "spread", "overUnder")) {
+    if (!col %in% names(pickcenter)) pickcenter[[col]] <- NA
+  }
+  pickcenter %>%
+    dplyr::arrange(factor(.data$provider.name, provider_rank)) %>%
+    dplyr::slice(1) %>%
+    dplyr::transmute(
+      spread = as.numeric(.data$spread),
+      overUnder = as.numeric(.data$overUnder)
+    )
+}

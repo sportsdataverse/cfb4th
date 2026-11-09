@@ -25,7 +25,17 @@
   columns, which made `add_4th_probs()` fail. A provider with a spread is
   preferred, the play-by-play's own line fills in where the chosen provider
   has none, and `provider` / `formatted_spread` describe the line used.
-* `dplyr (>= 1.0.0)` is required, for `any_of()`.
+* `load_4th_pbp()` no longer fails with "Column `provider` not found" when
+  the CFBD API returns no betting lines. `cfbfastR::cfbd_betting_lines()`
+  returns an empty data frame on any API error, a rate limit (HTTP 429)
+  included; `load_4th_pbp()` now warns and keeps the play-by-play's own
+  spread and over/under. Lines without a `provider` column are ranked on
+  spread alone, with a warning and `provider` set to `NA`. `get_4th_plays()`
+  likewise tolerates games with no ESPN betting lines.
+* `load_4th_pbp()` gives a clear error when a season's play-by-play is empty,
+  and `add_4th_probs()` returns `NA` probabilities (with a warning, for a
+  non-empty input) instead of failing when no play can be scored.
+* `dplyr (>= 1.0.0)` is required, for `any_of()`. `cli` is a new import.
 * Removed unused suggested packages (`future`, `gt`, `rmarkdown`, `tictoc`,
   `tidyselect`, `tidyverse`).
 

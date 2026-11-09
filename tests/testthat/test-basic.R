@@ -128,3 +128,81 @@ test_that("load_4th_pbp() prefers a provider with a spread and falls back to the
   testthat::expect_equal(out$provider, c("Bovada", "consensus"))
   testthat::expect_false(any(c("pbp_spread", "pbp_over_under", "formatted_spread") %in% names(out)))
 })
+
+# cfbfastR::cfbd_betting_lines() returns data.frame() on any API error (a 429
+# included), as it did on 2026-11-09
+test_that("load_4th_pbp() warns and keeps the pbp line when CFBD returns no betting lines", {
+  pbp <- tibble::tibble(
+    game_id = c(1L, 2L), spread = c(-4, 3), over_under = c(45, 50),
+    provider = c("pbp", "pbp"),
+    rush = c(1, 0), pass = c(0, 0), play_type = c("Rush", "Punt")
+  )
+  testthat::local_mocked_bindings(
+    load_cfb_pbp = function(...) pbp,
+    cfbd_betting_lines = function(...) data.frame(),
+    .package = "cfbfastR"
+  )
+  testthat::local_mocked_bindings(add_4th_probs = function(df, ...) df, .package = "cfb4th")
+
+  testthat::expect_warning(
+    out <- suppressMessages(cfb4th::load_4th_pbp(2020)),
+    "no betting lines"
+  )
+  testthat::expect_equal(out$spread, c(-4, 3))
+  testthat::expect_equal(out$over_under, c(45, 50))
+  testthat::expect_true(all(is.na(out$provider)))
+})
+
+test_that("load_4th_pbp() warns and picks a line with a spread when CFBD has no provider column", {
+  pbp <- tibble::tibble(
+    game_id = c(1L, 2L), spread = c(99, -4), over_under = c(99, 45),
+    rush = c(1, 0), pass = c(0, 0), play_type = c("Rush", "Punt")
+  )
+  lines <- function(year, season_type = "regular", ...) {
+    if (season_type != "regular") return(data.frame())
+    tibble::tibble(
+      game_id = c(1L, 1L, 2L), spread = c(NA, "-3", NA), over_under = c("55", "50", NA)
+    )
+  }
+  testthat::local_mocked_bindings(
+    load_cfb_pbp = function(...) pbp, cfbd_betting_lines = lines, .package = "cfbfastR"
+  )
+  testthat::local_mocked_bindings(add_4th_probs = function(df, ...) df, .package = "cfb4th")
+
+  testthat::expect_warning(
+    out <- suppressMessages(cfb4th::load_4th_pbp(2020)),
+    "no .*provider"
+  )
+  testthat::expect_equal(out$spread, c(-3, -4))
+  testthat::expect_equal(out$over_under, c(50, 45))
+  testthat::expect_true(all(is.na(out$provider)))
+})
+
+test_that("load_4th_pbp() errors clearly on an empty play-by-play", {
+  testthat::local_mocked_bindings(
+    load_cfb_pbp = function(...) data.frame(),
+    cfbd_betting_lines = function(...) tibble::tibble(game_id = 1L, provider = "consensus", spread = "-3", over_under = "50"),
+    .package = "cfbfastR"
+  )
+  testthat::expect_error(suppressMessages(cfb4th::load_4th_pbp(2020)), "No .*play-by-play")
+})
+
+test_that("add_4th_probs() returns NA probabilities when there is nothing to score", {
+  empty <- suppressMessages(cfb4th::add_4th_probs(play[0, ]))
+  testthat::expect_equal(nrow(empty), 0)
+  testthat::expect_true(all(cfb4th:::prob_cols %in% names(empty)))
+
+  third_down <- play
+  third_down$down <- 3
+  third_down$type <- NULL
+  testthat::expect_warning(out <- cfb4th::add_4th_probs(third_down), "can be scored")
+  testthat::expect_equal(nrow(out), 1)
+  testthat::expect_true(is.na(out$go_wp))
+})
+
+test_that("espn_line() ranks by provider and tolerates missing lines", {
+  pc <- data.frame(provider.name = c("Bovada", "consensus"), spread = c(-3, -7), overUnder = c(50, 55))
+  testthat::expect_equal(cfb4th:::espn_line(pc)$spread, -7)
+  testthat::expect_true(is.na(cfb4th:::espn_line(NULL)$spread))
+  testthat::expect_equal(cfb4th:::espn_line(pc["spread"])$spread, -3)
+})

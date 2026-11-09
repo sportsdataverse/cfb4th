@@ -61,7 +61,7 @@
 add_4th_probs <- function(df) {
 
   original_df <- df %>%
-    dplyr::mutate(index = 1:dplyr::n())
+    dplyr::mutate(index = seq_len(dplyr::n()))
 
   modified_df <- original_df
   if ("fg_make_prob" %in% names(original_df)) {
@@ -69,11 +69,24 @@ add_4th_probs <- function(df) {
       dplyr::select(-"fg_make_prob")
   }
 
-  if (!"type" %in% names(df)) {
+  if (nrow(original_df) > 0 && !"type" %in% names(df)) {
     # message("type not found. Assuming an cfbfastR df and doing necessary cleaning . . .")
     modified_df <- original_df %>%
       dplyr::filter(.data$down == 4) %>%
       prepare_cfbfastr_data()
+  }
+
+  # nothing to score: return the input with the probability columns as NA
+  # instead of failing inside a model call
+  if (nrow(modified_df) == 0) {
+    if (nrow(original_df) > 0) {
+      cli::cli_warn(c(
+        "None of the {nrow(original_df)} play{?s} can be scored.",
+        "i" = "Scored plays are 4th downs in regulation, with more than 30 seconds left, a {.field spread}, a {.field pos_team} and {.field yards_to_goal} > 0."
+      ))
+    }
+    original_df[prob_cols] <- NA_real_
+    return(dplyr::select(original_df, -"index"))
   }
 
   # message("Performing final preparation . . .")
@@ -87,26 +100,14 @@ add_4th_probs <- function(df) {
   message(glue::glue("Computing probabilities for {nrow(df)} plays. . ."))
   df <- df %>%
     add_probs() %>%
-    dplyr::mutate(play_no = 1:dplyr::n()) %>%
+    dplyr::mutate(play_no = seq_len(dplyr::n())) %>%
     dplyr::group_by(.data$play_no) %>%
     dplyr::mutate(
       punt_prob = dplyr::if_else(is.na(.data$punt_wp), 0, .data$punt_wp),
       max_non_go = max(.data$fg_wp, .data$punt_prob, na.rm = T),
       go_boost = 100 * (.data$go_wp - .data$max_non_go)) %>%
     dplyr::ungroup() %>%
-    dplyr::select(
-      "index",
-      "go_boost",
-      "first_down_prob",
-      "wp_fail",
-      "wp_succeed",
-      "go_wp",
-      "fg_make_prob",
-      "miss_fg_wp",
-      "make_fg_wp",
-      "fg_wp",
-      "punt_wp"
-    )
+    dplyr::select("index", dplyr::all_of(prob_cols))
 
   original_df %>%
     dplyr::left_join(df, by = c("index")) %>%
@@ -139,43 +140,21 @@ load_4th_pbp <- function(seasons) {
 
   # this is less likely to result in crashes due to memory
   purrr::map_df(seasons, ~{
-    message(glue::glue("Loading season {.x}"))
-    suppressMessages({bets <- cfbfastR::cfbd_betting_lines(year = .x) %>%
-      dplyr::bind_rows(cfbfastR::cfbd_betting_lines(year = .x, season_type = "postseason")) %>%
-      dplyr::mutate(
-        provider = factor(.data$provider,
-                               c(
-                                 "consensus",
-                                 "teamrankings",
-                                 "numberfire",
-                                 "Caesars",
-                                 "Caesars (Pennsylvania)",
-                                 "William Hill (New Jersey)",
-                                 "SugarHouse",
-                                 "Bovada"
-                               )),
-             spread = as.numeric(.data$spread),
-             over_under = as.numeric(.data$over_under)
-             ) %>%
-      dplyr::group_by(.data$game_id) %>%
-      # a provider with a spread first, then by provider rank
-      dplyr::arrange(is.na(.data$spread), .data$provider) %>%
-      dplyr::slice(1) %>%
-      dplyr::ungroup() %>%
-      dplyr::mutate(provider = as.character(.data$provider)) %>%
-      dplyr::select(
-        "game_id",
-        "provider",
-        "spread",
-        "over_under",
-        dplyr::any_of("formatted_spread"))
-      }
-    )
+    season <- .x
+    message(glue::glue("Loading season {season}"))
+    bets <- season_betting_lines(season)
+    pbp <- cfbfastR::load_cfb_pbp(season)
+    if (NROW(pbp) == 0) {
+      cli::cli_abort(c(
+        "No {.pkg cfbfastR} play-by-play was found for season {season}.",
+        "i" = "Check your network connection, or whether the season is published yet."
+      ))
+    }
     # cfbfastR >= 3 pbp already carries a line (spread, over_under, provider,
-    # formatted_spread). The provider-ranked line above replaces it, so the
+    # formatted_spread). The provider-ranked line replaces it, so the
     # metadata describes the line used, and the pbp's own spread/over_under
     # fill in where that line has none.
-    cfbfastR::load_cfb_pbp(.x) %>%
+    pbp %>%
       dplyr::rename(dplyr::any_of(c(pbp_spread = "spread", pbp_over_under = "over_under"))) %>%
       dplyr::select(-dplyr::any_of(c("provider", "formatted_spread"))) %>%
       dplyr::left_join(bets, by = "game_id") %>%
@@ -220,6 +199,69 @@ load_4th_pbp <- function(seasons) {
 
 }
 
+
+# columns add_4th_probs() adds
+prob_cols <- c(
+  "go_boost", "first_down_prob", "wp_fail", "wp_succeed", "go_wp",
+  "fg_make_prob", "miss_fg_wp", "make_fg_wp", "fg_wp", "punt_wp"
+)
+
+# betting-line providers, most preferred first; unlisted providers rank last
+provider_rank <- c(
+  "consensus", "teamrankings", "numberfire", "Caesars",
+  "Caesars (Pennsylvania)", "William Hill (New Jersey)", "SugarHouse", "Bovada"
+)
+
+# One CFBD betting line per game for a season: a provider with a spread
+# first, then by provider rank. cfbfastR::cfbd_betting_lines() returns an
+# empty data.frame() with no columns on any API error (an HTTP 429 included)
+# and its message is hidden here, so an empty response warns and returns no
+# lines, and the pbp's own line is used. A response without `provider` is
+# ranked on spread alone, with `provider` NA.
+season_betting_lines <- function(season) {
+  bets <- suppressMessages(dplyr::bind_rows(
+    cfbfastR::cfbd_betting_lines(year = season),
+    cfbfastR::cfbd_betting_lines(year = season, season_type = "postseason")
+  ))
+  if (NROW(bets) == 0 || !"game_id" %in% names(bets)) {
+    cli::cli_warn(c(
+      "CFBD returned no betting lines for {season}, so the play-by-play's own {.field spread} and {.field over_under} are used.",
+      "i" = "The CFBD API may be rate-limiting (HTTP 429); try again later."
+    ))
+    return(tibble::tibble(
+      game_id = integer(), provider = character(),
+      spread = numeric(), over_under = numeric()
+    ))
+  }
+  if (!"provider" %in% names(bets)) {
+    cli::cli_warn(c(
+      "CFBD's betting lines for {season} have no {.field provider} column.",
+      "i" = "Each game's first line with a spread is used, and {.field provider} is {.val NA}."
+    ))
+    bets$provider <- NA_character_
+  }
+  for (col in c("spread", "over_under")) {
+    if (!col %in% names(bets)) bets[[col]] <- NA_real_
+  }
+  bets %>%
+    dplyr::mutate(
+      game_id = as.integer(.data$game_id),
+      spread = suppressWarnings(as.numeric(.data$spread)),
+      over_under = suppressWarnings(as.numeric(.data$over_under))
+    ) %>%
+    dplyr::group_by(.data$game_id) %>%
+    dplyr::arrange(
+      is.na(.data$spread), factor(.data$provider, provider_rank),
+      .by_group = TRUE
+    ) %>%
+    dplyr::slice(1) %>%
+    dplyr::ungroup() %>%
+    dplyr::mutate(provider = as.character(.data$provider)) %>%
+    dplyr::select(
+      "game_id", "provider", "spread", "over_under",
+      dplyr::any_of("formatted_spread")
+    )
+}
 
 # `col` from the joined betting line, falling back to the pbp's own value
 # (`pbp_<col>`) where the line has none; drops `pbp_<col>`.
