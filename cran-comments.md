@@ -14,8 +14,10 @@ play-by-play.
   network blocked
 * GitHub Actions: ubuntu-latest (R devel, release, oldrel-1),
   windows-latest (R release), macos-latest (R release)
-* R-hub v2 (2026-11-06, commit 721e43f, two commits before this one):
-  linux, windows, macos and macos-arm64, all R-devel: all succeeded
+* R-hub v2 (2026-11-06, commit 721e43f): linux, windows, macos and
+  macos-arm64, all R-devel: all succeeded. That run was on an earlier
+  commit, before the last 0.2.0 fixes (the interactive-only `load_4th_pbp()`
+  example and the betting-line handling); it has not been re-run since.
 * win-builder (devel and release): to be run before submission
 
 ## R CMD check results
@@ -24,7 +26,7 @@ play-by-play.
 
 * This is a new submission.
 
-With the network blocked, the `--run-donttest` check is Status OK. Every
+With the network blocked, the `--run-donttest --no-tests` check is Status OK. Every
 example that needs the network fails gracefully inside `try()`.
 
 Example times, each run alone from an installed build with the models
