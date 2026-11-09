@@ -56,8 +56,11 @@ Nothing loads at package load (`R/zzz.R` is a comment). Same shape as `nfl4th`:
   `nfl4th::cached_model()`). Raw UBJ byte vectors saved with `saveRDS()` on this
   repo's **`model_archive` GitHub release**
   (<https://github.com/sportsdataverse/cfb4th/releases/tag/model_archive>),
-  downloaded on first use, read with `xgboost::xgb.load.raw()`, parsed once per
-  session (`.models` env) and cached under `tools::R_user_dir("cfb4th", "cache")`.
+  downloaded on first use, kept as raw bytes once per session (`.models` env),
+  parsed with `xgboost::xgb.load.raw()` on each use, and cached under
+  `tools::R_user_dir("cfb4th", "cache")`. Never keep a parsed `xgb.Booster` in
+  `.models`: xgboost disposes it at R exit before covr saves its counters, which
+  kills the test-coverage job.
   To ship a retrained model, upload a new asset there; users pick it up after
   `cfb4th_clear_cache()`.
 

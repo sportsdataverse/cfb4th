@@ -42,7 +42,12 @@ model_url <- function(name) {
   )
 }
 
-# one parsed copy per session, so a cached 15 MB model is read from disk once
+# one copy per session of each model's raw UBJ bytes, so a cached 15 MB model
+# is read from disk once. The bytes, not a parsed xgb.Booster, are kept: a
+# booster still held here when R exits is disposed by xgboost's exit finalizer
+# before covr's exit hook saves its counters, and that save then fails with
+# "DMatrix/Booster has not been initialized or has already been disposed".
+# Parsing on use is cheap (about 0.1 s for fd_model, 0.01 s for wp_model).
 .models <- new.env(parent = emptyenv())
 
 fd_model <- function() cached_model("fd_model")
@@ -50,7 +55,7 @@ wp_model <- function() cached_model("wp_model")
 
 cached_model <- function(name) {
   if (!is.null(.models[[name]])) {
-    return(.models[[name]])
+    return(xgboost::xgb.load.raw(.models[[name]]))
   }
   path <- cfb4th_model_path(name)
   use_cache <- !probably_cran() || force_cache()
@@ -79,7 +84,7 @@ cached_model <- function(name) {
   }
 
   parsed <- xgboost::xgb.load.raw(obj)
-  assign(name, parsed, envir = .models)
+  assign(name, obj, envir = .models)
   parsed
 }
 
