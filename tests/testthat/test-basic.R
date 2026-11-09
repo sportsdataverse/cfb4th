@@ -191,6 +191,9 @@ test_that("add_4th_probs() returns NA probabilities when there is nothing to sco
   empty <- suppressMessages(cfb4th::add_4th_probs(play[0, ]))
   testthat::expect_equal(nrow(empty), 0)
   testthat::expect_true(all(cfb4th:::prob_cols %in% names(empty)))
+  empty_df <- suppressMessages(cfb4th::add_4th_probs(as.data.frame(play)[0, ]))
+  testthat::expect_equal(nrow(empty_df), 0)
+  testthat::expect_true(all(cfb4th:::prob_cols %in% names(empty_df)))
 
   third_down <- play
   third_down$down <- 3

@@ -23,6 +23,9 @@ The input data frame with the following columns added:
 \item{fg_wp}{Average win probability when attempting field goal.}
 \item{punt_wp}{Average win probability when punting.}
 }
+If no play can be scored (a 4th down in regulation with more than 30
+seconds left, a \code{spread}, a \code{pos_team} and \code{yards_to_goal} > 0), the input
+is returned with these columns \code{NA}, with a warning unless it has no rows.
 }
 \description{
 Get various probabilities associated with each option on 4th downs (go

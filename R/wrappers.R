@@ -23,6 +23,9 @@
 #' \item{fg_wp}{Average win probability when attempting field goal.}
 #' \item{punt_wp}{Average win probability when punting.}
 #' }
+#' If no play can be scored (a 4th down in regulation with more than 30
+#' seconds left, a `spread`, a `pos_team` and `yards_to_goal` > 0), the input
+#' is returned with these columns `NA`, with a warning unless it has no rows.
 #' @export
 #' @examples
 #' \donttest{
@@ -85,7 +88,7 @@ add_4th_probs <- function(df) {
         "i" = "Scored plays are 4th downs in regulation, with more than 30 seconds left, a {.field spread}, a {.field pos_team} and {.field yards_to_goal} > 0."
       ))
     }
-    original_df[prob_cols] <- NA_real_
+    for (col in prob_cols) original_df[[col]] <- rep(NA_real_, nrow(original_df))
     return(dplyr::select(original_df, -"index"))
   }
 
@@ -125,6 +128,10 @@ add_4th_probs <- function(df) {
 #' \describe{
 #' \item{go}{100 if a team went for it on 4th down, 0 otherwise. It's 100 and 0 as a convenience for obtaining percent of times going for it.}
 #' }
+#' `spread` and `over_under` come from the CFBD betting lines, one per game
+#' ranked by `provider`, with the play-by-play's own line where CFBD has none.
+#' If CFBD returns no lines, or lines without a provider, a warning says so
+#' and `provider` is `NA`.
 #' @export
 #' @examplesIf interactive() && cfbfastR::has_cfbd_key()
 #' # interactive only: one season is the smallest call, and scoring its ~10,000

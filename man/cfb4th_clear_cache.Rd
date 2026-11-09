@@ -20,10 +20,10 @@ version; caches left by other versions are removed when a model is cached.
 Clear the cache to force a fresh download, for example after a model update.
 }
 \examples{
-# point the cache at a temporary folder, so the example leaves your real
-# cache alone
-old <- Sys.getenv("R_USER_CACHE_DIR")
+# point the cache at a temporary folder, so the example leaves your cached
+# model files alone (it still drops this session's in-memory copies)
+old <- Sys.getenv("R_USER_CACHE_DIR", unset = NA)
 Sys.setenv(R_USER_CACHE_DIR = tempfile())
 cfb4th_clear_cache()
-Sys.setenv(R_USER_CACHE_DIR = old)
+if (is.na(old)) Sys.unsetenv("R_USER_CACHE_DIR") else Sys.setenv(R_USER_CACHE_DIR = old)
 }

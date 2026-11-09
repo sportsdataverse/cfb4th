@@ -132,12 +132,12 @@ force_cache <- function() {
 #' @export
 #'
 #' @examples
-#' # point the cache at a temporary folder, so the example leaves your real
-#' # cache alone
-#' old <- Sys.getenv("R_USER_CACHE_DIR")
+#' # point the cache at a temporary folder, so the example leaves your cached
+#' # model files alone (it still drops this session's in-memory copies)
+#' old <- Sys.getenv("R_USER_CACHE_DIR", unset = NA)
 #' Sys.setenv(R_USER_CACHE_DIR = tempfile())
 #' cfb4th_clear_cache()
-#' Sys.setenv(R_USER_CACHE_DIR = old)
+#' if (is.na(old)) Sys.unsetenv("R_USER_CACHE_DIR") else Sys.setenv(R_USER_CACHE_DIR = old)
 cfb4th_clear_cache <- function(type = c("all", "fd_model", "wp_model")) {
   type <- match.arg(type)
   names <- if (type == "all") model_names else type

@@ -14,6 +14,10 @@ load_4th_pbp(seasons)
 \describe{
 \item{go}{100 if a team went for it on 4th down, 0 otherwise. It's 100 and 0 as a convenience for obtaining percent of times going for it.}
 }
+\code{spread} and \code{over_under} come from the CFBD betting lines, one per game
+ranked by \code{provider}, with the play-by-play's own line where CFBD has none.
+If CFBD returns no lines, or lines without a provider, a warning says so
+and \code{provider} is \code{NA}.
 }
 \description{
 Load calculated 4th down probabilities from \code{cfbfastR} data.
