@@ -19,8 +19,10 @@ load_4th_pbp(seasons)
 Load calculated 4th down probabilities from \code{cfbfastR} data.
 }
 \examples{
-\donttest{
-# the betting lines come from the CFBD API, which needs a CFBD_API_KEY
-if (cfbfastR::has_cfbd_key()) try(cfb4th::load_4th_pbp(2020))
-}
+\dontshow{if (interactive() && cfbfastR::has_cfbd_key()) withAutoprint(\{ # examplesIf}
+# interactive only: one season is the smallest call, and scoring its ~10,000
+# fourth downs (mostly the field-goal model) takes about a minute of CPU.
+# The betting lines come from the CFBD API, which needs a CFBD_API_KEY.
+try(cfb4th::load_4th_pbp(2020))
+\dontshow{\}) # examplesIf}
 }

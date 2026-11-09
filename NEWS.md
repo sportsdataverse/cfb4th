@@ -16,8 +16,9 @@
   caching a model removes the caches of other versions, so an upgrade never
   leaves stale models behind. Caching a model now prints where it was saved,
   and the model download allows at least 300 seconds.
-* The `get_4th_plays()` and `load_4th_pbp()` examples now run (under
-  `\donttest`); `load_4th_pbp()` only runs when a CFBD API key is set.
+* The `get_4th_plays()` example now runs (under `\donttest`). The
+  `load_4th_pbp()` example runs only in an interactive session with a CFBD
+  API key set: scoring one season's ~10,000 fourth downs takes about a minute.
 * `load_4th_pbp()` works again with 'cfbfastR' 3.x, whose play-by-play
   already has `spread` and `over_under` columns: they are replaced by the
   provider-ranked betting lines instead of being split into `.x`/`.y`
