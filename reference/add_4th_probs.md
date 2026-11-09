@@ -60,6 +60,11 @@ The input data frame with the following columns added:
 
   Average win probability when punting.
 
+If no play can be scored (a 4th down in regulation with more than 30
+seconds left, a `spread`, a `pos_team` and `yards_to_goal` \> 0), the
+input is returned with these columns `NA`, with a warning unless it has
+no rows.
+
 ## Examples
 
 ``` r

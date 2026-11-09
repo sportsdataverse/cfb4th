@@ -135,10 +135,17 @@ hand is annoying. So how does the 4th down bot work? With thanks to the
 ESPN API, which can be accessed using
 [`get_4th_plays()`](https://cfb4th.sportsdataverse.org/reference/get_4th_plays.md).
 
+[`get_4th_plays()`](https://cfb4th.sportsdataverse.org/reference/get_4th_plays.md)
+takes one row identifying the game: its ESPN game id and the home and
+away teams (a row of
+[`cfbfastR::cfbd_game_info()`](https://cfbfastR.sportsdataverse.org/reference/cfbd_game_info.html)
+works too, given a CFBD API key).
+
 ``` r
 
-game <- cfbfastR::cfbd_game_info(year = 2019, team = "Utah", week = 4)
-plays <- cfb4th::get_4th_plays(game) %>% 
+# Utah at USC, 2019 week 4
+game <- data.frame(game_id = 401114220, home_team = "USC", away_team = "Utah", week = 4)
+plays <- cfb4th::get_4th_plays(game) %>%
   tail(1)
 plays %>% 
   dplyr::select("desc", "TimeSecsRem")

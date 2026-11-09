@@ -105,7 +105,7 @@
 
 
 <dl><dt id="arg-df">df<a class="anchor" aria-label="anchor" href="#arg-df"></a></dt>
-<dd><p>A data frame of a game to get 4th down decisions of.</p></dd>
+<dd><p>A one-row data frame identifying the game to get 4th down decisions of.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -127,8 +127,9 @@ input data frame is only used to identify the game), with the columns:</p><dl><d
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Obtains a data frame that can be used with <code><a href="add_4th_probs.html">add_4th_probs()</a></code>. The following columns
-must be present:</p><ul><li><p>game_id : ESPN game ID from ESPN or cfbfastR (e.g. '401114223')</p></li>
+    <p>Obtains a data frame that can be used with <code><a href="add_4th_probs.html">add_4th_probs()</a></code>. <code>df</code>
+must have exactly one row (otherwise <code>get_4th_plays()</code> errors) and the
+following columns:</p><ul><li><p>game_id : ESPN game ID from ESPN or cfbfastR (e.g. '401114223')</p></li>
 <li><p>home_team : Name of the home team</p></li>
 <li><p>away_team : Name of the away team</p></li>
 </ul></div>

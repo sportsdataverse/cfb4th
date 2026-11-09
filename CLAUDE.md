@@ -67,11 +67,14 @@ Nothing loads at package load (`R/zzz.R` is a comment). Same shape as
   [`saveRDS()`](https://rdrr.io/r/base/readRDS.html) on this repo’s
   **`model_archive` GitHub release**
   (<https://github.com/sportsdataverse/cfb4th/releases/tag/model_archive>),
-  downloaded on first use, read with
-  [`xgboost::xgb.load.raw()`](https://rdrr.io/pkg/xgboost/man/xgb.load.raw.html),
-  parsed once per session (`.models` env) and cached under
-  `tools::R_user_dir("cfb4th", "cache")`. To ship a retrained model,
-  upload a new asset there; users pick it up after
+  downloaded on first use, kept as raw bytes once per session (`.models`
+  env), parsed with
+  [`xgboost::xgb.load.raw()`](https://rdrr.io/pkg/xgboost/man/xgb.load.raw.html)
+  on each use, and cached under `tools::R_user_dir("cfb4th", "cache")`.
+  Never keep a parsed `xgb.Booster` in `.models`: xgboost disposes it at
+  R exit before covr saves its counters, which kills the test-coverage
+  job. To ship a retrained model, upload a new asset there; users pick
+  it up after
   [`cfb4th_clear_cache()`](https://cfb4th.sportsdataverse.org/reference/cfb4th_clear_cache.md).
 
 `probably_cran()` (CRAN check env vars) disables cache *writes* so

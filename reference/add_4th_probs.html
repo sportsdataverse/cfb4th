@@ -144,7 +144,10 @@ for it, kick field goal, punt).</p>
 <dd><p>Average win probability when punting.</p></dd>
 
 
-</dl></div>
+</dl><p>If no play can be scored (a 4th down in regulation with more than 30
+seconds left, a <code>spread</code>, a <code>pos_team</code> and <code>yards_to_goal</code> &gt; 0), the input
+is returned with these columns <code>NA</code>, with a warning unless it has no rows.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>

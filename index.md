@@ -1,4 +1,4 @@
-# cfb4th
+# **cfb4th**
 
 This is the package that powers the [A.I. Sports College Football 4th
 Down Model](https://kazink.shinyapps.io/cfb_fourth_down/) discussed in
@@ -6,29 +6,33 @@ Down Model](https://kazink.shinyapps.io/cfb_fourth_down/) discussed in
 article.](https://247sports.com/college/utah/LongFormArticle/Utah-Fourth-Downs-2020-159851937/)
 The model is heavily based on the work and
 [code](https://www.nfl4th.com/) produced by [Ben
-Baldwin](https://twitter.com/benbbaldwin) for his [4th Down Calculator
-for the NFL](https://rbsdm.com/stats/fourth_calculator/)
+Baldwin](https://x.com/benbbaldwin) for his [4th Down Calculator for the
+NFL](https://rbsdm.com/stats/fourth_calculator/)
 
 Data freshness and pipeline status for every SportsDataverse dataset:
 [sportsdataverse.org/status](https://sportsdataverse.org/status).
 
 ## **Installation**
 
-You can install the released version of cfb4th from
-[CRAN](https://CRAN.R-project.org) with:
+You can install the latest build from
+[R-universe](https://sportsdataverse.r-universe.dev/cfb4th) with:
 
 ``` r
 
-install.packages("cfb4th")
+install.packages("cfb4th", repos = c("https://sportsdataverse.r-universe.dev", getOption("repos")))
 ```
 
-And the development version from
-[GitHub](https://github.com/sportsdataverse/cfb4th) with:
+You can install the development version of
+[**`cfb4th`**](https://github.com/sportsdataverse/cfb4th/) from GitHub
+with:
 
 ``` r
 
-# install.packages("pak")
+if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")
 pak::pak("sportsdataverse/cfb4th")
+# or, with remotes:
+# if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+# remotes::install_github("sportsdataverse/cfb4th")
 ```
 
 The two `xgboost` models (fourth-down conversion and win probability)
@@ -38,6 +42,25 @@ the first call to
 [`add_4th_probs()`](https://cfb4th.sportsdataverse.org/reference/add_4th_probs.md)
 needs network access. Clear the cache to force a fresh download with
 [`cfb4th_clear_cache()`](https://cfb4th.sportsdataverse.org/reference/cfb4th_clear_cache.md).
+
+## **Quick start**
+
+``` r
+
+library(cfb4th)
+
+# a season of cfbfastR play-by-play with the fourth-down decision columns added
+pbp <- load_4th_pbp(2020)
+
+# the last fourth down of one game from ESPN, scored and laid out as a decision table
+game <- data.frame(game_id = 401114223, home_team = "BYU", away_team = "Utah", week = 1)
+plays <- get_4th_plays(game)
+make_table_data(add_4th_probs(utils::tail(plays, 1)))
+```
+
+The [Get Started
+article](https://cfb4th.sportsdataverse.org/articles/cfb4th.html) walks
+through both workflows.
 
 ## **Features**
 
@@ -81,8 +104,55 @@ article](https://cfb4th.sportsdataverse.org/articles/cfb4th.html).
 - [The code that powers the
   bot](https://github.com/Kazink36/cfb_fourth_down/tree/main/bot)
 
-- [The bot can be found on twitter
-  here.](https://twitter.com/aisports_4th)
+- [The bot can be found on X here.](https://x.com/aisports_4th)
+
+## **Documentation**
+
+- [Package site](https://cfb4th.sportsdataverse.org/)
+- [Function
+  reference](https://cfb4th.sportsdataverse.org/reference/index.html)
+- Articles:
+  - [Get Started with
+    cfb4th](https://cfb4th.sportsdataverse.org/articles/cfb4th.html)
+- [NEWS / changelog](https://cfb4th.sportsdataverse.org/news/index.html)
+
+## **Companion packages**
+
+- [**`cfbfastR`**](https://cfbfastR.sportsdataverse.org/) — the college
+  football play-by-play the `cfb4th` models are fitted on and that
+  [`load_4th_pbp()`](https://cfb4th.sportsdataverse.org/reference/load_4th_pbp.md)
+  reads.
+- [**`cfbseedR`**](https://cfbseedR.sportsdataverse.org/) — simulate
+  college football seasons, conference standings and the College
+  Football Playoff.
+- [**`cfbplotR`**](https://cfbplotR.sportsdataverse.org/) and
+  [**`sdvplotR`**](https://sdvplotR.sportsdataverse.org/) — team logos,
+  colors and `gt` tables for plotting decisions.
+
+## **The SportsDataverse**
+
+[**`cfb4th`**](https://cfb4th.sportsdataverse.org/) is part of the
+[SportsDataverse](https://sportsdataverse.org/), a set of open-source
+packages for sports data.
+
+| Package | Sport / Scope |
+|----|----|
+| [**cfbfastR**](https://cfbfastR.sportsdataverse.org/) | College football |
+| [**hoopR**](https://hoopR.sportsdataverse.org/) | Men’s basketball (NBA and NCAA) |
+| [**wehoop**](https://wehoop.sportsdataverse.org/) | Women’s basketball (WNBA and NCAA) |
+| [**fastRhockey**](https://fastRhockey.sportsdataverse.org/) | Hockey (NHL and PWHL) |
+| [**baseballr**](https://billpetti.github.io/baseballr/) | Baseball (MLB, MiLB, NCAA) |
+| [**softballR**](https://github.com/sportsdataverse/softballR) | College softball |
+| [**oddsapiR**](https://oddsapiR.sportsdataverse.org/) | Sports betting odds |
+| [**recruitR**](https://recruitR.sportsdataverse.org/) | College football recruiting |
+| [**usfootballR**](https://usfootballR.sportsdataverse.org/) | US soccer |
+| [**cfbseedR**](https://cfbseedR.sportsdataverse.org/) · [**cfb4th**](https://cfb4th.sportsdataverse.org/) | CFB playoff simulation · fourth-down decisions |
+| [**cfbplotR**](https://cfbplotR.sportsdataverse.org/) · [**sdvplotR**](https://sdvplotR.sportsdataverse.org/) · [**sportyR**](https://sportyR.sportsdataverse.org/) | Logos, colors, tables · playing surfaces |
+| [**sportsdataverse-R**](https://r.sportsdataverse.org/) | Umbrella R metapackage |
+| [**sportsdataverse-py**](https://py.sportsdataverse.org/) · [**sportsdataverse.js**](https://js.sportsdataverse.org/) | Python and Node.js |
+
+See the full ecosystem at
+[sportsdataverse.org](https://sportsdataverse.org/).
 
 ## **Follow the SportsDataverse (@SportsDataverse) on X and star this repo**
 
@@ -100,21 +170,24 @@ sportsdataverse/cfb4th](https://raw.githubusercontent.com/sportsdataverse/cfb4th
 - [Jared Lee](https://github.com/Kazink36)
   [![@Kazink36](https://img.shields.io/github/followers/Kazink36?color=eee&logo=Github&style=for-the-badge)](https://github.com/Kazink36)
 
-- [Sebastian Carl](https://twitter.com/mrcaseb)  
-  [![@mrcaseb](https://img.shields.io/twitter/follow/mrcaseb?color=blue&label=%40mrcaseb&logo=twitter&style=for-the-badge)](https://twitter.com/mrcaseb)
+- [Sebastian Carl](https://x.com/mrcaseb)  
+  [![@mrcaseb](https://img.shields.io/twitter/follow/mrcaseb?color=blue&label=%40mrcaseb&logo=x&style=for-the-badge)](https://x.com/mrcaseb)
   [![@mrcaseb](https://img.shields.io/github/followers/mrcaseb?color=eee&logo=Github&style=for-the-badge)](https://github.com/mrcaseb)
 
-- [Ben Baldwin](https://twitter.com/benbbaldwin)  
-  [![@benbbaldwin](https://img.shields.io/twitter/follow/benbbaldwin?color=blue&label=%40benbbaldwin&logo=twitter&style=for-the-badge)](https://twitter.com/benbbaldwin)
+- [Ben Baldwin](https://x.com/benbbaldwin)  
+  [![@benbbaldwin](https://img.shields.io/twitter/follow/benbbaldwin?color=blue&label=%40benbbaldwin&logo=x&style=for-the-badge)](https://x.com/benbbaldwin)
   [![@guga31bb](https://img.shields.io/github/followers/guga31bb?color=eee&logo=Github&style=for-the-badge)](https://github.com/guga31bb)
+
+- [Saiem Gilani](https://x.com/saiemgilani)
+  [![@saiemgilani](https://img.shields.io/twitter/follow/saiemgilani?color=blue&label=%40saiemgilani&logo=x&style=for-the-badge)](https://x.com/saiemgilani)
+  [![@saiemgilani](https://img.shields.io/github/followers/saiemgilani?color=eee&logo=Github&style=for-the-badge)](https://github.com/saiemgilani)
 
 ## **Cheat sheet**
 
-A printable one-page reference covering **cfbplotR, cfb4th and
-cfbseedR** — the function families, the loaders, and what each one
-returns.
+A printable one-page reference for **`cfb4th`**, shared with
+**`cfbplotR`** and **`cfbseedR`**.
 
-📄 **[Download the cfb4th cheat sheet
+📄 **[Download the cfbplotR / cfb4th / cfbseedR cheat sheet
 (PDF)](https://sportsdataverse.org/cheatsheets/cfbplotR-cfb4th-cfbseedR.pdf)**
 
 Free to download, print and hand out; light and dark, US Letter
@@ -136,3 +209,9 @@ BibTeX Citation
   year = {2026}
 }
 ```
+
+## **License**
+
+[**`cfb4th`**](https://cfb4th.sportsdataverse.org/) is released under
+the [MIT
+License](https://github.com/sportsdataverse/cfb4th/blob/main/LICENSE.md).

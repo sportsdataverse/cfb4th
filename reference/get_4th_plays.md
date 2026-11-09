@@ -12,7 +12,8 @@ get_4th_plays(df)
 
 - df:
 
-  A data frame of a game to get 4th down decisions of.
+  A one-row data frame identifying the game to get 4th down decisions
+  of.
 
 ## Value
 
@@ -40,7 +41,8 @@ input data frame is only used to identify the game), with the columns:
 
 Obtains a data frame that can be used with
 [`add_4th_probs()`](https://cfb4th.sportsdataverse.org/reference/add_4th_probs.md).
-The following columns must be present:
+`df` must have exactly one row (otherwise `get_4th_plays()` errors) and
+the following columns:
 
 - game_id : ESPN game ID from ESPN or cfbfastR (e.g. '401114223')
 

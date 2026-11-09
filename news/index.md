@@ -3,6 +3,10 @@
 ## cfb4th 0.2.0
 
 - First CRAN release.
+- [`load_4th_pbp()`](https://cfb4th.sportsdataverse.org/reference/load_4th_pbp.md)
+  ranks the betting-line providers CFBD now serves (Bovada, then
+  DraftKings, then ESPN Bet), so a game without a Bovada line gets a
+  fixed choice instead of whichever unranked book came first.
 - Model loading now mirrors `nfl4th`. The expected-points and field-goal
   models ship with the package (the field-goal model refreshed to the
   copy on `cfbfastR-data`), so nothing is downloaded when the package is
@@ -17,6 +21,13 @@
   a failure inside a model call.
 - [`get_4th_plays()`](https://cfb4th.sportsdataverse.org/reference/get_4th_plays.md)
   requests the ESPN game summary over HTTPS.
+- [`get_4th_plays()`](https://cfb4th.sportsdataverse.org/reference/get_4th_plays.md)
+  errors clearly unless `df` is one row with `game_id`, `home_team` and
+  `away_team`. Before, an empty input (what
+  [`cfbfastR::cfbd_game_info()`](https://cfbfastR.sportsdataverse.org/reference/cfbd_game_info.html)
+  returns when the CFBD API rejects the key) gave a data frame with no
+  columns, so the caller failed later with “Column `desc` doesn’t
+  exist”.
 - The model cache is kept in a folder named after the package version,
   and caching a model removes the caches of other versions, so an
   upgrade never leaves stale models behind. Caching a model now prints
@@ -24,11 +35,10 @@
   seconds.
 - The
   [`get_4th_plays()`](https://cfb4th.sportsdataverse.org/reference/get_4th_plays.md)
-  and
+  example now runs (under `\donttest`). The
   [`load_4th_pbp()`](https://cfb4th.sportsdataverse.org/reference/load_4th_pbp.md)
-  examples now run (under `\donttest`);
-  [`load_4th_pbp()`](https://cfb4th.sportsdataverse.org/reference/load_4th_pbp.md)
-  only runs when a CFBD API key is set.
+  example runs only in an interactive session with a CFBD API key set:
+  scoring one season’s ~10,000 fourth downs takes about a minute.
 - [`load_4th_pbp()`](https://cfb4th.sportsdataverse.org/reference/load_4th_pbp.md)
   works again with ‘cfbfastR’ 3.x, whose play-by-play already has
   `spread` and `over_under` columns: they are replaced by the
@@ -38,8 +48,30 @@
   fail. A provider with a spread is preferred, the play-by-play’s own
   line fills in where the chosen provider has none, and `provider` /
   `formatted_spread` describe the line used.
+- [`load_4th_pbp()`](https://cfb4th.sportsdataverse.org/reference/load_4th_pbp.md)
+  no longer fails with “Column `provider` not found” when the CFBD API
+  returns no betting lines.
+  [`cfbfastR::cfbd_betting_lines()`](https://cfbfastR.sportsdataverse.org/reference/cfbd_betting_lines.html)
+  returns an empty data frame on any API error, a rate limit (HTTP 429)
+  included;
+  [`load_4th_pbp()`](https://cfb4th.sportsdataverse.org/reference/load_4th_pbp.md)
+  now warns and keeps the play-by-play’s own spread and over/under.
+  Lines without a `provider` column are ranked on spread alone, with a
+  warning and `provider` set to `NA`.
+  [`get_4th_plays()`](https://cfb4th.sportsdataverse.org/reference/get_4th_plays.md)
+  likewise tolerates games with no ESPN betting lines.
+- [`load_4th_pbp()`](https://cfb4th.sportsdataverse.org/reference/load_4th_pbp.md)
+  gives a clear error when a season’s play-by-play is empty, and
+  [`add_4th_probs()`](https://cfb4th.sportsdataverse.org/reference/add_4th_probs.md)
+  returns `NA` probabilities (with a warning, for a non-empty input)
+  instead of failing when no play can be scored.
+- The
+  [`cfb4th_clear_cache()`](https://cfb4th.sportsdataverse.org/reference/cfb4th_clear_cache.md)
+  example uses a temporary cache folder, so it no longer deletes the
+  user’s cached models.
 - `dplyr (>= 1.0.0)` is required, for
   [`any_of()`](https://tidyselect.r-lib.org/reference/all_of.html).
+  `cli` is a new import.
 - Removed unused suggested packages (`future`, `gt`, `rmarkdown`,
   `tictoc`, `tidyselect`, `tidyverse`).
 

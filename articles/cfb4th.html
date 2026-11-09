@@ -331,9 +331,14 @@ probability if they had gone for it and 85% if they punted.</p>
 the plays in by hand is annoying. So how does the 4th down bot work?
 With thanks to the ESPN API, which can be accessed using
 <code><a href="../reference/get_4th_plays.html">get_4th_plays()</a></code>.</p>
+<p><code><a href="../reference/get_4th_plays.html">get_4th_plays()</a></code> takes one row identifying the game: its
+ESPN game id and the home and away teams (a row of
+<code><a href="https://cfbfastR.sportsdataverse.org/reference/cfbd_game_info.html" class="external-link">cfbfastR::cfbd_game_info()</a></code> works too, given a CFBD API
+key).</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">game</span> <span class="op">&lt;-</span> <span class="fu">cfbfastR</span><span class="fu">::</span><span class="fu"><a href="https://cfbfastR.sportsdataverse.org/reference/cfbd_game_info.html" class="external-link">cfbd_game_info</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2019</span>, team <span class="op">=</span> <span class="st">"Utah"</span>, week <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
-<span><span class="va">plays</span> <span class="op">&lt;-</span> <span class="fu">cfb4th</span><span class="fu">::</span><span class="fu"><a href="../reference/get_4th_plays.html">get_4th_plays</a></span><span class="op">(</span><span class="va">game</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<code class="sourceCode R"><span><span class="co"># Utah at USC, 2019 week 4</span></span>
+<span><span class="va">game</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>game_id <span class="op">=</span> <span class="fl">401114220</span>, home_team <span class="op">=</span> <span class="st">"USC"</span>, away_team <span class="op">=</span> <span class="st">"Utah"</span>, week <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="va">plays</span> <span class="op">&lt;-</span> <span class="fu">cfb4th</span><span class="fu">::</span><span class="fu"><a href="../reference/get_4th_plays.html">get_4th_plays</a></span><span class="op">(</span><span class="va">game</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">plays</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="st">"desc"</span>, <span class="st">"TimeSecsRem"</span><span class="op">)</span></span>
