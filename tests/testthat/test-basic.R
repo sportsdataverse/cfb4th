@@ -103,6 +103,26 @@ test_that("load_4th_pbp() joins betting lines onto pbp that already has spread/o
   testthat::expect_equal(out$go, c(100, 0))
 })
 
+test_that("load_4th_pbp() ranks today's books: Bovada, then DraftKings, then ESPN Bet", {
+  pbp <- tibble::tibble(game_id = c(1L, 2L), rush = c(1, 0), pass = c(0, 0), play_type = c("Rush", "Punt"))
+  lines <- function(year, season_type = "regular", ...) {
+    if (season_type != "regular") return(tibble::tibble())
+    tibble::tibble(
+      game_id = c(1L, 1L, 1L, 2L, 2L), provider = c("ESPN Bet", "DraftKings", "Bovada", "ESPN Bet", "DraftKings"),
+      spread = c("-1", "-2", "-3", "4", "5"), over_under = c("40", "41", "42", "50", "51")
+    )
+  }
+  testthat::local_mocked_bindings(
+    load_cfb_pbp = function(...) pbp, cfbd_betting_lines = lines, .package = "cfbfastR"
+  )
+  testthat::local_mocked_bindings(add_4th_probs = function(df, ...) df, .package = "cfb4th")
+
+  out <- suppressMessages(cfb4th::load_4th_pbp(2020))
+
+  testthat::expect_equal(out$provider, c("Bovada", "DraftKings"))
+  testthat::expect_equal(out$spread, c(-3, 5))
+})
+
 test_that("load_4th_pbp() prefers a provider with a spread and falls back to the pbp line", {
   pbp <- tibble::tibble(
     game_id = c(1L, 2L), spread = c(99, -4), over_under = c(99, 45),

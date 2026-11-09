@@ -213,10 +213,13 @@ prob_cols <- c(
   "fg_make_prob", "miss_fg_wp", "make_fg_wp", "fg_wp", "punt_wp"
 )
 
-# betting-line providers, most preferred first; unlisted providers rank last
+# betting-line providers, most preferred first; unlisted providers rank last.
+# CFBD's 2025 lines come from Bovada, DraftKings and ESPN Bet (ESPN's pickcenter
+# spells it "ESPN BET"), so those are listed to keep the pick deterministic.
 provider_rank <- c(
   "consensus", "teamrankings", "numberfire", "Caesars",
-  "Caesars (Pennsylvania)", "William Hill (New Jersey)", "SugarHouse", "Bovada"
+  "Caesars (Pennsylvania)", "William Hill (New Jersey)", "SugarHouse", "Bovada",
+  "DraftKings", "ESPN Bet", "ESPN BET"
 )
 
 # One CFBD betting line per game for a season: a provider with a spread

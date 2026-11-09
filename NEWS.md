@@ -1,6 +1,9 @@
 # cfb4th 0.2.0
 
 * First CRAN release.
+* `load_4th_pbp()` ranks the betting-line providers CFBD now serves (Bovada,
+  then DraftKings, then ESPN Bet), so a game without a Bovada line gets a
+  fixed choice instead of whichever unranked book came first.
 * Model loading now mirrors `nfl4th`. The expected-points and field-goal
   models ship with the package (the field-goal model refreshed to the copy on
   `cfbfastR-data`), so nothing is downloaded when the package is attached. The
