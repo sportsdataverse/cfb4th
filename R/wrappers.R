@@ -107,7 +107,7 @@ add_4th_probs <- function(df) {
     dplyr::group_by(.data$play_no) %>%
     dplyr::mutate(
       punt_prob = dplyr::if_else(is.na(.data$punt_wp), 0, .data$punt_wp),
-      max_non_go = max(.data$fg_wp, .data$punt_prob, na.rm = T),
+      max_non_go = max(.data$fg_wp, .data$punt_prob, na.rm = TRUE),
       go_boost = 100 * (.data$go_wp - .data$max_non_go)) %>%
     dplyr::ungroup() %>%
     dplyr::select("index", dplyr::all_of(prob_cols))
